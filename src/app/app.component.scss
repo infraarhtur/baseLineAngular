@@ -1,0 +1,24 @@
+
+// @import '@angular/material/prebuilt-themes/azure-blue.css';
+
+@import '@angular/material/prebuilt-themes/purple-green.css';
+
+$spacing: 16px;
+
+.spacer {
+  flex: 1;
+}
+
+.container {
+  height: 100vh;
+}
+
+.content {
+  padding: $spacing;
+}
+
+// mat-sidenav {
+//   background-color: #f2f2f2;
+//   color: white;
+// }
+
