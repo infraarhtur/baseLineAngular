@@ -5,11 +5,14 @@ import { AuthService } from './services/auth.service';
   selector: 'app-root',
   templateUrl: './app.component.html',
   standalone: false,
-  styleUrl: './app.component.css'
+  styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit{
   title = 'baseLineAngular';
-  constructor(private authService: AuthService) {}
+  opened = false;  //cambiar esto a `false` si quieres que el menú inicie cerrado
+  constructor(private authService: AuthService) {
+
+  }
   ngOnInit(): void {
     // this.authService.handleAuthCallback();
     // if (!this.authService.isAuthenticated()) {
@@ -22,7 +25,6 @@ export class AppComponent implements OnInit{
     }
 
   logout(){
-    console.log('holaaa amigo')
     this.authService.logout();
   }
   }
