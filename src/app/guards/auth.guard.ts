@@ -1,11 +1,15 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
+  private cognitoDomain = environment.cognitoDomain;
+  private clientId = environment.cognitoClientId;
+  private redirectUri = environment.redirectUri;
   constructor(private authService: AuthService, private router: Router) {}
 
   // canActivate(): boolean {
@@ -22,7 +26,7 @@ export class AuthGuard implements CanActivate {
   canActivate(): boolean {
     const token = localStorage.getItem('token');
     if (!token) {
-      window.location.href = 'https://us-east-1cifmpvh0b.auth.us-east-1.amazoncognito.com/login?client_id=2kgl9phf326v4ts8sudrdapjsp&response_type=token&scope=openid&redirect_uri=http://localhost:4200/';
+      window.location.href = `${this.cognitoDomain}/login?client_id=${this.clientId}&response_type=token&scope=openid&redirect_uri=${this.redirectUri}`;
       return false;
     }
     return true;

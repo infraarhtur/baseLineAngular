@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private cognitoDomain = 'https://us-east-1cifmpvh0b.auth.us-east-1.amazoncognito.com';
-  private clientId = '2kgl9phf326v4ts8sudrdapjsp';
-  private redirectUri = 'http://localhost:4200/';
+  private cognitoDomain = environment.cognitoDomain;
+  private clientId = environment.cognitoClientId;
+  private redirectUri = environment.redirectUri;
 
   constructor() {
     this.handleAuthCallback();
