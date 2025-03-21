@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from './services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +11,7 @@ import { AuthService } from './services/auth.service';
 export class AppComponent implements OnInit{
   title = 'baseLineAngular';
   opened = false;  //cambiar esto a `false` si quieres que el menú inicie cerrado
-  constructor(private authService: AuthService) {
+  constructor(private router: Router, private authService: AuthService) {
 
   }
   ngOnInit(): void {
@@ -26,6 +27,9 @@ export class AppComponent implements OnInit{
 
   logout(){
     this.authService.logout();
+  }
+  redirectToCreateProduct() {
+    this.router.navigate(['/products/create']);
   }
   }
 

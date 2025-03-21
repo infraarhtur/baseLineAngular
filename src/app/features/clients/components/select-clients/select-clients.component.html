@@ -1,0 +1,19 @@
+<h1>Gestión de Clientes</h1>
+
+<nav>
+  <button mat-button [routerLink]="['/clients/create']">Crear Cliente</button>
+  <button mat-button [routerLink]="['/clients/update']">Actualizar Cliente</button>
+</nav>
+
+<mat-list *ngIf="clients.length > 0; else noClients">
+  <mat-list-item *ngFor="let client of clients">
+    <h3>{{ client.nombre }}</h3>
+    <p>📞 {{ client.telefono }} | ✉️ {{ client.email }}</p>
+  </mat-list-item>
+</mat-list>
+
+<ng-template #noClients>
+  <p>No hay clientes disponibles.</p>
+</ng-template>
+
+<router-outlet></router-outlet> <!-- Aquí se renderizan los hijos -->
