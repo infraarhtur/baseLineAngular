@@ -1,1 +1,57 @@
-<p>create-clients works!</p>
+<form [formGroup]="clientForm" (ngSubmit)="onSubmit()" class="client-form">
+  <mat-form-field appearance="outline">
+    <mat-label>Nombre</mat-label>
+    <input matInput formControlName="nombre" required />
+    <mat-error *ngIf="clientForm.get('nombre')?.hasError('required')">
+      El nombre es obligatorio.
+    </mat-error>
+    <mat-error *ngIf="clientForm.get('nombre')?.hasError('minlength')">
+      El nombre debe tener al menos 3 caracteres.
+    </mat-error>
+    <mat-error *ngIf="clientForm.get('nombre')?.hasError('maxlength')">
+      El nombre no puede tener más de 40 caracteres.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Teléfono</mat-label>
+    <input matInput formControlName="telefono" type="tel" required />
+    <mat-error *ngIf="clientForm.get('telefono')?.invalid">
+      Ingrese un teléfono válido (Ej: +573001234567 o 3201234567).
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Email</mat-label>
+    <input matInput formControlName="email" type="email" required />
+    <mat-error *ngIf="clientForm.get('email')?.hasError('required')">
+      El email es obligatorio.
+    </mat-error>
+    <mat-error *ngIf="clientForm.get('email')?.hasError('email')">
+      Ingrese un email válido (Ej: usuario&#64;example.com).
+    </mat-error>
+    <mat-error *ngIf="clientForm.get('email')?.hasError('pattern')">
+      Formato inválido. Ejemplo válido: usuario&#64;dominio.com.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Dirección</mat-label>
+    <textarea matInput formControlName="direccion"  maxlength="60"></textarea>
+    <mat-error *ngIf="clientForm.get('direccion')?.hasError('maxlength')">
+      La dirección no puede tener más de 60 caracteres.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Comentario</mat-label>
+    <textarea matInput formControlName="comentario"  maxlength="70"></textarea>
+    <mat-error *ngIf="clientForm.get('comentario')?.hasError('maxlength')">
+      El comentario no puede tener más de 70 caracteres.
+    </mat-error>
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" type="submit" [disabled]="clientForm.invalid">
+    Guardar Cliente
+  </button>
+</form>

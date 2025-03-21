@@ -9,6 +9,8 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 
 import { ProductsModule } from './features/products/products.module';
 import { MaterialModule } from './shared/material/material.module';
+import { ClientsModule } from './features/clients/clients.module';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,9 @@ import { MaterialModule } from './shared/material/material.module';
     AppRoutingModule,
     BrowserAnimationsModule,
     ProductsModule,
-    MaterialModule
+    ClientsModule,
+    MaterialModule,
+    HttpClientModule
   ],
   providers: [
     provideAnimationsAsync()
