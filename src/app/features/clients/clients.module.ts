@@ -8,13 +8,15 @@ import { CreateClientsComponent } from './components/create-clients/create-clien
 import { UpdateClientsComponent } from './components/update-clients/update-clients.component';
 
 import { MaterialModule } from '../../shared/material/material.module';
+import { HomeClientsComponent } from './components/home-clients/home-clients.component';
 
 
 @NgModule({
   declarations: [
     SelectClientsComponent,
     CreateClientsComponent,
-    UpdateClientsComponent
+    UpdateClientsComponent,
+    HomeClientsComponent
   ],
   imports: [
     CommonModule,

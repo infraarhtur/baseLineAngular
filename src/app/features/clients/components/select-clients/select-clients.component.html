@@ -1,19 +1,68 @@
-<h1>Gestión de Clientes</h1>
+<h2>Lista de Clientes</h2>
 
-<nav>
-  <button mat-button [routerLink]="['/clients/create']">Crear Cliente</button>
-  <button mat-button [routerLink]="['/clients/update']">Actualizar Cliente</button>
-</nav>
+<table mat-table [dataSource]="clients" class="mat-elevation-z8" *ngIf="clients.length > 0; else noClients">
 
-<mat-list *ngIf="clients.length > 0; else noClients">
-  <mat-list-item *ngFor="let client of clients">
-    <h3>{{ client.nombre }}</h3>
-    <p>📞 {{ client.telefono }} | ✉️ {{ client.email }}</p>
-  </mat-list-item>
-</mat-list>
+  <!-- Selección Column -->
+  <ng-container matColumnDef="select">
+    <th mat-header-cell *matHeaderCellDef>
+      <mat-checkbox (change)="$event ? toggleAllRows() : null" [checked]="isAllSelected()"></mat-checkbox>
+    </th>
+    <td mat-cell *matCellDef="let client">
+      <mat-checkbox (click)="$event.stopPropagation()" [checked]="selection.isSelected(client)"
+        (change)="$event ? selection.toggle(client) : null">
+      </mat-checkbox>
+    </td>
+  </ng-container>
+
+  <!-- Nombre Column -->
+  <ng-container matColumnDef="nombre">
+    <th mat-header-cell *matHeaderCellDef> Nombre </th>
+    <td mat-cell *matCellDef="let client"> {{ client.name }} </td>
+  </ng-container>
+
+  <!-- Teléfono Column -->
+  <ng-container matColumnDef="telefono">
+    <th mat-header-cell *matHeaderCellDef> Teléfono </th>
+    <td mat-cell *matCellDef="let client"> 📞 {{ client.phone }} </td>
+  </ng-container>
+
+  <!-- Email Column -->
+  <ng-container matColumnDef="email">
+    <th mat-header-cell *matHeaderCellDef> Email </th>
+    <td mat-cell *matCellDef="let client"> ✉️ {{ client.email }} </td>
+  </ng-container>
+
+  <!-- direccion Column -->
+  <ng-container matColumnDef="direccion">
+    <th mat-header-cell *matHeaderCellDef> Direccion </th>
+    <td mat-cell *matCellDef="let client"> {{ client.address }} </td>
+  </ng-container>
+
+  <!-- comentario Column -->
+  <ng-container matColumnDef="comentario">
+    <th mat-header-cell *matHeaderCellDef> Comentario </th>
+    <td mat-cell *matCellDef="let client"> {{ client.comment }} </td>
+  </ng-container>
+
+  <!-- Acciones Column -->
+  <ng-container matColumnDef="acciones">
+    <th mat-header-cell *matHeaderCellDef> Acciones </th>
+    <td mat-cell *matCellDef="let client">
+      <button mat-button color="warn" (click)="deleteClient(client.id,client.name,client.email)">Eliminar</button>
+      <button mat-button color="warn" (click)="updateClient(client.id)">Actualizar</button>
+    </td>
+  </ng-container>
+
+  <!-- Encabezados y Filas -->
+  <thead>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  </thead>
+  <tbody>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </tbody>
+
+</table>
 
 <ng-template #noClients>
   <p>No hay clientes disponibles.</p>
 </ng-template>
-
-<router-outlet></router-outlet> <!-- Aquí se renderizan los hijos -->

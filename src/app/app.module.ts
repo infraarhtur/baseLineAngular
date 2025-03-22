@@ -11,11 +11,13 @@ import { ProductsModule } from './features/products/products.module';
 import { MaterialModule } from './shared/material/material.module';
 import { ClientsModule } from './features/clients/clients.module';
 import { HttpClientModule } from '@angular/common/http';
+import { ConfirmDialogComponent } from './shared/components/confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
+    ConfirmDialogComponent,
 
   ],
   imports: [
@@ -27,6 +29,7 @@ import { HttpClientModule } from '@angular/common/http';
     MaterialModule,
     HttpClientModule
   ],
+  exports:[],
   providers: [
     provideAnimationsAsync()
   ],
