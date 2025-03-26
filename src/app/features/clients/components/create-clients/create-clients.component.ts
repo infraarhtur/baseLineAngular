@@ -24,7 +24,6 @@ export class CreateClientsComponent {
   ) {}
 
   createClient(formData: any): void {
-    debugger
     this.clientsService.createClient(formData).subscribe({
       next: () => {
         this.snackbar.success('✅ Cliente creado con éxito')

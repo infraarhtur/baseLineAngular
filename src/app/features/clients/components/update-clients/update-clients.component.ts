@@ -32,7 +32,6 @@ export class UpdateClientsComponent implements OnInit {
   loadClient(): void {
     this.clientsService.getClientById(this.clientId).subscribe({
       next: (data) => {
-        debugger
         this.clientData = data;
         console.log('Cliente adaptado para el formulario:', this.clientData);
       },
@@ -44,7 +43,6 @@ export class UpdateClientsComponent implements OnInit {
   }
 
   updateClient(data: any): void {
-    debugger
     this.clientsService.updateClient(this.clientId, data).subscribe({
       next: () => {
         this.snackbar.success('✅ Cliente actualizado con éxito');

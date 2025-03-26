@@ -15,7 +15,7 @@ export class ClientFormComponent implements OnInit,OnChanges {
   clientForm!: FormGroup;
 
   constructor(private fb: FormBuilder,
-    
+
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -34,6 +34,9 @@ export class ClientFormComponent implements OnInit,OnChanges {
     });
   }
   ngOnInit(): void {
+    if (!this.clientForm) {
+      this.buildForm(); // ✅ Construye el formulario vacío si no hay datos
+    }
   }
 
   onSubmit(): void {

@@ -1,4 +1,10 @@
+<button mat-fab extended [routerLink]="['/clients/create']">
+  <mat-icon>person_add</mat-icon>
+  Agregar Cliente
+</button>
+
 <h2>Lista de Clientes</h2>
+
 
 <table mat-table [dataSource]="clients" class="mat-elevation-z8" *ngIf="clients.length > 0; else noClients">
 
