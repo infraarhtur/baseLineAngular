@@ -8,13 +8,17 @@ import { CreateClientsComponent } from './components/create-clients/create-clien
 import { UpdateClientsComponent } from './components/update-clients/update-clients.component';
 
 import { MaterialModule } from '../../shared/material/material.module';
+import { HomeClientsComponent } from './components/home-clients/home-clients.component';
+import { ClientFormComponent } from './components/client-form/client-form.component';
 
 
 @NgModule({
   declarations: [
     SelectClientsComponent,
     CreateClientsComponent,
-    UpdateClientsComponent
+    UpdateClientsComponent,
+    HomeClientsComponent,
+    ClientFormComponent
   ],
   imports: [
     CommonModule,
@@ -23,7 +27,7 @@ import { MaterialModule } from '../../shared/material/material.module';
     MaterialModule
   ],
   exports: [
-    CreateClientsComponent
+
   ]
 })
 export class ClientsModule { }

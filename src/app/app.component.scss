@@ -17,8 +17,22 @@ $spacing: 16px;
   padding: $spacing;
 }
 
-// mat-sidenav {
-//   background-color: #f2f2f2;
-//   color: white;
-// }
+.snackbar-success {
+  background-color: #4caf50;
+  color: #fff;
+}
 
+.snackbar-error {
+  background-color: #f44336;
+  color: #fff;
+}
+
+.snackbar-info {
+  background-color: #2196f3;
+  color: #fff;
+}
+
+.snackbar-warning {
+  background-color: #ff9800;
+  color: #fff;
+}

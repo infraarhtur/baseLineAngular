@@ -6,9 +6,9 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ClientsService {
-  private apiUrl = 'http://localhost:8001/api/clients'; // URL del backend
+  private apiUrl = 'http://localhost:8000/api/clients'; // URL del backend
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
 
   /**
@@ -16,5 +16,30 @@ export class ClientsService {
    */
   getClients(): Observable<any> {
     return this.http.get<any>(this.apiUrl);
+  }
+
+  getClientById(id: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${id}`);
+  }
+
+  // Eliminar cliente por ID (UUID)
+  deleteClient(id: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
+  }
+
+  //  Crear un nuevo cliente
+  createClient(clientData: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/`, clientData, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+  }
+  updateClient(id: string, clientData: any): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/${id}`, clientData, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
   }
 }
