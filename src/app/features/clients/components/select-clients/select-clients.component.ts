@@ -4,6 +4,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { SnackbarService } from '../../../../shared/services/snackbar.service';
 
 
 @Component({
@@ -19,7 +20,12 @@ export class SelectClientsComponent implements OnInit {
   clients: any[] = []; // Lista de clientes
   selection = new SelectionModel<any>(true, []);
 
-  constructor(private clientsService: ClientsService, private router: Router, private dialog: MatDialog) {}
+  constructor(
+    private clientsService: ClientsService,
+    private router: Router,
+    private dialog: MatDialog,
+    private snackbar: SnackbarService,
+  ) {}
 
   ngOnInit(): void {
     this.loadClients();
@@ -30,8 +36,10 @@ export class SelectClientsComponent implements OnInit {
       next: (data) => {
         this.clients = data;
         console.log('Clientes cargados:', this.clients);
-      },
+        this.snackbar.success('Clientes cargados');
+            },
       error: (err) => {
+        this.snackbar.error('Error al obtener clientes');
         console.error('Error al obtener clientes', err);
       }
     });
@@ -47,9 +55,17 @@ export class SelectClientsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        // Aquí iría la lógica para eliminar el cliente
-        console.log('Cliente confirmado para eliminar:', id);
-        // this.clientsService.deleteClient(clientId).subscribe(...);
+        this.clientsService.deleteClient(id).subscribe({
+          next: () => {
+            this.clients = this.clients.filter(c => c.id !== id); // Actualiza la tabla
+            console.log('Cliente eliminado correctamente');
+            this.snackbar.success('Cliente eliminado correctamente');
+          },
+          error: (err) => {
+            console.error('Error al eliminar el cliente', err);
+            this.snackbar.error('Error al eliminar el cliente');
+          }
+        });
       }
     });
     // Aquí puedes llamar a un servicio para eliminar el cliente

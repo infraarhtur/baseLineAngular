@@ -1,8 +1,10 @@
 
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ClientsService } from '../../services/clients.service';
+import { SnackbarService } from '../../../../shared/services/snackbar.service';
+
 
 @Component({
   selector: 'app-create-clients',
@@ -11,28 +13,28 @@ import { ClientsService } from '../../services/clients.service';
   styleUrl: './create-clients.component.scss'
 })
 export class CreateClientsComponent {
-  clientForm: FormGroup;
+
+  @Input() clientData?: any;
   @Output() formSubmitted = new EventEmitter<any>();
 
   constructor(private fb: FormBuilder,
+    private snackbar: SnackbarService,
     private clientsService: ClientsService, // Inyectamos el servicio
     private router: Router // Para redirigir después de guardar
-    ) {
-    this.clientForm = this.fb.group({
-      nombre: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
-      telefono: ['', [Validators.required, Validators.pattern('^\\+?[0-9]{7,15}$')]],
-      email: ['', [Validators.required, Validators.email, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$')]], // Mejor validación,
-      direccion: ['',[Validators.maxLength(60)]],
-      comentario: ['',[Validators.maxLength(70)]]
+  ) {}
+
+  createClient(formData: any): void {
+    debugger
+    this.clientsService.createClient(formData).subscribe({
+      next: () => {
+        this.snackbar.success('✅ Cliente creado con éxito')
+        this.router.navigate(['/clients/select']);
+      },
+      error: (error) => {
+        console.error('Error al crear cliente:', error);
+        this.snackbar.error('❌ Ocurrió un error al crear el cliente.');
+      }
     });
-  }
 
-  onSubmit() {
-    debugger;
-    if (this.clientForm.valid) {
-      this.formSubmitted.emit(this.clientForm.value);
-      console.log('Formulario enviado:', this.clientForm.value);
-    }
-  }
-
+}
 }

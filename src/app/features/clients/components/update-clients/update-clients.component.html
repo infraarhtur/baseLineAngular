@@ -1,1 +1,6 @@
-<p>update-clients works!</p>
+<!-- Solo mostrar el formulario si ya cargaron los datos -->
+<app-client-form
+  *ngIf="clientData"
+  [clientData]="clientData"
+  (formSubmitted)="updateClient($event)">
+</app-client-form>
