@@ -11,8 +11,8 @@ export class SnackbarService {
   private show(message: string, panelClass: string) {
     const config: MatSnackBarConfig = {
       duration: 3000,
-      horizontalPosition: 'right',
-      verticalPosition: 'top',
+      horizontalPosition: 'center',
+      verticalPosition: 'bottom',
       panelClass: [panelClass]
     };
     this.snackBar.open(message, 'Cerrar', config);

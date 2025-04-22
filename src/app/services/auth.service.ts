@@ -31,7 +31,6 @@ export class AuthService {
   }
 
   logout() {
-    debugger;
     localStorage.removeItem('token');
     const logoutUrl = `${this.cognitoDomain}/logout?client_id=${this.clientId}&logout_uri=${this.redirectUri}`;
     window.location.href = logoutUrl;

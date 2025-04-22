@@ -1,10 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ClientsService } from '../../services/clients.service';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { SnackbarService } from '../../../../shared/services/snackbar.service';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { ViewChild } from '@angular/core'
 
 
 @Component({
@@ -13,12 +16,15 @@ import { SnackbarService } from '../../../../shared/services/snackbar.service';
   templateUrl: './select-clients.component.html',
   styleUrl: './select-clients.component.scss'
 })
-export class SelectClientsComponent implements OnInit {
+export class SelectClientsComponent implements OnInit, AfterViewInit {
 
-  displayedColumns: string[] = ['select', 'nombre', 'telefono', 'email','direccion','comentario', 'acciones']; // ✅ Columnas de la tabla
+  displayedColumns: string[] = [ 'name', 'phone', 'email','address','comment', 'actions']; // ✅ Columnas de la tabla
 
   clients: any[] = []; // Lista de clientes
   selection = new SelectionModel<any>(true, []);
+  dataSource = new MatTableDataSource<any>();
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator
 
   constructor(
     private clientsService: ClientsService,
@@ -30,12 +36,15 @@ export class SelectClientsComponent implements OnInit {
   ngOnInit(): void {
     this.loadClients();
   }
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+  }
 
   loadClients(): void {
     this.clientsService.getClients().subscribe({
       next: (data) => {
-        this.clients = data;
-        console.log('Clientes cargados:', this.clients);
+        this.dataSource.data = data;
+        console.log('Clientes cargados:', this.dataSource.data );
         this.snackbar.success('Clientes cargados');
             },
       error: (err) => {
@@ -57,7 +66,7 @@ export class SelectClientsComponent implements OnInit {
       if (result) {
         this.clientsService.deleteClient(id).subscribe({
           next: () => {
-            this.clients = this.clients.filter(c => c.id !== id); // Actualiza la tabla
+            this.dataSource.data = this.dataSource.data.filter(c => c.id !== id); // Actualiza la tabla
             console.log('Cliente eliminado correctamente');
             this.snackbar.success('Cliente eliminado correctamente');
           },
@@ -79,12 +88,12 @@ export class SelectClientsComponent implements OnInit {
 
   /** Si la cantidad de seleccionados es igual a la cantidad total de filas, retorna true */
   isAllSelected() {
-    return this.selection.selected.length === this.clients.length;
+    return this.selection.selected.length === this.dataSource.data.length;
   }
 
 
   /** Selecciona o deselecciona todas las filas */
   toggleAllRows() {
-    this.isAllSelected() ? this.selection.clear() : this.clients.forEach(row => this.selection.select(row));
+    this.isAllSelected() ? this.selection.clear() : this.dataSource.data.forEach(row => this.selection.select(row));
   }
 }
