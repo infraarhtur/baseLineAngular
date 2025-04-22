@@ -7,19 +7,27 @@ import { CreateProductsComponent } from './components/create-products/create-pro
 import { SelectProductsComponent } from './components/select-products/select-products.component';
 import { UpdateProductsComponent } from './components/update-products/update-products.component';
 import { MaterialModule } from '../../shared/material/material.module';
+import { HomeProductsComponent } from './components/home-products/home-products.component';
+import { FormProductsComponent } from './components/form-products/form-products.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
   declarations: [
     CreateProductsComponent,
     SelectProductsComponent,
-    UpdateProductsComponent
+    UpdateProductsComponent,
+    HomeProductsComponent,
+    FormProductsComponent
   ],
   imports: [
     CommonModule,
     ProductsRoutingModule,
-    RouterModule,
+    ReactiveFormsModule,
     MaterialModule
+  ],
+  exports: [
+
   ]
 })
 export class ProductsModule { }

@@ -8,17 +8,6 @@
 
 <table mat-table [dataSource]="this.dataSource" class="mat-elevation-z8" *ngIf="this.dataSource.data.length > 0; else noClients">
 
-  <!-- Selección Column -->
-  <!-- <ng-container matColumnDef="select">
-    <th mat-header-cell *matHeaderCellDef>
-      <mat-checkbox (change)="$event ? toggleAllRows() : null" [checked]="isAllSelected()"></mat-checkbox>
-    </th>
-    <td mat-cell *matCellDef="let client">
-      <mat-checkbox (click)="$event.stopPropagation()" [checked]="selection.isSelected(client)"
-        (change)="$event ? selection.toggle(client) : null">
-      </mat-checkbox>
-    </td>
-  </ng-container> -->
 
   <!-- Nombre Column -->
   <ng-container matColumnDef="name">
