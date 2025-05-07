@@ -25,10 +25,11 @@ export class CreateProductsComponent {
   ) {}
 
   createProduct(formData: any): void {
+    debugger;
     this.productsService.createProduct(formData).subscribe({
       next: () => {
-        this.snackbar.success('✅ Cliente creado con éxito')
-        this.router.navigate(['/clients/select']);
+        this.snackbar.success('✅ producto creado con éxito')
+        this.router.navigate(['/products/select']);
       },
       error: (error) => {
         console.error('Error al crear cliente:', error);

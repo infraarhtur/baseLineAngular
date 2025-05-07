@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProvidersService } from '../../../providers/services/providers.service';
+import { CategoriesService } from '../../../categories/services/categories.service';
 
 @Component({
   selector: 'app-form-products',
@@ -15,11 +16,17 @@ export class FormProductsComponent implements OnInit {
 
   productForm!: FormGroup;
   providers: any[] = [];
-  constructor(private fb: FormBuilder, private providersService: ProvidersService) {}
+  categories: any[] = [];
+
+  constructor(private fb: FormBuilder,
+     private providersService: ProvidersService,
+     private categoriesService: CategoriesService
+    ) {}
 
   ngOnInit(): void {
     this.buildForm();
     this.loadProviders();
+    this.loadCategories();
   }
 
 
@@ -30,7 +37,8 @@ export class FormProductsComponent implements OnInit {
       sale_price: [this.productData?.sale_price || 0, [Validators.required, Validators.min(0)]],
       purchase_price: [this.productData?.purchase_price || 0, [Validators.required, Validators.min(0)]],
       stock: [this.productData?.stock || 0, [Validators.required, Validators.min(0)]],
-      provider_id: [this.productData?.provider_id || '', Validators.required]
+      providers_ids: [this.productData?.providers_ids?.map((c: any) => c.id) || [], Validators.required],
+      category_ids: [this.productData?.categories_ids?.map((c: any) => c.id) || [], Validators.required]
     });
   }
 
@@ -40,6 +48,14 @@ export class FormProductsComponent implements OnInit {
       error: (err) => console.error('Error al cargar proveedores:', err)
     });
   }
+
+  loadCategories(): void {
+    this.categoriesService.getAllCategories().subscribe({
+      next: (data) => this.categories = Array.isArray(data) ? data : [],
+      error: (err) => console.error('Error al cargar categorías:', err)
+    });
+  }
+
   onSubmit(): void {
     if (this.productForm.valid) {
       this.formSubmitted.emit(this.productForm.value);
