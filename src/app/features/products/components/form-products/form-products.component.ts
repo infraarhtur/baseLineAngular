@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ProvidersService } from '../../../providers/services/providers.service';
 
 @Component({
   selector: 'app-form-products',
@@ -13,11 +14,12 @@ export class FormProductsComponent implements OnInit {
   @Output() formSubmitted = new EventEmitter<any>();
 
   productForm!: FormGroup;
-
-  constructor(private fb: FormBuilder) {}
+  providers: any[] = [];
+  constructor(private fb: FormBuilder, private providersService: ProvidersService) {}
 
   ngOnInit(): void {
     this.buildForm();
+    this.loadProviders();
   }
 
 
@@ -32,6 +34,12 @@ export class FormProductsComponent implements OnInit {
     });
   }
 
+  loadProviders(): void {
+    this.providersService.getAllProviders().subscribe({
+      next: (data) => (this.providers = data),
+      error: (err) => console.error('Error al cargar proveedores:', err)
+    });
+  }
   onSubmit(): void {
     if (this.productForm.valid) {
       this.formSubmitted.emit(this.productForm.value);

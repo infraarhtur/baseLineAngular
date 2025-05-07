@@ -31,8 +31,16 @@
 
   <mat-form-field appearance="outline" class="full-width">
     <mat-label>Proveedor</mat-label>
-    <input matInput formControlName="provider_id" placeholder="ID o nombre de proveedor" />
+    <mat-select formControlName="provider_id">
+      <mat-option *ngFor="let provider of providers" [value]="provider.id">
+        {{ provider.name }}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="productForm.get('provider_id')?.hasError('required')">
+      El proveedor es obligatorio
+    </mat-error>
   </mat-form-field>
+
 
   <div class="form-actions">
     <button mat-raised-button color="primary" type="submit">Guardar</button>

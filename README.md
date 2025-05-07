@@ -62,3 +62,4 @@ For more information on using the Angular CLI, including detailed command refere
 ng g c features/products/components/update-products
 ng g c features/clients/components/select-clients
 ng g module features/clients --routing  
+ng generate service features/providers/services/providers
