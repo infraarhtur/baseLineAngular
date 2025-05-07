@@ -13,7 +13,7 @@ import { SnackbarService } from '../../../../shared/services/snackbar.service';
 })
 export class CreateProductsComponent {
 
-  @Input() clientData?: any;
+  @Input() productData?: any;
   @Output() formSubmitted = new EventEmitter<any>();
 
 
@@ -25,10 +25,10 @@ export class CreateProductsComponent {
   ) {}
 
   createProduct(formData: any): void {
-    this.productsService.createProduct(formData).subscribe({
+      this.productsService.createProduct(formData).subscribe({
       next: () => {
-        this.snackbar.success('✅ Cliente creado con éxito')
-        this.router.navigate(['/clients/select']);
+        this.snackbar.success('✅ producto creado con éxito')
+        this.router.navigate(['/products/select']);
       },
       error: (error) => {
         console.error('Error al crear cliente:', error);

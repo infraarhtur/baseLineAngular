@@ -29,18 +29,30 @@
     <input matInput type="number" formControlName="stock" />
   </mat-form-field>
 
+
   <mat-form-field appearance="outline" class="full-width">
-    <mat-label>Proveedor</mat-label>
-    <mat-select formControlName="provider_id">
+    <mat-label>proveedores</mat-label>
+    <mat-select formControlName="providers_ids" multiple>
       <mat-option *ngFor="let provider of providers" [value]="provider.id">
         {{ provider.name }}
       </mat-option>
     </mat-select>
-    <mat-error *ngIf="productForm.get('provider_id')?.hasError('required')">
-      El proveedor es obligatorio
+    <mat-error *ngIf="productForm.get('providers_ids')?.hasError('required')">
+      Los proveedore son obligatorios
     </mat-error>
   </mat-form-field>
 
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Categorías</mat-label>
+    <mat-select formControlName="category_ids" multiple>
+      <mat-option *ngFor="let category of categories" [value]="category.id">
+        {{ category.name }}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="productForm.get('category_ids')?.hasError('required')">
+      Las categorías son obligatorias
+    </mat-error>
+  </mat-form-field>
 
   <div class="form-actions">
     <button mat-raised-button color="primary" type="submit">Guardar</button>
