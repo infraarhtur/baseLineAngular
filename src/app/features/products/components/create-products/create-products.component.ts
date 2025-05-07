@@ -1,4 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output, Input } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { ProductsService } from '../../services/products.service';
+import { SnackbarService } from '../../../../shared/services/snackbar.service';
+
 
 @Component({
   selector: 'app-create-products',
@@ -7,5 +12,29 @@ import { Component } from '@angular/core';
   styleUrl: './create-products.component.scss'
 })
 export class CreateProductsComponent {
+
+  @Input() clientData?: any;
+  @Output() formSubmitted = new EventEmitter<any>();
+
+
+
+  constructor(private fb: FormBuilder,
+    private snackbar: SnackbarService,
+    private productsService: ProductsService, // Inyectamos el servicio
+    private router: Router // Para redirigir después de guardar
+  ) {}
+
+  createProduct(formData: any): void {
+    this.productsService.createProduct(formData).subscribe({
+      next: () => {
+        this.snackbar.success('✅ Cliente creado con éxito')
+        this.router.navigate(['/clients/select']);
+      },
+      error: (error) => {
+        console.error('Error al crear cliente:', error);
+        this.snackbar.error('❌ Ocurrió un error al crear el cliente.');
+      }
+    });
+  }
 
 }
