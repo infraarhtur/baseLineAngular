@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProvidersService } from '../../../providers/services/providers.service';
 import { CategoriesService } from '../../../categories/services/categories.service';
@@ -9,7 +9,7 @@ import { CategoriesService } from '../../../categories/services/categories.servi
   templateUrl: './form-products.component.html',
   styleUrl: './form-products.component.scss'
 })
-export class FormProductsComponent implements OnInit {
+export class FormProductsComponent implements OnInit, OnChanges {
 
   @Input() productData?: any;
   @Output() formSubmitted = new EventEmitter<any>();
@@ -24,11 +24,16 @@ export class FormProductsComponent implements OnInit {
     ) {}
 
   ngOnInit(): void {
-    this.buildForm();
     this.loadProviders();
     this.loadCategories();
+    this.buildForm();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['productData'] && this.productData) {
+      this.buildForm();
+    }
+  }
 
   buildForm(): void {
     this.productForm = this.fb.group({
