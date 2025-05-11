@@ -34,7 +34,11 @@ export class UpdateProductsComponent implements OnInit {
   loadProduct():void{
     this.productsService.getProductById(this.productId).subscribe({
       next: (data) => {
-        this.productData = data;
+        this.productData = {
+          ...data,
+          providers_ids: data.providers || [],
+          categories_ids: data.categories || []
+        };
         console.log('producto adaptado para el formulario:', this.productData);
       },
       error: (err) => {
