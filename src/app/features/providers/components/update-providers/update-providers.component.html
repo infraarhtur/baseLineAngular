@@ -1,1 +1,5 @@
-<p>update-providers works!</p>
+<app-form-providers
+*ngIf="providerData"
+  [providerData]="providerData"
+  (formSubmitted)="updateProvider($event)">
+</app-form-providers>
