@@ -7,11 +7,32 @@ import { environment } from '../../../../environments/environment';
   providedIn: 'root'
 })
 export class ProvidersService {
-  private apiUrl = `${environment.apiUrl}api/provider`; // URL del backend
+  private baseUrl = `${environment.apiUrl}api/provider`; // URL del backend
 
   constructor(private http: HttpClient) { }
 
   getAllProviders(): Observable<any> {
-    return this.http.get<any>(this.apiUrl);
+    return this.http.get<any>(this.baseUrl);
   }
+
+  // Obtener un providero por su ID
+  getProviderById(id: string): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/${id}`);
+  }
+
+  // Crear un providero
+  createProvider(data: any): Observable<any> {
+    return this.http.post<any>(this.baseUrl, data);
+  }
+
+  // Actualizar un providero
+  updateProvider(id: string, data: any): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/${id}`, data);
+  }
+
+  // Eliminar un providero
+  deleteProvider(id: string): Observable<any> {
+    return this.http.delete<any>(`${this.baseUrl}/${id}`);
+  }
+
 }
