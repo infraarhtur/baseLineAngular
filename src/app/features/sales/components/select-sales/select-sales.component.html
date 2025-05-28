@@ -1,1 +1,76 @@
 <p>select-sales works!</p>
+<button mat-fab extended [routerLink]="['/sales/create']">
+  <mat-icon>person_add</mat-icon>
+  Agregar venta
+</button>
+
+<table mat-table [dataSource]="this.dataSource" class="mat-elevation-z8" *ngIf="this.dataSource.data.length > 0; else noSales">
+
+  <!-- Acciones Column -->
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef> Acciones </th>
+    <td mat-cell *matCellDef="let sale">
+      <button mat-button color="warn" >Eliminar</button>
+      <button mat-button color="warn" >Actualizar</button>
+      <button mat-button color="warn" >Detalle</button>
+    </td>
+  </ng-container>
+
+  <!-- client_id Column -->
+  <ng-container matColumnDef="client_id">
+    <th mat-header-cell *matHeaderCellDef> cliente </th>
+    <td mat-cell *matCellDef="let sale"> {{ sale.client_id }} </td>
+  </ng-container>
+
+    <!-- sale_date Column -->
+    <ng-container matColumnDef="sale_date">
+      <th mat-header-cell *matHeaderCellDef> fecha</th>
+      <td mat-cell *matCellDef="let sale"> {{ sale.sale_date }} </td>
+    </ng-container>
+
+
+    <!-- sale_date Column -->
+    <ng-container matColumnDef="payment_method">
+      <th mat-header-cell *matHeaderCellDef> metodo de pago</th>
+      <td mat-cell *matCellDef="let sale"> {{ sale.payment_method }} </td>
+    </ng-container>
+
+  <!-- status Column -->
+  <ng-container matColumnDef="status">
+    <th mat-header-cell *matHeaderCellDef> estado </th>
+    <td mat-cell *matCellDef="let sale"> {{ sale.status }} </td>
+  </ng-container>
+
+    <!-- status Column -->
+  <ng-container matColumnDef="total_amount">
+    <th mat-header-cell *matHeaderCellDef> Monto total </th>
+    <td mat-cell *matCellDef="let sale"> {{ sale.total_amount }} </td>
+  </ng-container>
+
+  <!-- status Column -->
+  <ng-container matColumnDef="comment">
+    <th mat-header-cell *matHeaderCellDef> comment </th>
+    <td mat-cell *matCellDef="let sale"> {{ sale.comment }} </td>
+  </ng-container>
+
+
+
+  <!-- Encabezados y Filas -->
+  <thead>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  </thead>
+  <tbody>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </tbody>
+
+</table>
+
+<mat-paginator
+  [pageSize]="5"
+  [pageSizeOptions]="[5, 10, 25, 100]"
+  showFirstLastButtons>
+</mat-paginator>
+
+<ng-template #noSales>
+  <p>No hay ventas disponibles.</p>
+</ng-template>
