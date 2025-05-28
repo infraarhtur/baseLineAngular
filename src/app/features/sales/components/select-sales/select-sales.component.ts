@@ -18,7 +18,7 @@ import { ViewChild } from '@angular/core'
 })
 export class SelectSalesComponent implements OnInit, AfterViewInit {
 
-  displayedColumns: string[] = [ 'actions','client_id','sale_date', 'total_amount', 'status','payment_method','comment']; // ✅ Columnas de la tabla
+  displayedColumns: string[] = [ 'actions','client','client.email','sale_date', 'total_amount', 'status','payment_method','comment']; // ✅ Columnas de la tabla
 
   sales: any[] = []; // Lista de ventas
   selection = new SelectionModel<any>(true, []);

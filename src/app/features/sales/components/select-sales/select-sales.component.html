@@ -16,16 +16,21 @@
     </td>
   </ng-container>
 
-  <!-- client_id Column -->
-  <ng-container matColumnDef="client_id">
+  <!-- client name Column -->
+  <ng-container matColumnDef="client">
     <th mat-header-cell *matHeaderCellDef> cliente </th>
-    <td mat-cell *matCellDef="let sale"> {{ sale.client_id }} </td>
+    <td mat-cell *matCellDef="let sale"> {{ sale.client.name }} </td>
+  </ng-container>
+   <!-- client_id Column -->
+  <ng-container matColumnDef="client.email">
+    <th mat-header-cell *matHeaderCellDef> email </th>
+    <td mat-cell *matCellDef="let sale"> {{ sale.client.email }} </td>
   </ng-container>
 
     <!-- sale_date Column -->
     <ng-container matColumnDef="sale_date">
       <th mat-header-cell *matHeaderCellDef> fecha</th>
-      <td mat-cell *matCellDef="let sale"> {{ sale.sale_date }} </td>
+      <td mat-cell *matCellDef="let sale"> {{ sale.sale_date | date:'dd/MM/yyyy' }} </td>
     </ng-container>
 
 
@@ -44,7 +49,7 @@
     <!-- status Column -->
   <ng-container matColumnDef="total_amount">
     <th mat-header-cell *matHeaderCellDef> Monto total </th>
-    <td mat-cell *matCellDef="let sale"> {{ sale.total_amount }} </td>
+    <td mat-cell *matCellDef="let sale"> {{ sale.total_amount | currency:'COP':'symbol':'1.0-0':'es-CO' }} </td>
   </ng-container>
 
   <!-- status Column -->
