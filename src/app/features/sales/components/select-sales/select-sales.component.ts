@@ -53,5 +53,19 @@ export class SelectSalesComponent implements OnInit, AfterViewInit {
     });
   }
 
+  deleteSale(sale_id:any): void{
+
+  }
+
+  updateSale(sale_id: any): void {
+
+   }
+
+   detailSale(sale_id: any): void {
+
+   }
+
+
+
 
 }
