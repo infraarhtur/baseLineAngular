@@ -8,8 +8,9 @@ const routes: Routes = [
   { path: 'products', loadChildren: () => import('./features/products/products.module').then(m => m.ProductsModule),canActivate: [AuthGuard]},
   { path: 'clients', loadChildren: () => import('./features/clients/clients.module').then(m => m.ClientsModule) ,canActivate: [AuthGuard]},
   { path: 'providers', loadChildren: () => import('./features/providers/providers.module').then(m => m.ProvidersModule) ,canActivate: [AuthGuard]},
+  { path: 'sales', loadChildren: () => import('./features/sales/sales.module').then(m => m.SalesModule),canActivate: [AuthGuard]},
   { path: '**', redirectTo: '' }
-];
+]
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
