@@ -58,11 +58,11 @@ export class SelectSalesComponent implements OnInit, AfterViewInit {
   }
 
   updateSale(sale_id: any): void {
-
+    this.router.navigate(['/sale/update', sale_id]);
    }
 
-   detailSale(sale_id: any): void {
-
+  detailSale(sale_id: any): void {
+    this.router.navigate(['/sale/detail', sale_id]);
    }
 
 

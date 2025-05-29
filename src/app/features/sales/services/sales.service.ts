@@ -23,5 +23,22 @@ export class SalesService {
     return this.http.get<any>(`${this.apiUrl}/${id}`);
   }
 
+  //  Crear una nueva venta
+  createSale(saleData: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/`, saleData, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+  }
+  //  Editar una  venta
+  updateSale(id: string, saleData: any): Observable<any> {
+  return this.http.put<any>(`${this.apiUrl}/${id}`, saleData, {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+}
+
 
 }
