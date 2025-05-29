@@ -4,6 +4,7 @@ import { HomeSalesComponent } from './components/home-sales/home-sales.component
 import { CreateSalesComponent } from './components/create-sales/create-sales.component';
 import { UpdateSalesComponent } from './components/update-sales/update-sales.component';
 import { SelectSalesComponent } from './components/select-sales/select-sales.component';
+import { DetailSalesComponent } from './components/detail-sales/detail-sales.component';
 
 
 const routes: Routes = [
@@ -14,6 +15,7 @@ const routes: Routes = [
       { path: '', redirectTo: 'select', pathMatch: 'full' }, // Redirección automática
       { path: 'create', component: CreateSalesComponent },
       { path: 'update/:id', component: UpdateSalesComponent },
+      { path: 'detail/:id', component: DetailSalesComponent },
       { path: 'select', component: SelectSalesComponent }
     ]
   }];

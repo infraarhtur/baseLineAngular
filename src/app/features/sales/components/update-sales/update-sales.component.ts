@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component,EventEmitter, Output, Input, OnInit} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { SalesService } from '../../services/sales.service';
 import { SnackbarService } from '../../../../shared/services/snackbar.service';
 
@@ -13,12 +13,14 @@ import { SnackbarService } from '../../../../shared/services/snackbar.service';
 export class UpdateSalesComponent  implements OnInit{
 
   saleId!: string; // ✅ Aquí se almacena el ID recibido
-  providerData: any;
+  @Input() saleData?: any;
+  @Output() formSubmitted = new EventEmitter<any>();
 
   constructor(
     private route: ActivatedRoute,
+    private fb: FormBuilder,
     private snackbar: SnackbarService,
-    private salesService: SalesService, // Inyectamos el servicio
+    private saleService: SalesService, // Inyectamos el servicio
     private router: Router // Para redirigir después de guardar
   ) {}
 
@@ -29,4 +31,18 @@ export class UpdateSalesComponent  implements OnInit{
       // this.loadProvider();
     });
   }
+
+  updateSale(data: any): void {
+    this.saleService.updateSale(this.saleId, data).subscribe({
+      next: () => {
+        this.snackbar.success('✅ producto creado con éxito')
+        this.router.navigate(['/products/select']);
+      },
+      error: (error) => {
+        console.error('Error al crear producto:', error);
+        this.snackbar.error('❌ Ocurrió un error al actualizar el producto.');
+      }
+    });
+  }
+
 }
