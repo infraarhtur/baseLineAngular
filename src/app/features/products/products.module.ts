@@ -27,7 +27,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     MaterialModule
   ],
   exports: [
-
+    SelectProductsComponent
   ]
 })
 export class ProductsModule { }

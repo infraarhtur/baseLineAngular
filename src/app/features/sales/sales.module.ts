@@ -11,7 +11,7 @@ import { UpdateSalesComponent } from './components/update-sales/update-sales.com
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../../shared/material/material.module';
 import { DetailSalesComponent } from './components/detail-sales/detail-sales.component';
-import { ProductSalesComponent } from './components/product-sales/product-sales.component';
+import { ProductsModule } from '../products/products.module';
 
 
 @NgModule({
@@ -21,14 +21,14 @@ import { ProductSalesComponent } from './components/product-sales/product-sales.
     CreateSalesComponent,
     SelectSalesComponent,
     UpdateSalesComponent,
-    DetailSalesComponent,
-    ProductSalesComponent
+    DetailSalesComponent
   ],
   imports: [
     CommonModule,
     SalesRoutingModule,
     ReactiveFormsModule,
-    MaterialModule
+    MaterialModule,
+    ProductsModule
   ]
 })
 export class SalesModule { }
