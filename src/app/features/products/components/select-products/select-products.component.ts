@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ProductsService } from '../../services/products.service';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Router } from '@angular/router';
@@ -16,12 +16,26 @@ import { ViewChild } from '@angular/core'
   templateUrl: './select-products.component.html',
   styleUrl: './select-products.component.scss'
 })
-export class SelectProductsComponent implements OnInit, AfterViewInit  {
-  displayedColumns: string[] = [ 'name','description', 'sale_price','purchase_price','provider','categories', 'actions']; // ✅ Columnas de la tabla
+export class SelectProductsComponent implements OnInit, OnChanges, AfterViewInit {
+
+  allColumns = {
+    select: 'select',
+    name: 'name',
+    description: 'description',
+    sale_price: 'sale_price',
+    purchase_price: 'purchase_price',
+    provider: 'provider',
+    categories: 'categories',
+    actions: 'actions'
+  };
+
+
+  displayedColumns: string[] = []; // ✅ Columnas de la tabla
 
   products: any[] = []; // Lista de productos
   selection = new SelectionModel<any>(true, []);
   dataSource = new MatTableDataSource<any>();
+  @Input() isSelected?: boolean = false;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator
   constructor(
@@ -29,12 +43,17 @@ export class SelectProductsComponent implements OnInit, AfterViewInit  {
     private router: Router,
     private dialog: MatDialog,
     private snackbar: SnackbarService,
-  ) {}
+  ) { }
+  ngOnChanges(changes: SimpleChanges): void {
+    this.setDisplayedColumns()
+  }
 
 
   ngOnInit(): void {
+    this.setDisplayedColumns()
     this.loadProducts();
   }
+
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
   }
@@ -42,9 +61,9 @@ export class SelectProductsComponent implements OnInit, AfterViewInit  {
     this.productsService.getProducts().subscribe({
       next: (data) => {
         this.dataSource.data = data;
-        console.log('Productos cargados:', this.dataSource.data );
+        console.log('Productos cargados:', this.dataSource.data);
         this.snackbar.success('Productos cargados');
-            },
+      },
       error: (err) => {
         this.snackbar.error('Error al obtener productos');
         console.error('Error al obtener productos', err);
@@ -52,7 +71,7 @@ export class SelectProductsComponent implements OnInit, AfterViewInit  {
     });
   }
 
-  deleteProduct(id: string,name:string): void {
+  deleteProduct(id: string, name: string): void {
     console.log('Eliminar producto con ID:', id);
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '450px',
@@ -91,9 +110,60 @@ export class SelectProductsComponent implements OnInit, AfterViewInit  {
 
   getProvidersNames(product: any): string {
     return product.providers?.length
-       ? product.providers.map((c: any) => c.name).join(', ')
-       : '';
-   }
+      ? product.providers.map((c: any) => c.name).join(', ')
+      : '';
+  }
+
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
+
+  toggleAllRows(event: any) {
+    if (this.isAllSelected()) {
+      this.selection.clear();
+    } else {
+      this.dataSource.data.forEach(row => this.selection.select(row));
+    }
+
+    const productosSeleccionados = this.selection.selected;
+    console.log('Productos seleccionados:', productosSeleccionados);
+
+  }
+
+  viewSelection(): void {
+    const productosSeleccionados = this.selection.selected;
+
+    if (productosSeleccionados.length === 0) {
+      this.snackbar.error('❌ Debes seleccionar al menos un producto');
+      return;
+    }
+
+    console.log('Productos seleccionados:', productosSeleccionados);
+  }
+
+  applyFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  setDisplayedColumns(): void {
+    const baseColumns = [
+      this.allColumns.name,
+      this.allColumns.description,
+      this.allColumns.sale_price,
+      this.allColumns.purchase_price,
+      this.allColumns.provider,
+      this.allColumns.categories
+    ];
+
+    if (this.isSelected) {
+      this.displayedColumns = [this.allColumns.select, ...baseColumns];
+    } else {
+      this.displayedColumns = [...baseColumns, this.allColumns.actions];
+    }
+  }
 
 
 }
