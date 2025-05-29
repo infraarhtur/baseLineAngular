@@ -1,6 +1,9 @@
 <p>product-sales works!</p>
+<mat-form-field appearance="outline" class="full-width">
+  <mat-label>Buscar productos</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Filtrar por nombre, descripción, etc.">
+</mat-form-field>
 <table mat-table [dataSource]="this.dataSourceProducts" class="mat-elevation-z8" *ngIf="this.dataSourceProducts.data.length > 0; else noProducts">
-
 
 <!-- Checkbox Column -->
 <ng-container matColumnDef="select">
@@ -37,13 +40,13 @@
   <!-- sale_price Column -->
   <ng-container matColumnDef="sale_price">
     <th mat-header-cell *matHeaderCellDef> precio venta </th>
-    <td mat-cell *matCellDef="let product"> {{ product.sale_price }} </td>
+    <td mat-cell *matCellDef="let product"> {{ product.sale_price  | currency:'COP':'symbol':'1.0-0':'es-CO'}} </td>
   </ng-container>
 
   <!-- purchase_price Column -->
   <ng-container matColumnDef="purchase_price">
     <th mat-header-cell *matHeaderCellDef> Precio de compra </th>
-    <td mat-cell *matCellDef="let product"> {{ product.purchase_price }} </td>
+    <td mat-cell *matCellDef="let product"> {{ product.purchase_price  | currency:'COP':'symbol':'1.0-0':'es-CO' }} </td>
   </ng-container>
 
   <!-- stock Column -->

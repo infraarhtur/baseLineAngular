@@ -108,4 +108,9 @@ viewSelection():void{
   console.log('Productos seleccionados:', productosSeleccionados);
 }
 
+applyFilter(event: Event): void {
+  const filterValue = (event.target as HTMLInputElement).value;
+  this.dataSourceProducts.filter = filterValue.trim().toLowerCase();
+}
+
 }
