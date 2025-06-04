@@ -1,4 +1,4 @@
-<button mat-fab extended [routerLink]="['/clients/create']">
+<button mat-fab extended [routerLink]="['/clients/create']" *ngIf="!isSelected">
   <mat-icon>person_add</mat-icon>
   Agregar Cliente
 </button>
@@ -6,7 +6,7 @@
 <h2>Lista de Clientes</h2>
 
 <!-- filtro -->
-<mat-form-field appearance="outline" class="full-width">
+<mat-form-field appearance="outline" class="full-width" >
   <mat-label>Buscar clientes</mat-label>
   <input matInput (keyup)="applyFilter($event)" placeholder="Filtrar nombre, email.">
 </mat-form-field>
