@@ -8,10 +8,11 @@ import { CreateSalesComponent } from './components/create-sales/create-sales.com
 import { SelectSalesComponent } from './components/select-sales/select-sales.component';
 import { UpdateSalesComponent } from './components/update-sales/update-sales.component';
 
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule,FormsModule } from '@angular/forms';
 import { MaterialModule } from '../../shared/material/material.module';
 import { DetailSalesComponent } from './components/detail-sales/detail-sales.component';
 import { ProductsModule } from '../products/products.module';
+import { ClientsModule } from '../clients/clients.module';
 
 
 @NgModule({
@@ -28,7 +29,9 @@ import { ProductsModule } from '../products/products.module';
     SalesRoutingModule,
     ReactiveFormsModule,
     MaterialModule,
-    ProductsModule
+    ProductsModule,
+    ClientsModule,
+    FormsModule
   ]
 })
 export class SalesModule { }

@@ -16,6 +16,13 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatRadioModule } from '@angular/material/radio';
+
+
+
 
 @NgModule({
   imports: [
@@ -33,7 +40,13 @@ import { MatSelectModule } from '@angular/material/select';
     MatDialogModule,
     MatSnackBarModule,
     MatCheckboxModule,
-    MatSelectModule
+    MatSelectModule,
+    MatChipsModule,
+    MatAutocompleteModule,
+    MatFormFieldModule,
+    MatAutocompleteModule,
+    MatFormFieldModule,
+    MatRadioModule
   ],
   exports: [
     MatButtonModule,
@@ -49,7 +62,12 @@ import { MatSelectModule } from '@angular/material/select';
     MatDialogModule,
     MatSnackBarModule,
     MatCheckboxModule,
-    MatSelectModule
+    MatSelectModule,
+    MatChipsModule,
+    MatAutocompleteModule,
+    MatFormFieldModule,
+    MatRadioModule
+
   ]
 })
 export class MaterialModule { }

@@ -203,8 +203,4 @@ toggleSelection(product: any, checked: boolean): void {
   }
 }
 
-
-
-
-
 }

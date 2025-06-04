@@ -10,7 +10,7 @@ import { UpdateProductsComponent } from './components/update-products/update-pro
 import { MaterialModule } from '../../shared/material/material.module';
 import { HomeProductsComponent } from './components/home-products/home-products.component';
 import { FormProductsComponent } from './components/form-products/form-products.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, } from '@angular/forms';
 
 
 @NgModule({
