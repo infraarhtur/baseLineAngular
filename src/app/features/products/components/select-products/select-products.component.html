@@ -144,6 +144,5 @@
   <p>No hay productos disponibles.</p>
 </ng-template>
 
-<button mat-raised-button color="primary" (click)="viewSelection()" *ngIf="isSelected">
-  ver seleccion
-</button>
+<div class="total-container" *ngIf="isSelected">
+  <h3>Total de la venta: {{ getTotalAmount() | currency:'COP' }}</h3>

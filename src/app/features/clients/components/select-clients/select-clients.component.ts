@@ -53,7 +53,6 @@ export class SelectClientsComponent implements OnInit, OnChanges, AfterViewInit 
     this.clientsService.getClients().subscribe({
       next: (data) => {
         this.dataSource.data = data;
-        console.log('Clientes cargados:', this.dataSource.data);
         this.snackbar.success('Clientes cargados');
       },
       error: (err) => {
@@ -65,7 +64,6 @@ export class SelectClientsComponent implements OnInit, OnChanges, AfterViewInit 
 
 
   deleteClient(id: string, name: string, email: string): void {
-    console.log('Eliminar cliente con ID:', id);
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '450px',
       data: { message: `¿Estás seguro de que deseas eliminar el cliente \n ${name} con email ${email}?  ` }
@@ -76,7 +74,7 @@ export class SelectClientsComponent implements OnInit, OnChanges, AfterViewInit 
         this.clientsService.deleteClient(id).subscribe({
           next: () => {
             this.dataSource.data = this.dataSource.data.filter(c => c.id !== id); // Actualiza la tabla
-            console.log('Cliente eliminado correctamente');
+
             this.snackbar.success('Cliente eliminado correctamente');
           },
           error: (err) => {
@@ -90,7 +88,7 @@ export class SelectClientsComponent implements OnInit, OnChanges, AfterViewInit 
   }
 
   updateClient(id: number): void {
-    console.log('actualizar cliente con ID:', id);
+
     this.router.navigate(['/clients/update', id]);
     // Aquí puedes llamar a un servicio para eliminar el cliente
   }
@@ -117,7 +115,6 @@ export class SelectClientsComponent implements OnInit, OnChanges, AfterViewInit 
   selectClient(clientId: string): void {
     this.selectedClientId = clientId;
     const selected = this.dataSource.data.find(c => c.id === clientId);
-    console.log('Cliente seleccionado:', selected);
     this.selectedClientChange.emit(selected);
   }
 

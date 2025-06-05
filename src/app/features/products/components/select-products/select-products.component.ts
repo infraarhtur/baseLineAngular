@@ -65,7 +65,6 @@ export class SelectProductsComponent implements OnInit, OnChanges, AfterViewInit
     this.productsService.getProducts().subscribe({
       next: (data) => {
         this.dataSource.data = data;
-        console.log('Productos cargados:', this.dataSource.data);
         this.snackbar.success('Productos cargados');
       },
       error: (err) => {
@@ -76,7 +75,6 @@ export class SelectProductsComponent implements OnInit, OnChanges, AfterViewInit
   }
 
   deleteProduct(id: string, name: string): void {
-    console.log('Eliminar producto con ID:', id);
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '450px',
       data: { message: `¿Estás seguro de que deseas eliminar el producto \n ${name} ?  ` }
@@ -132,7 +130,6 @@ export class SelectProductsComponent implements OnInit, OnChanges, AfterViewInit
     }
 
     const productosSeleccionados = this.selection.selected;
-    console.log('Productos seleccionados:', productosSeleccionados);
     // 🚨 Emitimos los productos seleccionados
     this.selectedProductsChange.emit(this.selection.selected);
 
@@ -145,8 +142,6 @@ export class SelectProductsComponent implements OnInit, OnChanges, AfterViewInit
       this.snackbar.error('❌ Debes seleccionar al menos un producto');
       return;
     }
-
-    console.log('Productos seleccionados:', productosSeleccionados);
   }
 
   applyFilter(event: Event): void {
@@ -211,7 +206,4 @@ export class SelectProductsComponent implements OnInit, OnChanges, AfterViewInit
   getTotalAmount(): number {
     return this.selection.selected.reduce((sum, item) => sum + (item.total || 0), 0);
   }
-
-
-
 }

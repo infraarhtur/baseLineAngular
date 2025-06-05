@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProvidersService } from '../../../providers/services/providers.service';
 import { CategoriesService } from '../../../categories/services/categories.service';
 import { SalesService } from '../../services/sales.service';
@@ -19,6 +19,7 @@ export class FormSalesComponent {
 
   @Input() saleData?: any;
   @Output() formSubmitted = new EventEmitter<any>();
+
   selectedProducts: any[] = [];
   totalAmount: number = 0;
 
@@ -56,24 +57,62 @@ buildForm(): void {
     payment_method: [this.saleData?.payment_method || 'cash', Validators.required],
     comment: [this.saleData?.comment || new Date()],
     status: [this.saleData?.status || 'pending', Validators.required],
+    details: this.fb.array([])
   });
 }
 
 handleSelectedProducts(products: any[]): void {
   this.selectedProducts = products;
-  console.log('Productos recibidos en el padre:', this.selectedProducts);
-    // ✅ Calcular el total sumando los campos `total` de cada producto
+
+  // ✅ Calcular el total sumando los campos `total` de cada producto
   this.totalAmount = products.reduce((acc, p) => acc + (p.total || 0), 0);
+
+
+// productos seleccionados emitidos al componente padre
+  // this.productsSelected.emit(this.selectedProducts);
+
+
 }
 
 onClientSelected(client: any): void {
-  console.log('Cliente recibido en FormSalesComponent:', client);
+  console.log('Cliente seleccionado desde el hijo:', client);
+  // this.clientSelected.emit(client);
   this.saleForm.patchValue({ client_id: client.id });
 }
 
+loadDetails(): void {
+
+    const detailsArray = this.saleForm.get('details') as FormArray;
+  detailsArray.clear(); // Evita duplicados
+// Limpiar el FormArray antes de agregar nuevos productos
+this.selectedProducts.forEach(product => {
+  const quantity = product.quantity || 1;
+  const salePrice = product.sale_price || 0;
+  const discount = product.discount || 0;
+  const tax = product.tax || 0;
+
+  const subtotal = quantity * salePrice;
+  const discountAmount = subtotal * (discount / 100);
+  const taxedAmount = (subtotal - discountAmount) * (tax / 100);
+  const total = subtotal - discountAmount + taxedAmount;
+
+  detailsArray.push(this.fb.group({
+    product_id: [product.id, Validators.required],
+    sale_price: [salePrice, [Validators.required, Validators.min(0)]],
+    tax: [tax, [Validators.required, Validators.min(0)]],
+    subtotal: [parseFloat(subtotal.toFixed(2)), [Validators.required, Validators.min(0)]],
+    quantity: [quantity, [Validators.required, Validators.min(1)]],
+    discount: [discount, [Validators.required, Validators.min(0)]],
+    total: [parseFloat(total.toFixed(2)), Validators.required]
+  }));
+});
+  console.log('Productos recibidos en el padre:', this.selectedProducts,detailsArray);
+}
 
 onSubmit(): void {
-  debugger;
+  this.loadDetails()
+  console.log('Datos del formulario:', this.saleForm.value);
+  debugger
   if (this.saleForm.valid) {
     console.log('Formulario enviado con:', this.saleForm.value);
     this.formSubmitted.emit(this.saleForm.value);
