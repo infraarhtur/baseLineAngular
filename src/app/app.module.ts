@@ -15,6 +15,8 @@ import { ConfirmDialogComponent } from './shared/components/confirm-dialog/confi
 import { SalesModule } from './features/sales/sales.module';
 import { LOCALE_ID } from '@angular/core';
 
+
+
 @NgModule({
   declarations: [
     AppComponent,

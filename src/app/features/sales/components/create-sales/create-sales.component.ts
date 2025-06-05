@@ -20,7 +20,19 @@ export class CreateSalesComponent {
     private SalesService: SalesService, // Inyectamos el servicio
     private router: Router // Para redirigir después de guardar
   ) {}
-  createProvider(formData: any): void {
+
+  createSale(formData: any): void {
+    debugger;
+    this.SalesService.createSale(formData).subscribe({
+      next: () => {
+        this.snackbar.success('✅ Venta creada con éxito');
+        this.router.navigate(['/sales/select']);
+      },
+      error: (error) => {
+        console.error('Error al crear venta:', error);
+        this.snackbar.error('❌ Ocurrió un error al crear la venta.');
+      }
+    });
 
   }
 

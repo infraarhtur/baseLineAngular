@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { AfterViewInit, Component, Input, Output, OnChanges, OnInit, SimpleChanges, EventEmitter } from '@angular/core';
 import { ProductsService } from '../../services/products.service';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Router } from '@angular/router';
@@ -26,6 +26,9 @@ export class SelectProductsComponent implements OnInit, OnChanges, AfterViewInit
     purchase_price: 'purchase_price',
     provider: 'provider',
     categories: 'categories',
+    quantity: 'quantity',
+    discount: 'discount',
+    total: 'total',
     actions: 'actions'
   };
 
@@ -36,6 +39,7 @@ export class SelectProductsComponent implements OnInit, OnChanges, AfterViewInit
   selection = new SelectionModel<any>(true, []);
   dataSource = new MatTableDataSource<any>();
   @Input() isSelected?: boolean = false;
+  @Output() selectedProductsChange = new EventEmitter<any[]>();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator
   constructor(
@@ -44,10 +48,10 @@ export class SelectProductsComponent implements OnInit, OnChanges, AfterViewInit
     private dialog: MatDialog,
     private snackbar: SnackbarService,
   ) { }
+
   ngOnChanges(changes: SimpleChanges): void {
     this.setDisplayedColumns()
   }
-
 
   ngOnInit(): void {
     this.setDisplayedColumns()
@@ -61,7 +65,6 @@ export class SelectProductsComponent implements OnInit, OnChanges, AfterViewInit
     this.productsService.getProducts().subscribe({
       next: (data) => {
         this.dataSource.data = data;
-        console.log('Productos cargados:', this.dataSource.data);
         this.snackbar.success('Productos cargados');
       },
       error: (err) => {
@@ -72,7 +75,6 @@ export class SelectProductsComponent implements OnInit, OnChanges, AfterViewInit
   }
 
   deleteProduct(id: string, name: string): void {
-    console.log('Eliminar producto con ID:', id);
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '450px',
       data: { message: `¿Estás seguro de que deseas eliminar el producto \n ${name} ?  ` }
@@ -128,7 +130,8 @@ export class SelectProductsComponent implements OnInit, OnChanges, AfterViewInit
     }
 
     const productosSeleccionados = this.selection.selected;
-    console.log('Productos seleccionados:', productosSeleccionados);
+    // 🚨 Emitimos los productos seleccionados
+    this.selectedProductsChange.emit(this.selection.selected);
 
   }
 
@@ -139,8 +142,6 @@ export class SelectProductsComponent implements OnInit, OnChanges, AfterViewInit
       this.snackbar.error('❌ Debes seleccionar al menos un producto');
       return;
     }
-
-    console.log('Productos seleccionados:', productosSeleccionados);
   }
 
   applyFilter(event: Event): void {
@@ -153,17 +154,56 @@ export class SelectProductsComponent implements OnInit, OnChanges, AfterViewInit
       this.allColumns.name,
       this.allColumns.description,
       this.allColumns.sale_price,
-      this.allColumns.purchase_price,
       this.allColumns.provider,
       this.allColumns.categories
     ];
 
     if (this.isSelected) {
-      this.displayedColumns = [this.allColumns.select, ...baseColumns];
+      this.displayedColumns = [
+        this.allColumns.select,
+        ...baseColumns,
+        this.allColumns.quantity,
+        this.allColumns.discount,
+        this.allColumns.total
+      ];
     } else {
+      baseColumns.splice(2, 0, this.allColumns.purchase_price); // Insertar después de sale_price
       this.displayedColumns = [...baseColumns, this.allColumns.actions];
     }
   }
 
+  updateTotal(product: any): void {
+    const quantity = Number(product.quantity) || 0;
+    const discount = Number(product.discount) || 0;
 
+    const unitPrice = Number(product.sale_price) || 0;
+    const subtotal = quantity * unitPrice;
+    const discountAmount = subtotal * (discount / 100);
+    const total = subtotal - discountAmount
+
+    // Guarda el total redondeado a 2 decimales
+    product.total = parseFloat(total.toFixed(2));
+  }
+
+  toggleSelection(product: any, checked: boolean): void {
+    if (checked) {
+      this.selection.select(product);
+      product.quantity = product.quantity ?? 1;
+      product.discount = product.discount ?? 0;
+      product.tax = product.tax ?? 0;
+      this.updateTotal(product);
+    } else {
+      this.selection.deselect(product);
+      product.quantity = null;
+      product.discount = null;
+      product.tax = null;
+      product.total = null;
+    }
+
+    // 🚨 Emitimos los productos seleccionados
+    this.selectedProductsChange.emit(this.selection.selected);
+  }
+  getTotalAmount(): number {
+    return this.selection.selected.reduce((sum, item) => sum + (item.total || 0), 0);
+  }
 }

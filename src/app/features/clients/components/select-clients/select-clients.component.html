@@ -1,13 +1,29 @@
-<button mat-fab extended [routerLink]="['/clients/create']">
+<button mat-fab extended [routerLink]="['/clients/create']" *ngIf="!isSelected">
   <mat-icon>person_add</mat-icon>
   Agregar Cliente
 </button>
 
 <h2>Lista de Clientes</h2>
 
+<!-- filtro -->
+<mat-form-field appearance="outline" class="full-width" >
+  <mat-label>Buscar clientes</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Filtrar nombre, email.">
+</mat-form-field>
 
 <table mat-table [dataSource]="this.dataSource" class="mat-elevation-z8" *ngIf="this.dataSource.data.length > 0; else noClients">
 
+<!-- Selección única por radio -->
+<ng-container matColumnDef="select" *ngIf="isSelected">
+  <th mat-header-cell *matHeaderCellDef></th>
+  <td mat-cell *matCellDef="let client">
+    <mat-radio-button
+      [value]="client.id"
+      [checked]="selectedClientId === client.id"
+      (change)="selectClient(client.id)">
+    </mat-radio-button>
+  </td>
+</ng-container>
 
   <!-- Nombre Column -->
   <ng-container matColumnDef="name">
@@ -40,7 +56,7 @@
   </ng-container>
 
   <!-- Acciones Column -->
-  <ng-container matColumnDef="actions">
+  <ng-container matColumnDef="actions" >
     <th mat-header-cell *matHeaderCellDef> Acciones </th>
     <td mat-cell *matCellDef="let client">
       <button mat-button color="warn" (click)="deleteClient(client.id,client.name,client.email)">Eliminar</button>

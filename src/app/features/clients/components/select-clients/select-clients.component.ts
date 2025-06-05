@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, Output, EventEmitter, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ClientsService } from '../../services/clients.service';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Router } from '@angular/router';
@@ -16,13 +16,17 @@ import { ViewChild } from '@angular/core'
   templateUrl: './select-clients.component.html',
   styleUrl: './select-clients.component.scss'
 })
-export class SelectClientsComponent implements OnInit, AfterViewInit {
+export class SelectClientsComponent implements OnInit, OnChanges, AfterViewInit {
 
-  displayedColumns: string[] = [ 'name', 'phone', 'email','address','comment', 'actions']; // ✅ Columnas de la tabla
+  displayedColumns: string[] = this.isSelected
+    ? ['select', 'name', 'phone', 'email', 'address', 'comment']
+    : ['name', 'phone', 'email', 'address', 'comment', 'actions']; // ✅ Columnas de la tabla
 
   clients: any[] = []; // Lista de clientes
   selection = new SelectionModel<any>(true, []);
   dataSource = new MatTableDataSource<any>();
+  @Input() isSelected?: boolean = false;
+  @Output() selectedClientChange = new EventEmitter<any>();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator
 
@@ -31,22 +35,26 @@ export class SelectClientsComponent implements OnInit, AfterViewInit {
     private router: Router,
     private dialog: MatDialog,
     private snackbar: SnackbarService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
+    this.setDisplayedColumns();
     this.loadClients();
+
   }
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+    this.setDisplayedColumns()
   }
 
   loadClients(): void {
     this.clientsService.getClients().subscribe({
       next: (data) => {
         this.dataSource.data = data;
-        console.log('Clientes cargados:', this.dataSource.data );
         this.snackbar.success('Clientes cargados');
-            },
+      },
       error: (err) => {
         this.snackbar.error('Error al obtener clientes');
         console.error('Error al obtener clientes', err);
@@ -55,8 +63,7 @@ export class SelectClientsComponent implements OnInit, AfterViewInit {
   }
 
 
-  deleteClient(id: string,name:string, email:string): void {
-    console.log('Eliminar cliente con ID:', id);
+  deleteClient(id: string, name: string, email: string): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '450px',
       data: { message: `¿Estás seguro de que deseas eliminar el cliente \n ${name} con email ${email}?  ` }
@@ -67,7 +74,7 @@ export class SelectClientsComponent implements OnInit, AfterViewInit {
         this.clientsService.deleteClient(id).subscribe({
           next: () => {
             this.dataSource.data = this.dataSource.data.filter(c => c.id !== id); // Actualiza la tabla
-            console.log('Cliente eliminado correctamente');
+
             this.snackbar.success('Cliente eliminado correctamente');
           },
           error: (err) => {
@@ -81,7 +88,7 @@ export class SelectClientsComponent implements OnInit, AfterViewInit {
   }
 
   updateClient(id: number): void {
-    console.log('actualizar cliente con ID:', id);
+
     this.router.navigate(['/clients/update', id]);
     // Aquí puedes llamar a un servicio para eliminar el cliente
   }
@@ -95,5 +102,26 @@ export class SelectClientsComponent implements OnInit, AfterViewInit {
   /** Selecciona o deselecciona todas las filas */
   toggleAllRows() {
     this.isAllSelected() ? this.selection.clear() : this.dataSource.data.forEach(row => this.selection.select(row));
+  }
+
+  applyFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+
+  selectedClientId: string | null = null;
+
+  selectClient(clientId: string): void {
+    this.selectedClientId = clientId;
+    const selected = this.dataSource.data.find(c => c.id === clientId);
+    this.selectedClientChange.emit(selected);
+  }
+
+
+  setDisplayedColumns(): void {
+    this.displayedColumns = this.isSelected
+      ? ['select', 'name', 'phone', 'email', 'address', 'comment']
+      : ['name', 'phone', 'email', 'address', 'comment', 'actions'];
   }
 }
