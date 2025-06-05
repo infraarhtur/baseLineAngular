@@ -1,5 +1,61 @@
 <p>form-sales works!</p>
 
-<app-select-products [isSelected]="true"></app-select-products>
+<app-select-products [isSelected]="true"  (selectedProductsChange)="handleSelectedProducts($event)"></app-select-products>
 
-<app-select-clients [isSelected]="true"></app-select-clients>
+<app-select-clients [isSelected]="true" (selectedClientChange)="onClientSelected($event)"></app-select-clients>
+
+
+<form [formGroup]="saleForm" (ngSubmit)="onSubmit()" class="sale-form">
+
+  <!-- Método de Pago -->
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Método de Pago</mat-label>
+    <mat-select formControlName="payment_method">
+      <mat-option value="cash">Efectivo</mat-option>
+      <mat-option value="credit_card">Tarjeta de Crédito</mat-option>
+      <mat-option value="bank_transfer">Transferencia</mat-option>
+      <mat-option value="other">Otros</mat-option>
+    </mat-select>
+    <mat-error *ngIf="saleForm.get('payment_method')?.hasError('required')">
+  El método de pago es obligatorio
+</mat-error>
+  </mat-form-field>
+
+  <!-- Comentario -->
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Comentario</mat-label>
+    <textarea matInput formControlName="comment" placeholder="Observaciones o detalles adicionales"></textarea>
+  </mat-form-field>
+
+  <!-- Estado de la Factura -->
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Estado</mat-label>
+    <mat-select formControlName="status">
+      <mat-option value="pending">Pendiente</mat-option>
+      <mat-option value="paid">Pagada</mat-option>
+      <mat-option value="canceled">Cancelada</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+<!-- <div *ngIf="selectedProducts.length > 0">
+  <h3>Productos Seleccionados</h3>
+
+  <mat-list>
+    <mat-list-item *ngFor="let p of selectedProducts">
+      <div class="product-list-item">
+        <div class="item-name">nombre: {{ p.name }}</div>
+        <div class="item-detail">Cantidad: {{ p.quantity }}</div>
+        <div class="item-detail">Descuento: {{ p.discount }}%</div>
+        <div class="item-total">Total: {{ p.total | currency:'COP':'symbol' }}</div>
+      </div>
+    </mat-list-item>
+  </mat-list>
+
+  <div class="total-summary">
+    <strong>Total a pagar:</strong> {{ totalAmount | currency:'COP':'symbol' }}
+  </div>
+</div> -->
+    <div class="form-actions">
+    <button mat-raised-button color="primary" type="submit">Guardar</button>
+  </div>
+</form>

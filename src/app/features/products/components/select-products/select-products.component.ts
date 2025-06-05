@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { AfterViewInit, Component, Input, Output, OnChanges, OnInit, SimpleChanges, EventEmitter } from '@angular/core';
 import { ProductsService } from '../../services/products.service';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Router } from '@angular/router';
@@ -39,6 +39,7 @@ export class SelectProductsComponent implements OnInit, OnChanges, AfterViewInit
   selection = new SelectionModel<any>(true, []);
   dataSource = new MatTableDataSource<any>();
   @Input() isSelected?: boolean = false;
+  @Output() selectedProductsChange = new EventEmitter<any[]>();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator
   constructor(
@@ -47,10 +48,10 @@ export class SelectProductsComponent implements OnInit, OnChanges, AfterViewInit
     private dialog: MatDialog,
     private snackbar: SnackbarService,
   ) { }
+
   ngOnChanges(changes: SimpleChanges): void {
     this.setDisplayedColumns()
   }
-
 
   ngOnInit(): void {
     this.setDisplayedColumns()
@@ -132,6 +133,8 @@ export class SelectProductsComponent implements OnInit, OnChanges, AfterViewInit
 
     const productosSeleccionados = this.selection.selected;
     console.log('Productos seleccionados:', productosSeleccionados);
+    // 🚨 Emitimos los productos seleccionados
+    this.selectedProductsChange.emit(this.selection.selected);
 
   }
 
@@ -187,20 +190,28 @@ export class SelectProductsComponent implements OnInit, OnChanges, AfterViewInit
     product.total = parseFloat(total.toFixed(2));
   }
 
-toggleSelection(product: any, checked: boolean): void {
-  if (checked) {
-    this.selection.select(product);
-    product.quantity = product.quantity ?? 1;
-    product.discount = product.discount ?? 0;
-    product.tax = product.tax ?? 0;
-    this.updateTotal(product);
-  } else {
-    this.selection.deselect(product);
-    product.quantity = null;
-    product.discount = null;
-    product.tax = null;
-    product.total = null;
+  toggleSelection(product: any, checked: boolean): void {
+    if (checked) {
+      this.selection.select(product);
+      product.quantity = product.quantity ?? 1;
+      product.discount = product.discount ?? 0;
+      product.tax = product.tax ?? 0;
+      this.updateTotal(product);
+    } else {
+      this.selection.deselect(product);
+      product.quantity = null;
+      product.discount = null;
+      product.tax = null;
+      product.total = null;
+    }
+
+    // 🚨 Emitimos los productos seleccionados
+    this.selectedProductsChange.emit(this.selection.selected);
   }
-}
+  getTotalAmount(): number {
+    return this.selection.selected.reduce((sum, item) => sum + (item.total || 0), 0);
+  }
+
+
 
 }

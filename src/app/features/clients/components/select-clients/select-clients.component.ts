@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { AfterViewInit, Component, Input, Output, EventEmitter, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ClientsService } from '../../services/clients.service';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Router } from '@angular/router';
@@ -26,6 +26,7 @@ export class SelectClientsComponent implements OnInit, OnChanges, AfterViewInit 
   selection = new SelectionModel<any>(true, []);
   dataSource = new MatTableDataSource<any>();
   @Input() isSelected?: boolean = false;
+  @Output() selectedClientChange = new EventEmitter<any>();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator
 
@@ -117,6 +118,7 @@ export class SelectClientsComponent implements OnInit, OnChanges, AfterViewInit 
     this.selectedClientId = clientId;
     const selected = this.dataSource.data.find(c => c.id === clientId);
     console.log('Cliente seleccionado:', selected);
+    this.selectedClientChange.emit(selected);
   }
 
 

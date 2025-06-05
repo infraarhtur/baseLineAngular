@@ -19,7 +19,8 @@ export class FormSalesComponent {
 
   @Input() saleData?: any;
   @Output() formSubmitted = new EventEmitter<any>();
-
+  selectedProducts: any[] = [];
+  totalAmount: number = 0;
 
 
   saleForm!: FormGroup;
@@ -28,45 +29,58 @@ export class FormSalesComponent {
   products: any[] = [];
 
   constructor(private fb: FormBuilder,
-     private productsService: ProductsService,
-     private providersService: ProvidersService,
-     private categoriesService: CategoriesService,
-     private salesService: SalesService,
-     private snackbar: SnackbarService,
-    ) {}
+    private productsService: ProductsService,
+    private providersService: ProvidersService,
+    private categoriesService: CategoriesService,
+    private salesService: SalesService,
+    private snackbar: SnackbarService,
+  ) { }
 
 
   ngOnInit(): void {
     // this.loadProviders();
     // this.loadCategories();
-    // this.buildForm();
+     this.buildForm();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['productData'] && this.saleData) {
+    if (changes['saleData'] && this.saleData) {
       this.buildForm();
     }
   }
 
-  buildForm(): void {
-    this.saleForm = this.fb.group({});
-  //   this.productForm = this.fb.group({
-  //     name: [this.productData?.name || '', [Validators.required, Validators.maxLength(100)]],
-  //     description: [this.productData?.description || '', [Validators.maxLength(255)]],
-  //     sale_price: [this.productData?.sale_price || 0, [Validators.required, Validators.min(0)]],
-  //     purchase_price: [this.productData?.purchase_price || 0, [Validators.required, Validators.min(0)]],
-  //     stock: [this.productData?.stock || 0, [Validators.required, Validators.min(0)]],
-  //     providers_ids: [this.productData?.providers_ids?.map((c: any) => c.id) || [], Validators.required],
-  //     category_ids: [this.productData?.categories_ids?.map((c: any) => c.id) || [], Validators.required]
-  //   });
-  }
+buildForm(): void {
+  this.saleForm = this.fb.group({
+    client_id: [this.saleData?.client_id || null, Validators.required],
+    sale_date: [this.saleData?.sale_date || new Date(), Validators.required],
+    payment_method: [this.saleData?.payment_method || 'cash', Validators.required],
+    comment: [this.saleData?.comment || new Date()],
+    status: [this.saleData?.status || 'pending', Validators.required],
+  });
+}
+
+handleSelectedProducts(products: any[]): void {
+  this.selectedProducts = products;
+  console.log('Productos recibidos en el padre:', this.selectedProducts);
+    // ✅ Calcular el total sumando los campos `total` de cada producto
+  this.totalAmount = products.reduce((acc, p) => acc + (p.total || 0), 0);
+}
+
+onClientSelected(client: any): void {
+  console.log('Cliente recibido en FormSalesComponent:', client);
+  this.saleForm.patchValue({ client_id: client.id });
+}
 
 
-  onSubmit(): void {
-    if (this.saleForm.valid) {
-      this.formSubmitted.emit(this.saleForm.value);
-    } else {
-      this.saleForm.markAllAsTouched();
-    }
+onSubmit(): void {
+  debugger;
+  if (this.saleForm.valid) {
+    console.log('Formulario enviado con:', this.saleForm.value);
+    this.formSubmitted.emit(this.saleForm.value);
+  } else {
+    this.saleForm.markAllAsTouched();
+    this.snackbar.error('Por favor completa todos los campos obligatorios');
   }
+}
+
 }
