@@ -41,7 +41,7 @@ export class FormSalesComponent {
   ngOnInit(): void {
     // this.loadProviders();
     // this.loadCategories();
-     this.buildForm();
+    this.buildForm();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -50,76 +50,91 @@ export class FormSalesComponent {
     }
   }
 
-buildForm(): void {
-  this.saleForm = this.fb.group({
-    client_id: [this.saleData?.client_id || null, Validators.required],
-    sale_date: [this.saleData?.sale_date || new Date(), Validators.required],
-    payment_method: [this.saleData?.payment_method || 'cash', Validators.required],
-    comment: [this.saleData?.comment || new Date()],
-    status: [this.saleData?.status || 'pending', Validators.required],
-    details: this.fb.array([])
-  });
-}
-
-handleSelectedProducts(products: any[]): void {
-  this.selectedProducts = products;
-
-  // ✅ Calcular el total sumando los campos `total` de cada producto
-  this.totalAmount = products.reduce((acc, p) => acc + (p.total || 0), 0);
-
-
-// productos seleccionados emitidos al componente padre
-  // this.productsSelected.emit(this.selectedProducts);
-
-
-}
-
-onClientSelected(client: any): void {
-  console.log('Cliente seleccionado desde el hijo:', client);
-  // this.clientSelected.emit(client);
-  this.saleForm.patchValue({ client_id: client.id });
-}
-
-loadDetails(): void {
-
-    const detailsArray = this.saleForm.get('details') as FormArray;
-  detailsArray.clear(); // Evita duplicados
-// Limpiar el FormArray antes de agregar nuevos productos
-this.selectedProducts.forEach(product => {
-  const quantity = product.quantity || 1;
-  const salePrice = product.sale_price || 0;
-  const discount = product.discount || 0;
-  const tax = product.tax || 0;
-
-  const subtotal = quantity * salePrice;
-  const discountAmount = subtotal * (discount / 100);
-  const taxedAmount = (subtotal - discountAmount) * (tax / 100);
-  const total = subtotal - discountAmount + taxedAmount;
-
-  detailsArray.push(this.fb.group({
-    product_id: [product.id, Validators.required],
-    sale_price: [salePrice, [Validators.required, Validators.min(0)]],
-    tax: [tax, [Validators.required, Validators.min(0)]],
-    subtotal: [parseFloat(subtotal.toFixed(2)), [Validators.required, Validators.min(0)]],
-    quantity: [quantity, [Validators.required, Validators.min(1)]],
-    discount: [discount, [Validators.required, Validators.min(0)]],
-    total: [parseFloat(total.toFixed(2)), Validators.required]
-  }));
-});
-  console.log('Productos recibidos en el padre:', this.selectedProducts,detailsArray);
-}
-
-onSubmit(): void {
-  this.loadDetails()
-  console.log('Datos del formulario:', this.saleForm.value);
-  debugger
-  if (this.saleForm.valid) {
-    console.log('Formulario enviado con:', this.saleForm.value);
-    this.formSubmitted.emit(this.saleForm.value);
-  } else {
-    this.saleForm.markAllAsTouched();
-    this.snackbar.error('Por favor completa todos los campos obligatorios');
+  buildForm(): void {
+    this.saleForm = this.fb.group({
+      client_id: [this.saleData?.client_id || null, Validators.required],
+      sale_date: [this.saleData?.sale_date || new Date(), Validators.required],
+      payment_method: [this.saleData?.payment_method || 'cash', Validators.required],
+      comment: [this.saleData?.comment || new Date()],
+      status: [this.saleData?.status || 'pending', Validators.required],
+      details: this.fb.array([]),
+      client: this.fb.group({}),
+      total_amount: [{ value: 0 }]
+    });
   }
-}
+
+  handleSelectedProducts(products: any[]): void {
+    this.selectedProducts = products;
+
+    // ✅ Calcular el total sumando los campos `total` de cada producto
+    this.totalAmount = products.reduce((acc, p) => acc + (p.total || 0), 0);
+
+
+    // productos seleccionados emitidos al componente padre
+    // this.productsSelected.emit(this.selectedProducts);
+
+
+  }
+
+  onClientSelected(client: any): void {
+    console.log('Cliente seleccionado desde el hijo:', client);
+    // this.clientSelected.emit(client);
+    this.saleForm.patchValue({ client_id: client.id });
+
+    this.saleForm.setControl('client', this.fb.group({
+      id: [client.id, Validators.required],
+      name: [client.name, Validators.required],
+      email: [client.email, [Validators.required, Validators.email]],
+      phone: [client.phone, Validators.required],
+      address: [client.address],
+      comment: [client.comment],
+    }));
+  }
+
+  loadDetails(): void {
+    const detailsArray = this.saleForm.get('details') as FormArray;
+    // const clientSelected = this.saleForm.get('details') as FormArray;
+    detailsArray.clear(); // Evita duplicados
+    // Limpiar el FormArray antes de agregar nuevos productos
+    this.selectedProducts.forEach(product => {
+      const quantity = product.quantity || 1;
+      const salePrice = product.sale_price || 0;
+      const discount = product.discount || 0;
+      const tax = product.tax || 0;
+
+      const subtotal = quantity * salePrice;
+      const discountAmount = subtotal * (discount / 100);
+      const taxedAmount = (subtotal - discountAmount) * (tax / 100);
+      const total = subtotal - discountAmount + taxedAmount;
+
+      detailsArray.push(this.fb.group({
+        product_id: [product.id, Validators.required],
+        sale_price: [salePrice, [Validators.required, Validators.min(0)]],
+        tax: [tax, [Validators.required, Validators.min(0)]],
+        subtotal: [parseFloat(subtotal.toFixed(2)), [Validators.required, Validators.min(0)]],
+        quantity: [quantity, [Validators.required, Validators.min(1)]],
+        discount: [discount, [Validators.required, Validators.min(0)]],
+        total: [parseFloat(total.toFixed(2)), Validators.required]
+      }));
+    });
+    debugger
+    this.saleForm.get('total_amount')?.setValue(this.totalAmount);
+    // this.saleForm.patchValue({ total_amount: this.totalAmount });
+
+    console.log('Productos recibidos en el padre:', this.selectedProducts, detailsArray);
+  }
+
+  onSubmit(): void {
+    this.loadDetails()
+    console.log('Datos del formulario:', this.saleForm.value);
+    debugger
+    if (this.saleForm.valid) {
+      console.log('Formulario enviado con:', this.saleForm.value);
+      this.formSubmitted.emit(this.saleForm.value);
+    } else {
+      this.saleForm.markAllAsTouched();
+      this.snackbar.error('Por favor completa todos los campos obligatorios');
+    }
+  }
 
 }
