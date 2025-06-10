@@ -2,6 +2,8 @@
 
 <app-select-products [isSelected]="true"  (selectedProductsChange)="handleSelectedProducts($event)"></app-select-products>
 
+
+
 <app-select-clients [isSelected]="true" (selectedClientChange)="onClientSelected($event)"></app-select-clients>
 
 
@@ -37,7 +39,12 @@
     </mat-select>
   </mat-form-field>
 
-    <div class="form-actions">
-    <button mat-raised-button color="primary" type="submit">Guardar</button>
+<mat-error *ngIf="saleForm.get('details')?.hasError('minArrayLength') && selectedProducts.length === 0">
+  Debes agregar al menos un producto en los detalles.
+</mat-error>
+
+    <div class="form-actions" >
+  <button mat-raised-button color="primary" type="submit" [disabled]="selectedProducts.length === 0">
+    Guardar</button>
   </div>
 </form>
