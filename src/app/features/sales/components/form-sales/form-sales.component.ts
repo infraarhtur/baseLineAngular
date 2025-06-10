@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { ProvidersService } from '../../../providers/services/providers.service';
 import { CategoriesService } from '../../../categories/services/categories.service';
 import { SalesService } from '../../services/sales.service';
@@ -50,14 +50,24 @@ export class FormSalesComponent {
     }
   }
 
+    // ✅ Validador personalizado embebido
+  private minArrayLengthValidator(minLength: number = 1) {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value;
+      return Array.isArray(value) && value.length >= minLength
+        ? null
+        : { minArrayLength: true };
+    };
+  }
+
   buildForm(): void {
     this.saleForm = this.fb.group({
       client_id: [this.saleData?.client_id || null, Validators.required],
       sale_date: [this.saleData?.sale_date || new Date(), Validators.required],
       payment_method: [this.saleData?.payment_method || 'cash', Validators.required],
-      comment: [this.saleData?.comment || new Date()],
+      comment: [this.saleData?.comment || '', Validators.maxLength(400)],
       status: [this.saleData?.status || 'pending', Validators.required],
-      details: this.fb.array([]),
+      details: this.fb.array([], this.minArrayLengthValidator(1)),
       client: this.fb.group({}),
       total_amount: [{ value: 0 }]
     });
@@ -126,6 +136,7 @@ export class FormSalesComponent {
 
   onSubmit(): void {
     this.loadDetails()
+    debugger
     console.log('Datos del formulario:', this.saleForm.value);
     debugger
     if (this.saleForm.valid) {

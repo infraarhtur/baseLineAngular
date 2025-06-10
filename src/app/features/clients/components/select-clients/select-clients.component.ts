@@ -22,6 +22,7 @@ export class SelectClientsComponent implements OnInit, OnChanges, AfterViewInit 
     ? ['select', 'name', 'phone', 'email', 'address', 'comment']
     : ['name', 'phone', 'email', 'address', 'comment', 'actions']; // ✅ Columnas de la tabla
 
+  selectedClientId: string | null = null;
   clients: any[] = []; // Lista de clientes
   selection = new SelectionModel<any>(true, []);
   dataSource = new MatTableDataSource<any>();
@@ -54,6 +55,17 @@ export class SelectClientsComponent implements OnInit, OnChanges, AfterViewInit 
       next: (data) => {
         this.dataSource.data = data;
         this.snackbar.success('Clientes cargados');
+
+
+      // ✅ Seleccionar el primer cliente si está en modo selección
+      if (this.isSelected && data.length > 0) {
+        const selectedClient = data.find((c: any) => c.email === 'unknown@gmail.com');
+         if (selectedClient) {
+          this.selectedClientId = selectedClient.id;
+          this.selectClient(selectedClient.id);
+        }
+
+      }
       },
       error: (err) => {
         this.snackbar.error('Error al obtener clientes');
@@ -110,12 +122,12 @@ export class SelectClientsComponent implements OnInit, OnChanges, AfterViewInit 
   }
 
 
-  selectedClientId: string | null = null;
+
 
   selectClient(clientId: string): void {
     this.selectedClientId = clientId;
     const selected = this.dataSource.data.find(c => c.id === clientId);
-    this.selectedClientChange.emit(selected);
+    this.selectedClientChange.emit(selected); // Emitir al padre si aplica
   }
 
 
