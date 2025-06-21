@@ -20,6 +20,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 
 
@@ -46,7 +47,8 @@ import { MatRadioModule } from '@angular/material/radio';
     MatFormFieldModule,
     MatAutocompleteModule,
     MatFormFieldModule,
-    MatRadioModule
+    MatRadioModule,
+    MatGridListModule
   ],
   exports: [
     MatButtonModule,
@@ -66,8 +68,8 @@ import { MatRadioModule } from '@angular/material/radio';
     MatChipsModule,
     MatAutocompleteModule,
     MatFormFieldModule,
-    MatRadioModule
-
+    MatRadioModule,
+    MatGridListModule
   ]
 })
 export class MaterialModule { }

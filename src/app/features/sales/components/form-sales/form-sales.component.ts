@@ -135,10 +135,9 @@ export class FormSalesComponent {
   }
 
   onSubmit(): void {
-    this.loadDetails()
-    debugger
+    this.loadDetails();
     console.log('Datos del formulario:', this.saleForm.value);
-    debugger
+
     if (this.saleForm.valid) {
       console.log('Formulario enviado con:', this.saleForm.value);
       this.formSubmitted.emit(this.saleForm.value);

@@ -54,15 +54,34 @@ export class SelectSalesComponent implements OnInit, AfterViewInit {
   }
 
   deleteSale(sale_id:any): void{
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '450px',
+      data: { message: `¿Estás seguro de que deseas anular esta venta  \n ${sale_id} ?  ` }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.salesService.deleteSale(sale_id).subscribe({
+          next: () => {
+            this.loadSales();
+            this.snackbar.success('Venta anulada correctamente');
+          },
+          error: (err) => {
+            this.snackbar.error('Error al anular la venta');
+            console.error('Error al anular la venta', err);
+          }
+        });
+      }
+    });
 
   }
 
   updateSale(sale_id: any): void {
-    this.router.navigate(['/sale/update', sale_id]);
+    this.router.navigate(['/sales/update', sale_id]);
    }
 
   detailSale(sale_id: any): void {
-    this.router.navigate(['/sale/detail', sale_id]);
+    this.router.navigate(['/sales/detail', sale_id]);
    }
 
 
