@@ -1,6 +1,7 @@
 <p>form-sales works!</p>
 
-<app-select-products [isSelected]="true"  (selectedProductsChange)="handleSelectedProducts($event)"></app-select-products>
+<app-select-products [isSelected]="true"
+  (selectedProductsChange)="handleSelectedProducts($event)"></app-select-products>
 
 
 
@@ -19,8 +20,8 @@
       <mat-option value="other">Otros</mat-option>
     </mat-select>
     <mat-error *ngIf="saleForm.get('payment_method')?.hasError('required')">
-  El método de pago es obligatorio
-</mat-error>
+      El método de pago es obligatorio
+    </mat-error>
   </mat-form-field>
 
   <!-- Comentario -->
@@ -39,12 +40,12 @@
     </mat-select>
   </mat-form-field>
 
-<mat-error *ngIf="saleForm.get('details')?.hasError('minArrayLength') && selectedProducts.length === 0">
-  Debes agregar al menos un producto en los detalles.
-</mat-error>
+  <mat-error *ngIf="saleForm.get('details')?.hasError('minArrayLength') && selectedProducts.length === 0">
+    Debes agregar al menos un producto en los detalles.
+  </mat-error>
 
-    <div class="form-actions" >
-  <button mat-raised-button color="primary" type="submit" [disabled]="selectedProducts.length === 0">
-    Guardar</button>
+  <div class="form-actions">
+    <button mat-raised-button color="primary" type="submit" [disabled]="selectedProducts.length === 0">
+      Guardar</button>
   </div>
 </form>

@@ -1,4 +1,6 @@
-<h3>Detalle de la Venta</h3>
+<h3 *ngIf="!isUpdate">Ver Detalle de la Venta</h3>
+<h3 *ngIf="isUpdate">Actualizar detalle de la Venta</h3>
+
 <div id="content" class="content">
   <div class="header">
     <!-- <h2>Venta #{{ saleData?.id }}</h2> -->
@@ -87,7 +89,7 @@
   </ng-template>
 
 
-  <div class="sale-info-container">
+  <div class="sale-info-container" *ngIf="!isUpdate">
     <div class="sale-info-grid">
 
       <div class="full-width center" style="grid-column: span 4;">
@@ -112,4 +114,65 @@
       </div>
 
     </div>
+    <div class="full-width2 center">
+      <button mat-raised-button color="warn" type="button" (click)="backToSales()">
+        <mat-icon matListItemIcon>arrow_back</mat-icon>
+        volver a ventas
+      </button>
+    </div>
+  </div>
+
+  <div class="sale-info-container sale-form-vertical" *ngIf="isUpdate">
+
+
+    <form [formGroup]="saleForm" (ngSubmit)="onSubmit()" class="sale-form">
+      <div class="full-width center">
+        <p><strong>Información de la venta</strong></p>
+        total de la venta: <strong>{{ saleData.total_amount | currency:'COP' }}</strong>
+        <br><br>
+      </div>
+      <!-- Método de Pago -->
+
+      <mat-form-field appearance="outline" class="full-width2">
+        <mat-label>Método de Pago</mat-label>
+        <mat-select formControlName="payment_method">
+          <mat-option value="cash">Efectivo</mat-option>
+          <mat-option value="credit_card">Tarjeta de Crédito</mat-option>
+          <mat-option value="bank_transfer">Transferencia</mat-option>
+          <mat-option value="other">Otros</mat-option>
+        </mat-select>
+        <mat-error *ngIf="saleForm.get('payment_method')?.hasError('required')">
+          El método de pago es obligatorio
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Comentario -->
+      <mat-form-field appearance="outline" class="full-width2">
+        <mat-label>Comentario</mat-label>
+        <textarea matInput formControlName="comment" placeholder="Observaciones o detalles adicionales"></textarea>
+      </mat-form-field>
+
+      <!-- Estado de la Factura -->
+      <mat-form-field appearance="outline" class="full-width2">
+        <mat-label>Estado</mat-label>
+        <mat-select formControlName="status">
+          <mat-option value="pending">Pendiente</mat-option>
+          <mat-option value="paid">Pagada</mat-option>
+          <mat-option value="canceled">Cancelada</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div class="center">
+        <button mat-raised-button color="warn" type="button" (click)="cancelUpdate()">
+          <mat-icon>cancel</mat-icon>
+          Cancelar
+        </button>
+        <button mat-raised-button color="primary" type="submit">
+          <mat-icon>edit</mat-icon>
+          Guardar
+        </button>
+
+      </div>
+    </form>
+
   </div>
