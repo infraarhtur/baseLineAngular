@@ -1,4 +1,3 @@
-<p>form-sales works!</p>
 
 <app-select-products [isSelected]="true"
   (selectedProductsChange)="handleSelectedProducts($event)"></app-select-products>
@@ -36,7 +35,7 @@
     <mat-select formControlName="status">
       <mat-option value="pending">Pendiente</mat-option>
       <mat-option value="paid">Pagada</mat-option>
-      <mat-option value="canceled">Cancelada</mat-option>
+      <!-- <mat-option value="canceled" *ngIf="isSelected">Cancelada</mat-option> -->
     </mat-select>
   </mat-form-field>
 
@@ -45,6 +44,10 @@
   </mat-error>
 
   <div class="form-actions">
+    <button mat-raised-button color="warn" type="button" (click)="goBack()">
+      <mat-icon>cancel</mat-icon>
+      Cancelar
+    </button>
     <button mat-raised-button color="primary" type="submit" [disabled]="selectedProducts.length === 0">
       Guardar</button>
   </div>

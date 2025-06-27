@@ -6,6 +6,7 @@ import { SalesService } from '../../services/sales.service';
 import { ProductsService } from '../../../products/services/products.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { SnackbarService } from '../../../../shared/services/snackbar.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 @Component({
@@ -35,6 +36,7 @@ export class FormSalesComponent {
     private categoriesService: CategoriesService,
     private salesService: SalesService,
     private snackbar: SnackbarService,
+    private router: Router // Para redirigir después de guardar
   ) { }
 
 
@@ -146,5 +148,9 @@ export class FormSalesComponent {
       this.snackbar.error('Por favor completa todos los campos obligatorios');
     }
   }
+  goBack(): void {
+    this.router.navigate(['/sales/select']);
+  }
+
 
 }
