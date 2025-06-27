@@ -35,4 +35,8 @@ export class ProductsService {
   deleteProduct(id: string): Observable<any> {
     return this.http.delete<any>(`${this.baseUrl}/${id}`);
   }
+  // Actualizar el stock de un producto
+  updateProductStock(id: string, stock: number): Observable<any> {
+    return this.http.patch<any>(`${this.baseUrl}/${id}`, { stock });
+  }
 }
