@@ -1,5 +1,8 @@
-<h3 *ngIf="!isUpdate">Ver Detalle de la Venta</h3>
-<h3 *ngIf="isUpdate">Actualizar detalle de la Venta</h3>
+<p> <a [routerLink]="['/sales']">Gestión de ventas</a>
+  <mat-icon style="vertical-align: middle;">navigate_next</mat-icon>
+  <label *ngIf="!isUpdate">Ver Detalle de la Venta</label>
+  <label *ngIf="isUpdate">Actualizar detalle de la Venta</label>
+</p>
 
 <div id="content" class="content">
   <div class="header">

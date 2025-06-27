@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChange
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProvidersService } from '../../../providers/services/providers.service';
 import { CategoriesService } from '../../../categories/services/categories.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-form-products',
@@ -20,7 +21,8 @@ export class FormProductsComponent implements OnInit, OnChanges {
 
   constructor(private fb: FormBuilder,
      private providersService: ProvidersService,
-     private categoriesService: CategoriesService
+     private categoriesService: CategoriesService,
+     private router: Router
     ) {}
 
   ngOnInit(): void {
@@ -67,6 +69,10 @@ export class FormProductsComponent implements OnInit, OnChanges {
     } else {
       this.productForm.markAllAsTouched();
     }
+  }
+
+    goBack(): void {
+    this.router.navigate(['/products/select']);
   }
 
 }
