@@ -6,7 +6,8 @@ import { SnackbarService } from '../../../../shared/services/snackbar.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { ViewChild } from '@angular/core'
 import { MatPaginator } from '@angular/material/paginator';
-
+import { AlertDialogComponent } from '../../../../shared/components/alert-dialog/alert-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-detail-sales',
@@ -32,7 +33,8 @@ export class DetailSalesComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     private snackbar: SnackbarService,
     private salesService: SalesService, // Inyectamos el servicio
-    private router: Router // Para redirigir después de guardar
+    private router: Router, // Para redirigir después de guardar
+    private dialog: MatDialog,
   ) { }
 
   saleData: any; // aquí se guardarán los datos completos de la venta
@@ -83,6 +85,17 @@ export class DetailSalesComponent implements OnInit, AfterViewInit {
       status: [this.saleData?.status || '', Validators.required],
 
     });
+
+    // Validación condicional
+    this.saleForm.get('status')?.valueChanges.subscribe((statusValue) => {
+      const commentControl = this.saleForm.get('comment');
+      if (statusValue === 'canceled') {
+        commentControl?.setValidators([Validators.required, Validators.maxLength(400)]);
+      } else {
+        commentControl?.clearValidators();
+      }
+      commentControl?.updateValueAndValidity();
+    });
   }
   loadData(data: any): void {
 
@@ -120,12 +133,13 @@ export class DetailSalesComponent implements OnInit, AfterViewInit {
   }
 
   onSubmit(): void {
+    debugger;
     let sendData = {
       ...this.saleForm.value,
       sale_id: this.saleId // Agregar el ID de la venta al enviar
     };
 
-    if (this.saleForm.valid){
+    if (this.saleForm.valid) {
       this.formSubmitted.emit(sendData);
     } else {
       this.saleForm.markAllAsTouched();
@@ -140,5 +154,26 @@ export class DetailSalesComponent implements OnInit, AfterViewInit {
   backToSales(): void {
     this.router.navigate(['/sales/select']);
     this.snackbar.info('Volviendo a la lista de ventas');
+  }
+
+  onStatusChange(event: any): void {
+    const status = event.value;
+    console.log('Estado seleccionado:', status);
+    if (status === 'canceled') {
+      this.saleForm.get('comment')?.setValidators([Validators.required, Validators.maxLength(400)]);
+      const dialogRef = this.dialog.open(AlertDialogComponent, {
+        width: '450px',
+        data: {
+          message: `
+          Al cancelar una venta, es obligatorio agregar un comentario. \n
+          Por favor, proporciona un motivo para la cancelación. \n
+          Recuerda que la venta no se eliminará, solo se marcará como cancelada. pero no se podra editar mas adelante.
+        ` }
+      });
+      this.saleForm.get('comment')?.setValue(''); // Limpiar el campo de comentario al cambiar el estado a cancelado
+    } else {
+      this.saleForm.get('comment')?.clearValidators();
+    }
+    this.saleForm.get('comment')?.updateValueAndValidity();
   }
 }
