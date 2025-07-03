@@ -34,7 +34,6 @@ export class UpdateSalesComponent  implements OnInit{
 
   updateSale(data: any): void {
     console.log('Datos a actualizar:', data);
-    debugger;
     this.saleService.updateSale(this.saleId, data).subscribe({
       next: () => {
         this.snackbar.success('venta editada con éxito')

@@ -14,6 +14,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ConfirmDialogComponent } from './shared/components/confirm-dialog/confirm-dialog.component';
 import { SalesModule } from './features/sales/sales.module';
 import { LOCALE_ID } from '@angular/core';
+import { AlertDialogComponent } from './shared/components/alert-dialog/alert-dialog.component';
 
 
 
@@ -22,6 +23,7 @@ import { LOCALE_ID } from '@angular/core';
     AppComponent,
     HomeComponent,
     ConfirmDialogComponent,
+    AlertDialogComponent,
   ],
   imports: [
     BrowserModule,

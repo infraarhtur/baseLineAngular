@@ -4,6 +4,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { AlertDialogComponent } from '../../../../shared/components/alert-dialog/alert-dialog.component';
 import { SnackbarService } from '../../../../shared/services/snackbar.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
@@ -24,6 +25,7 @@ export class SelectProductsComponent implements OnInit, OnChanges, AfterViewInit
     description: 'description',
     sale_price: 'sale_price',
     purchase_price: 'purchase_price',
+    stock: 'stock',
     provider: 'provider',
     categories: 'categories',
     quantity: 'quantity',
@@ -155,7 +157,8 @@ export class SelectProductsComponent implements OnInit, OnChanges, AfterViewInit
       this.allColumns.description,
       this.allColumns.sale_price,
       this.allColumns.provider,
-      this.allColumns.categories
+      this.allColumns.categories,
+      this.allColumns.stock
     ];
 
     if (this.isSelected) {
@@ -206,4 +209,53 @@ export class SelectProductsComponent implements OnInit, OnChanges, AfterViewInit
   getTotalAmount(): number {
     return this.selection.selected.reduce((sum, item) => sum + (item.total || 0), 0);
   }
+
+  validateDiscount(product: any): void {
+
+    const quantity = Number(product.quantity) || 0;
+    const discount = Number(product.discount) || 0;
+
+    if (quantity < 1) {
+      product.quantity = 1; // Ajustar a 1 si es menor
+    }
+
+    if (discount < 0 || discount > 99) {
+      product.discount = 0; // Ajustar a 0 si está fuera de rango
+      const dialogRef = this.dialog.open(AlertDialogComponent, {
+        width: '450px',
+        data: {
+          message: `
+        Un descuento no puede ser mayor al 100%
+la aplicacion no acepta valores negativos ni mayores a 99%
+        Se ha ajustado el descuento a 0% para el producto (${product.name}) \n
+        Por favor, verifica el descuento ingresado.
+        ` }
+      });
+    }
+
+    this.updateTotal(product);
+  }
+
+  validateQuantity(product: any): void {
+    const quantity = Number(product.quantity) || 0;
+    if (quantity < 1) {
+      product.quantity = 1; // Ajustar a 1 si es menor
+    }
+
+    if (quantity > product.stock  ) {
+      product.quantity = product.stock ; // Ajustar a la cantidad máxima disponible
+      const dialogRef = this.dialog.open(AlertDialogComponent, {
+        width: '450px',
+        data: {
+          message: `
+        La cantidad no puede ser mayor a la del stock.
+        Se ha ajustado la cantidad a laa maxima posible para el producto (${product.name}).
+        Por favor, verifica la cantidad ingresada.
+        ` }
+      });
+    }
+
+    this.updateTotal(product);
+  }
+
 }

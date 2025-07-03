@@ -22,7 +22,6 @@ export class CreateSalesComponent {
   ) {}
 
   createSale(formData: any): void {
-    debugger;
     this.SalesService.createSale(formData).subscribe({
       next: () => {
         this.snackbar.success('✅ Venta creada con éxito');

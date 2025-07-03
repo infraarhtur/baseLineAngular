@@ -29,6 +29,7 @@ export class FormSalesComponent {
   providers: any[] = [];
   categories: any[] = [];
   products: any[] = [];
+  totals: number[] = []; // Para almacenar los totales de cada producto
 
   constructor(private fb: FormBuilder,
     private productsService: ProductsService,
@@ -82,10 +83,6 @@ export class FormSalesComponent {
     this.totalAmount = products.reduce((acc, p) => acc + (p.total || 0), 0);
 
 
-    // productos seleccionados emitidos al componente padre
-    // this.productsSelected.emit(this.selectedProducts);
-
-
   }
 
   onClientSelected(client: any): void {
@@ -108,6 +105,7 @@ export class FormSalesComponent {
     // const clientSelected = this.saleForm.get('details') as FormArray;
     detailsArray.clear(); // Evita duplicados
     // Limpiar el FormArray antes de agregar nuevos productos
+    this.totals = [];
     this.selectedProducts.forEach(product => {
       const quantity = product.quantity || 1;
       const salePrice = product.sale_price || 0;
@@ -118,6 +116,7 @@ export class FormSalesComponent {
       const discountAmount = subtotal * (discount / 100);
       const taxedAmount = (subtotal - discountAmount) * (tax / 100);
       const total = subtotal - discountAmount + taxedAmount;
+      this.totals.push(total); // Agregar el total del producto al array de totales
 
       detailsArray.push(this.fb.group({
         product_id: [product.id, Validators.required],
@@ -129,11 +128,9 @@ export class FormSalesComponent {
         total: [parseFloat(total.toFixed(2)), Validators.required]
       }));
     });
-    debugger
+    // Actualizar el total de la venta
+    this.totalAmount = this.totals.reduce((acc, total) => acc + total, 0);
     this.saleForm.get('total_amount')?.setValue(this.totalAmount);
-    // this.saleForm.patchValue({ total_amount: this.totalAmount });
-
-    console.log('Productos recibidos en el padre:', this.selectedProducts, detailsArray);
   }
 
   onSubmit(): void {
