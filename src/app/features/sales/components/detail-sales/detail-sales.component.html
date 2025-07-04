@@ -153,12 +153,15 @@
       <mat-form-field appearance="outline" class="full-width2">
         <mat-label>Comentario</mat-label>
         <textarea matInput formControlName="comment" placeholder="Observaciones o detalles adicionales"></textarea>
+        <mat-error *ngIf="saleForm.get('comment')?.hasError('required') && saleForm.get('comment')?.touched">
+          El comentario es obligatorio si la venta está cancelada
+        </mat-error>
       </mat-form-field>
 
       <!-- Estado de la Factura -->
       <mat-form-field appearance="outline" class="full-width2">
         <mat-label>Estado</mat-label>
-        <mat-select formControlName="status">
+        <mat-select formControlName="status" (selectionChange)="onStatusChange($event)">
           <mat-option value="pending">Pendiente</mat-option>
           <mat-option value="paid">Pagada</mat-option>
           <mat-option value="canceled">Cancelada</mat-option>
