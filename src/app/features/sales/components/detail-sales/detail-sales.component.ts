@@ -52,6 +52,10 @@ export class DetailSalesComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
     this.loadData(this.saleData);
+    if (this.isUpdate  && this.saleData.status === 'canceled') {
+       this.isUpdate = false; // Deshabilitar la edición si el estado es 'canceled'
+       this.snackbar.info('La venta está cancelada, no se puede editar');
+    }
   }
 
   // ✅ Validador personalizado embebido
