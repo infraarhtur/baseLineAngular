@@ -3,7 +3,32 @@
   Agregar venta
 </button>
 
-<table mat-table [dataSource]="this.dataSource" class="mat-elevation-z8" *ngIf="this.dataSource.data.length > 0; else noSales">
+<!-- filtro -->
+<mat-toolbar color="primary">
+  <span>Lista de Ventas</span>
+</mat-toolbar>
+<mat-form-field appearance="outline" class="full-width">
+  <mat-label>Buscar ventas</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Filtrar por nombre, descripción, etc.">
+</mat-form-field>
+
+<div class="filter-container">
+  <mat-form-field appearance="outline">
+    <mat-label>Fecha inicio</mat-label>
+    <input matInput [matDatepicker]="pickerStart" [(ngModel)]="startDate" (dateChange)="applyDateFilter()">
+    <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
+    <mat-datepicker #pickerStart></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Fecha fin</mat-label>
+    <input matInput [matDatepicker]="pickerEnd" [(ngModel)]="endDate" (dateChange)="applyDateFilter()">
+    <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+    <mat-datepicker #pickerEnd></mat-datepicker>
+  </mat-form-field>
+</div>
+
+<table mat-table [dataSource]="this.dataSource" matSort class="mat-elevation-z8" *ngIf="this.dataSource.data.length > 0; else noSales">
 
   <!-- Acciones Column -->
   <ng-container matColumnDef="actions">
@@ -20,25 +45,25 @@
 
   <!-- client name Column -->
   <ng-container matColumnDef="client">
-    <th mat-header-cell *matHeaderCellDef> cliente </th>
+    <th mat-header-cell *matHeaderCellDef  mat-sort-header> cliente </th>
     <td mat-cell *matCellDef="let sale"> {{ sale.client.name }} </td>
   </ng-container>
    <!-- client_id Column -->
   <ng-container matColumnDef="client.email">
-    <th mat-header-cell *matHeaderCellDef> email </th>
+    <th mat-header-cell *matHeaderCellDef  mat-sort-header> email </th>
     <td mat-cell *matCellDef="let sale"> {{ sale.client.email }} </td>
   </ng-container>
 
     <!-- sale_date Column -->
     <ng-container matColumnDef="sale_date">
-      <th mat-header-cell *matHeaderCellDef> fecha</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> fecha</th>
       <td mat-cell *matCellDef="let sale"> {{ sale.sale_date | date:'dd/MM/yyyy' }} </td>
     </ng-container>
 
 
     <!-- sale_date Column -->
     <ng-container matColumnDef="payment_method">
-      <th mat-header-cell *matHeaderCellDef> metodo de pago</th>
+      <th mat-header-cell *matHeaderCellDef  mat-sort-header> metodo de pago</th>
       <td mat-cell *matCellDef="let sale"> {{ sale.payment_method }} </td>
     </ng-container>
 
@@ -50,7 +75,7 @@
 
     <!-- status Column -->
   <ng-container matColumnDef="total_amount">
-    <th mat-header-cell *matHeaderCellDef> Monto total </th>
+    <th mat-header-cell *matHeaderCellDef  mat-sort-header> Monto total </th>
     <td mat-cell *matCellDef="let sale"> {{ sale.total_amount | currency:'COP':'symbol':'1.0-0':'es-CO' }} </td>
   </ng-container>
 
