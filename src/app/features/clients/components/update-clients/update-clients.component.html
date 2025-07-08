@@ -1,3 +1,9 @@
+<p>
+  <a [routerLink]="['/clients']">Gestión de clientes</a>
+  <mat-icon style="vertical-align: middle;">navigate_next</mat-icon>
+  <label>Actualizar cliente</label>
+</p>
+
 <!-- Solo mostrar el formulario si ya cargaron los datos -->
 <app-client-form
   *ngIf="clientData"

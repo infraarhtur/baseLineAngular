@@ -1,4 +1,3 @@
-
 <form [formGroup]="providerForm" (ngSubmit)="onSubmit()" class="provider-form">
   <mat-form-field appearance="outline">
     <mat-label>Nombre</mat-label>
@@ -38,7 +37,7 @@
 
   <mat-form-field appearance="outline">
     <mat-label>Dirección</mat-label>
-    <textarea matInput formControlName="address"  maxlength="60"></textarea>
+    <textarea matInput formControlName="address" maxlength="60"></textarea>
     <mat-error *ngIf="providerForm.get('address')?.hasError('maxlength')">
       La dirección no puede tener más de 60 caracteres.
     </mat-error>
@@ -46,8 +45,12 @@
 
 
   <div class="text-end">
-  <button mat-raised-button color="primary" type="submit" [disabled]="providerForm.invalid">
-    {{ providerData ? 'Actualizar' : 'Crear' }} proveedor
-  </button>
+    <button mat-raised-button color="warn" type="button" (click)="goBack()">
+      <mat-icon>cancel</mat-icon>
+      Cancelar
+    </button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="providerForm.invalid">
+      {{ providerData ? 'Actualizar' : 'Crear' }} proveedor
+    </button>
   </div>
 </form>

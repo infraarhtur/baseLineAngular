@@ -1,9 +1,16 @@
-<button mat-fab extended [routerLink]="['/products/create']" *ngIf="isSelected == false">
-  <mat-icon>add</mat-icon>
-  Agregar producto
-</button>
-
 <h2>Lista de Productos</h2>
+
+
+<div class="button-container">
+  <!-- botón para agregar producto -->
+  <button mat-fab extended [routerLink]="['/products/create']" *ngIf="!isSelected">
+    <mat-icon>add_circle</mat-icon>
+    Agregar producto
+  </button>
+
+</div>  
+<br>
+
 <!-- filtro -->
 <mat-form-field appearance="outline" class="full-width">
   <mat-label>Buscar productos</mat-label>

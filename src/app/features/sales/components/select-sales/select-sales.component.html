@@ -1,14 +1,18 @@
-<button mat-fab extended [routerLink]="['/sales/create']">
-  <mat-icon>add_shopping_cart</mat-icon>
-  Agregar venta
-</button>
 
-<!-- filtro -->
 <mat-toolbar color="primary">
   <span>Lista de Ventas</span>
 </mat-toolbar>
 
+<div class="button-container">
+<button mat-fab extended [routerLink]="['/sales/create']">
+  <mat-icon>add_shopping_cart</mat-icon>
+  Agregar venta
+</button>
+</div>
+<br>
 
+
+<!-- filtro -->
 <div class="filter-container">
   <!-- filter general search-->
   <mat-form-field appearance="outline" class="full-width">

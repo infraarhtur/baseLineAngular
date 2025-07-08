@@ -16,7 +16,7 @@ import { ViewChild } from '@angular/core'
   styleUrl: './select-providers.component.scss'
 })
 export class SelectProvidersComponent implements  OnInit, AfterViewInit {
-  displayedColumns: string[] = [ 'name','phone','email','address', 'actions']; // ✅ Columnas de la tabla
+  displayedColumns: string[] = [ 'actions', 'name','phone','email','address']; // ✅ Columnas de la tabla
 
   providers: any[] = []; // Lista de providers
   selection = new SelectionModel<any>(true, []);
@@ -78,6 +78,11 @@ export class SelectProvidersComponent implements  OnInit, AfterViewInit {
     console.log('actualizar providerp con ID:', id);
     this.router.navigate(['/providers/update', id]);
     // Aquí puedes llamar a un servicio para eliminar el proveedores
+  }
+
+  applyFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
 

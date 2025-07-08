@@ -1,7 +1,9 @@
-<p> <a [routerLink]="['/products']" >Gestión de productos</a> <mat-icon style="vertical-align: middle;">navigate_next</mat-icon> <label>Crear producto</label></p>
+<p>
+  <a [routerLink]="['/products']">Gestión de productos</a>
+  <mat-icon style="vertical-align: middle;">navigate_next</mat-icon>
+  <label>Crear producto</label>
+</p>
 
 
-<app-form-products
-  [productData]=""
-  (formSubmitted)="createProduct($event)">
+<app-form-products [productData]="" (formSubmitted)="createProduct($event)">
 </app-form-products>

@@ -21,6 +21,7 @@ export class SelectProductsComponent implements OnInit, OnChanges, AfterViewInit
 
   allColumns = {
     select: 'select',
+    actions: 'actions',
     name: 'name',
     description: 'description',
     sale_price: 'sale_price',
@@ -30,8 +31,8 @@ export class SelectProductsComponent implements OnInit, OnChanges, AfterViewInit
     categories: 'categories',
     quantity: 'quantity',
     discount: 'discount',
-    total: 'total',
-    actions: 'actions'
+    total: 'total'
+
   };
 
 
@@ -171,7 +172,7 @@ export class SelectProductsComponent implements OnInit, OnChanges, AfterViewInit
       ];
     } else {
       baseColumns.splice(2, 0, this.allColumns.purchase_price); // Insertar después de sale_price
-      this.displayedColumns = [...baseColumns, this.allColumns.actions];
+      this.displayedColumns = [this.allColumns.actions,...baseColumns];
     }
   }
 

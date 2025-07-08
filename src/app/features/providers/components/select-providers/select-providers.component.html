@@ -1,9 +1,19 @@
+<h2>Lista de Proveedores</h2>
+
+<!-- filtro -->
+<mat-form-field appearance="outline" class="full-width" >
+  <mat-label>Buscar clientes</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Filtrar nombre, email.">
+</mat-form-field>
+<!-- botón para agregar proveedor -->
+ <br>
+
 <button mat-fab extended [routerLink]="['/providers/create']">
-  <mat-icon>add</mat-icon>
+  <mat-icon>person_add_alt</mat-icon>
   Agregar proveedor
 </button>
 
-<h2>Lista de Proveedores</h2>
+
 
 
 <table mat-table [dataSource]="this.dataSource" class="mat-elevation-z8" *ngIf="this.dataSource.data.length > 0; else noProviders">

@@ -71,7 +71,7 @@ export class FormProductsComponent implements OnInit, OnChanges {
     }
   }
 
-    goBack(): void {
+  goBack(): void {
     this.router.navigate(['/products/select']);
   }
 
