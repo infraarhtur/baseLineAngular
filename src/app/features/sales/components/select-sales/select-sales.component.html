@@ -1,5 +1,5 @@
 <button mat-fab extended [routerLink]="['/sales/create']">
-  <mat-icon>person_add</mat-icon>
+  <mat-icon>add_shopping_cart</mat-icon>
   Agregar venta
 </button>
 
@@ -7,12 +7,16 @@
 <mat-toolbar color="primary">
   <span>Lista de Ventas</span>
 </mat-toolbar>
-<mat-form-field appearance="outline" class="full-width">
+
+
+<div class="filter-container">
+  <!-- filter general search-->
+  <mat-form-field appearance="outline" class="full-width">
   <mat-label>Buscar ventas</mat-label>
   <input matInput (keyup)="applyFilter($event)" placeholder="Filtrar por nombre, descripción, etc.">
 </mat-form-field>
 
-<div class="filter-container">
+ <!-- filter dates start an end  dates -->
   <mat-form-field appearance="outline">
     <mat-label>Fecha inicio</mat-label>
     <input matInput [matDatepicker]="pickerStart" [(ngModel)]="startDate" (dateChange)="applyDateFilter()">
