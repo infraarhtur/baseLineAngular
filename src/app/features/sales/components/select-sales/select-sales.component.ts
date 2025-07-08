@@ -46,8 +46,8 @@ export class SelectSalesComponent implements OnInit, AfterViewInit {
   }
   ngAfterViewInit(): void {
 
-  this.dataSource.filterPredicate = (data: any, filter: string) => {
-  const dataStr = `
+    this.dataSource.filterPredicate = (data: any, filter: string) => {
+      const dataStr = `
     ${data.client?.name || ''}
     ${data.client?.email || ''}
     ${data.sale_date || ''}
@@ -57,19 +57,10 @@ export class SelectSalesComponent implements OnInit, AfterViewInit {
     ${data.comment || ''}
   `.toLowerCase();
 
-  return dataStr.includes(filter);
-};
+    return dataStr.includes(filter);
+    };
 
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-
-    // Forzar orden correcto por fecha
-    // this.dataSource.sortingDataAccessor = (item, property) => {
-    //   if (property === 'sale_date') {
-    //     return new Date(item.sale_date); // convierte a fecha real
-    //   }
-    //   return item[property];
-    // };
+    this.sortConfigurations();
   }
 
   loadSales(): void {
@@ -78,21 +69,7 @@ export class SelectSalesComponent implements OnInit, AfterViewInit {
         this.originalSales = data;
         this.dataSource.data = data;
 
-        // this.dataSource.paginator = this.paginator;
-        // this.dataSource.sort = this.sort;
-
-      //   this.dataSource.sortingDataAccessor = (item, property) => {
-      //     if (property === 'sale_date') {
-      //       return new Date(item.sale_date);
-      //     }
-      //     if (property === 'client') {
-      //       return item.client?.name?.toLowerCase() || '';
-      //     }
-      //     if (property === 'client.email') {
-      //       return item.client?.email?.toLowerCase() || '';
-      //     }
-      //     return item[property];
-      // };
+        this.sortConfigurations(); // Configura el sort y paginator después de cargar los datos
 
         console.log('Ventass cargadas:', this.dataSource.data);
         this.snackbar.success('Ventas cargados');
@@ -157,4 +134,26 @@ export class SelectSalesComponent implements OnInit, AfterViewInit {
   }
 
 
+  sortConfigurations (): void {
+
+     // Espera un segundo para asegurarse de que el paginator y el sort estén listos
+    // Esto es necesario porque a veces el paginator y el sort no están disponibles inmediatamente después de
+    // la inicialización del componente, especialmente si se cargan datos de forma asíncr
+    setTimeout(() => {
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+      this.dataSource.sortingDataAccessor = (item, property) => {
+        if (property === 'sale_date') {
+          return new Date(item.sale_date).getTime(); // Asegura que la fecha se ordene correctamente
+        }
+        if (property === 'client') {
+          return item.client?.name?.toLowerCase() || '';
+        }
+        if (property === 'client.email') {
+          return item.client?.email?.toLowerCase() || '';
+        }
+        return item[property];
+      };
+    }, (100));
+  }
 }
