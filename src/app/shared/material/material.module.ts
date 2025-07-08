@@ -21,8 +21,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatGridListModule } from '@angular/material/grid-list';
-
-
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core'; // Import this if you use datepicker
 
 
 @NgModule({
@@ -48,7 +48,9 @@ import { MatGridListModule } from '@angular/material/grid-list';
     MatAutocompleteModule,
     MatFormFieldModule,
     MatRadioModule,
-    MatGridListModule
+    MatGridListModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   exports: [
     MatButtonModule,
@@ -69,7 +71,9 @@ import { MatGridListModule } from '@angular/material/grid-list';
     MatAutocompleteModule,
     MatFormFieldModule,
     MatRadioModule,
-    MatGridListModule
+    MatGridListModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ]
 })
 export class MaterialModule { }
