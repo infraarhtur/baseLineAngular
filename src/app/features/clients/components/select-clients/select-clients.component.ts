@@ -20,7 +20,7 @@ export class SelectClientsComponent implements OnInit, OnChanges, AfterViewInit 
 
   displayedColumns: string[] = this.isSelected
     ? ['select', 'name', 'phone', 'email', 'address', 'comment']
-    : ['name', 'phone', 'email', 'address', 'comment', 'actions']; // ✅ Columnas de la tabla
+    : ['actions','name', 'phone', 'email', 'address', 'comment']; // ✅ Columnas de la tabla
 
   selectedClientId: string | null = null;
   clients: any[] = []; // Lista de clientes
@@ -134,6 +134,6 @@ export class SelectClientsComponent implements OnInit, OnChanges, AfterViewInit 
   setDisplayedColumns(): void {
     this.displayedColumns = this.isSelected
       ? ['select', 'name', 'phone', 'email', 'address', 'comment']
-      : ['name', 'phone', 'email', 'address', 'comment', 'actions'];
+      : [ 'actions', 'name', 'phone', 'email', 'address', 'comment'];
   }
 }

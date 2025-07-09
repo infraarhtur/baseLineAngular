@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output , OnChanges, SimpleChanges} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -15,6 +16,7 @@ export class ClientFormComponent implements OnInit,OnChanges {
   clientForm!: FormGroup;
 
   constructor(private fb: FormBuilder,
+              private router: Router
 
   ) {}
 
@@ -43,5 +45,10 @@ export class ClientFormComponent implements OnInit,OnChanges {
     if (this.clientForm.valid) {
       this.formSubmitted.emit(this.clientForm.value);
     }
+  }
+
+
+  goBack(): void {
+    this.router.navigate(['/clients/select']);
   }
 }

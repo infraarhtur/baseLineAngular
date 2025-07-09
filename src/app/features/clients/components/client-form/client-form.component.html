@@ -37,7 +37,7 @@
 
   <mat-form-field appearance="outline">
     <mat-label>Dirección</mat-label>
-    <textarea matInput formControlName="address"  maxlength="60"></textarea>
+    <textarea matInput formControlName="address" maxlength="60"></textarea>
     <mat-error *ngIf="clientForm.get('address')?.hasError('maxlength')">
       La dirección no puede tener más de 60 caracteres.
     </mat-error>
@@ -45,15 +45,19 @@
 
   <mat-form-field appearance="outline">
     <mat-label>Comentario</mat-label>
-    <textarea matInput formControlName="comment"  maxlength="70"></textarea>
+    <textarea matInput formControlName="comment" maxlength="70"></textarea>
     <mat-error *ngIf="clientForm.get('comment')?.hasError('maxlength')">
       El comentario no puede tener más de 70 caracteres.
     </mat-error>
   </mat-form-field>
 
   <div class="text-end">
-  <button mat-raised-button color="primary" type="submit" [disabled]="clientForm.invalid">
-    {{ clientData ? 'Actualizar' : 'Crear' }} Cliente
-  </button>
+    <button mat-raised-button color="warn" type="button" (click)="goBack()">
+      <mat-icon>cancel</mat-icon>
+      Cancelar
+    </button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="clientForm.invalid">
+      {{ clientData ? 'Actualizar' : 'Crear' }} Cliente
+    </button>
   </div>
 </form>

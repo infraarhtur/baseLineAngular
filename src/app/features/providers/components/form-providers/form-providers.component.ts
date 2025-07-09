@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProvidersService } from '../../../providers/services/providers.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-form-providers',
@@ -15,7 +16,8 @@ export class FormProvidersComponent implements OnInit, OnChanges {
 
   providerForm!: FormGroup;
   constructor(private fb: FormBuilder,
-      private providersService: ProvidersService
+      private providersService: ProvidersService,
+      private router: Router
     ) {}
 
     ngOnInit(): void {
@@ -43,5 +45,9 @@ export class FormProvidersComponent implements OnInit, OnChanges {
         this.formSubmitted.emit(this.providerForm.value);
       }
     }
+
+    goBack(): void {
+    this.router.navigate(['/providers/select']);
+  }
 
 }
