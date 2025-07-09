@@ -4,11 +4,11 @@
 <div class="button-container">
   <!-- botón para agregar producto -->
   <button mat-fab extended [routerLink]="['/products/create']" *ngIf="!isSelected">
-    <mat-icon>add_circle</mat-icon>
+    <mat-icon>playlist_add</mat-icon>
     Agregar producto
   </button>
 
-</div>  
+</div>
 <br>
 
 <!-- filtro -->
@@ -29,8 +29,11 @@
       </mat-checkbox>
     </th>
     <td mat-cell *matCellDef="let row">
-      <mat-checkbox color="primary" (click)="$event.stopPropagation()" (change)="toggleSelection(row, $event.checked)"
-        [checked]="selection.isSelected(row)">
+      <mat-checkbox color="primary"
+       (click)="$event.stopPropagation()"
+       (change)="toggleSelection(row, $event.checked)"
+        [checked]="selection.isSelected(row)"
+        [disabled]="row.stock < 1">
       </mat-checkbox>
     </td>
     <!-- <td mat-footer-cell *matFooterCellDef></td> -->
