@@ -19,14 +19,15 @@ export class CreateCategoriesComponent {
       private router: Router // Para redirigir después de guardar
     ) { }
     createCategory(formData: any): void {
+
     this.categoriesService.createCategory(formData).subscribe({
       next: () => {
-        this.snackbar.success('✅ Provider creado con éxito')
+        this.snackbar.success('✅ category creado con éxito')
         this.router.navigate(['/category/select']);
       },
       error: (error) => {
-        console.error('Error al crear provider:', error);
-        this.snackbar.error('❌ Ocurrió un error al crear el provider.');
+        console.error('Error al crear category:', error);
+        this.snackbar.error('❌ Ocurrió un error al crear el category.');
       }
     });
 

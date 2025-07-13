@@ -37,9 +37,10 @@ export class FormCategoriesComponent implements OnInit, OnChanges {
   }
 
   buildForm(): void {
+
     this.categoryForm = this.fb.group({
       name: [this.categoryData?.name || '', [Validators.required, Validators.maxLength(100)]],
-      address: [this.categoryData?.description || '', [Validators.maxLength(120)]],
+      description: [this.categoryData?.description || '', [Validators.maxLength(120)]],
 
     });
   }
@@ -50,7 +51,7 @@ export class FormCategoriesComponent implements OnInit, OnChanges {
   }
 
   goBack(): void {
-    this.router.navigate(['/categories/select']);
+    this.router.navigate(['/category/select']);
   }
 
 }

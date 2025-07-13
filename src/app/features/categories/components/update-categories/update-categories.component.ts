@@ -10,17 +10,17 @@ import { SnackbarService } from '../../../../shared/services/snackbar.service';
   templateUrl: './update-categories.component.html',
   styleUrl: './update-categories.component.scss'
 })
-export class UpdateCategoriesComponent  implements OnInit{
-    categoryId!: string; // ✅ Aquí se almacena el ID recibido
-    categoryData: any;
-    constructor(
-      private route: ActivatedRoute,
-      private snackbar: SnackbarService,
-      private categoriesService: CategoriesService, // Inyectamos el servicio
-      private router: Router // Para redirigir después de guardar
-    ) {}
+export class UpdateCategoriesComponent implements OnInit {
+  categoryId!: string; // ✅ Aquí se almacena el ID recibido
+  categoryData: any;
+  constructor(
+    private route: ActivatedRoute,
+    private snackbar: SnackbarService,
+    private categoriesService: CategoriesService, // Inyectamos el servicio
+    private router: Router // Para redirigir después de guardar
+  ) { }
 
-      ngOnInit(): void {
+  ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       this.categoryId = String(params.get('id')); // ✅ Obtener el ID de la URL
       console.log('proveedor a actualizar:', this.categoryId);
@@ -28,7 +28,8 @@ export class UpdateCategoriesComponent  implements OnInit{
     });
   }
 
-    loadCategory(): void {
+  loadCategory(): void {
+
     this.categoriesService.getCategoryById(this.categoryId).subscribe({
       next: (data) => {
         this.categoryData = data;
@@ -41,6 +42,7 @@ export class UpdateCategoriesComponent  implements OnInit{
     });
   }
   updateCategory(data: any): void {
+
     this.categoriesService.updateCategory(this.categoryId, data).subscribe({
       next: () => {
         this.snackbar.success('✅ proveedor actualizado con éxito');

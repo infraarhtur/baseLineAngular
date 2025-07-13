@@ -15,7 +15,7 @@
   </mat-form-field>
 
   <mat-form-field appearance="outline">
-    <mat-label>Dirección</mat-label>
+    <mat-label>Descripcion</mat-label>
     <textarea matInput formControlName="description" maxlength="120"></textarea>
     <mat-error *ngIf="categoryForm.get('description')?.hasError('maxlength')">
       La dirección no puede tener más de 120 caracteres.
