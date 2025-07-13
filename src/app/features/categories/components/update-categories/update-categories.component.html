@@ -1,1 +1,13 @@
-<p>update-categories works!</p>
+<p>
+  <a [routerLink]="['/catgory']">Gestión de categorias</a>
+  <mat-icon style="vertical-align: middle;">navigate_next</mat-icon>
+  <label>Actualizar categoria</label>
+</p>
+<app-form-categories
+  *ngIf="categoryData"
+  [categoryData]="categoryData"
+  (formSubmitted)="updateCategory($event)">
+</app-form-categories>
+
+
+

@@ -1,0 +1,7 @@
+<p>
+  <a [routerLink]="['/categories']">Gestión de categorias</a>
+  <mat-icon style="vertical-align: middle;">navigate_next</mat-icon>
+  <label>Crear categorias</label>
+</p>
+
+<app-form-categories (formSubmitted)="createCategory($event)"></app-form-categories>
