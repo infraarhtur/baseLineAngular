@@ -9,6 +9,7 @@ const routes: Routes = [
   { path: 'clients', loadChildren: () => import('./features/clients/clients.module').then(m => m.ClientsModule) ,canActivate: [AuthGuard]},
   { path: 'providers', loadChildren: () => import('./features/providers/providers.module').then(m => m.ProvidersModule) ,canActivate: [AuthGuard]},
   { path: 'sales', loadChildren: () => import('./features/sales/sales.module').then(m => m.SalesModule),canActivate: [AuthGuard]},
+  { path: 'category', loadChildren: () => import('./features/categories/categories.module').then(m => m.CategoriesModule),canActivate: [AuthGuard]},
   { path: '**', redirectTo: '' }
 ]
 

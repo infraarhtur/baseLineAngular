@@ -46,7 +46,7 @@ export class UpdateProvidersComponent implements OnInit {
     this.providersService.updateProvider(this.providerId, data).subscribe({
       next: () => {
         this.snackbar.success('✅ proveedor actualizado con éxito');
-        this.router.navigate(['/clients/select']);
+        this.router.navigate(['/providers/select']);
       },
       error: (err) => {
         console.error('Error al actualizar proveedor:', err);

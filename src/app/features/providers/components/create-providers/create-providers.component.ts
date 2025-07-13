@@ -16,7 +16,7 @@ export class CreateProvidersComponent {
     private snackbar: SnackbarService,
     private providersService: ProvidersService, // Inyectamos el servicio
     private router: Router // Para redirigir después de guardar
-  ) {}
+  ) { }
 
 
   createProvider(formData: any): void {
@@ -30,6 +30,5 @@ export class CreateProvidersComponent {
         this.snackbar.error('❌ Ocurrió un error al crear el provider.');
       }
     });
-
-}
+  }
 }

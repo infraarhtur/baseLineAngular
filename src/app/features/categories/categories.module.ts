@@ -7,12 +7,18 @@ import { SelectCategoriesComponent } from './components/select-categories/select
 import { FormsModule } from '@angular/forms';
 import { MaterialModule } from '../../shared/material/material.module';
 import { ReactiveFormsModule, } from '@angular/forms';
+import { CreateCategoriesComponent } from './components/create-categories/create-categories.component';
+import { HomeCategoriesComponent } from './components/home-categories/home-categories.component';
+import { FormCategoriesComponent } from './components/form-categories/form-categories.component';
 
 
 @NgModule({
   declarations: [
     UpdateCategoriesComponent,
-    SelectCategoriesComponent
+    SelectCategoriesComponent,
+    CreateCategoriesComponent,
+    HomeCategoriesComponent,
+    FormCategoriesComponent
   ],
   imports: [
     CommonModule,

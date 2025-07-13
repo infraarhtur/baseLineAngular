@@ -137,7 +137,7 @@ export class DetailSalesComponent implements OnInit, AfterViewInit {
   }
 
   onSubmit(): void {
-    debugger;
+
     let sendData = {
       ...this.saleForm.value,
       sale_id: this.saleId // Agregar el ID de la venta al enviar
