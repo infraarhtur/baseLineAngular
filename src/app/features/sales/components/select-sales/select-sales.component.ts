@@ -33,6 +33,7 @@ export class SelectSalesComponent implements OnInit, AfterViewInit {
   startDate: Date | null = null;
   endDate: Date | null = null;
   originalSales: any[] = []; // respaldo sin filtrar
+  selectedStatus: string = ''; // Estado seleccionado para el filtro
 
 
   constructor(
@@ -155,5 +156,15 @@ export class SelectSalesComponent implements OnInit, AfterViewInit {
         return item[property];
       };
     }, (100));
+  }
+
+  applyStatusFilter(status: string): void {
+    if (status === '') {
+      this.dataSource.data = this.originalSales;
+    } else {
+      this.dataSource.data = this.originalSales.filter(sale => sale.status === status);
+    }
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 }

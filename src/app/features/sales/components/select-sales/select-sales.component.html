@@ -34,6 +34,17 @@
     <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
     <mat-datepicker #pickerEnd></mat-datepicker>
   </mat-form-field>
+
+  <!-- filter status -->
+  <mat-form-field appearance="outline">
+    <mat-label>Estado</mat-label>
+    <mat-select [(ngModel)]="selectedStatus" (selectionChange)="applyStatusFilter( $event.value)">
+      <mat-option value="">Todos</mat-option>
+      <mat-option value="paid">Pagada</mat-option>
+      <mat-option value="pending">Pendiente</mat-option>
+      <mat-option value="canceled">Cancelada</mat-option>
+    </mat-select>
+  </mat-form-field>
 </div>
 
 <table mat-table [dataSource]="this.dataSource" matSort class="mat-elevation-z8" *ngIf="this.dataSource.data.length > 0; else noSales">
