@@ -168,4 +168,7 @@
 </ng-template>
 
 <div class="total-container" *ngIf="isSelected">
+  <h4>Total de descuento: {{ getTotalDiscount() | currency:'COP' }}</h4>
   <h3>Total de la venta: {{ getTotalAmount() | currency:'COP' }}</h3>
+
+</div>

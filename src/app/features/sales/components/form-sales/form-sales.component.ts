@@ -23,6 +23,7 @@ export class FormSalesComponent {
 
   selectedProducts: any[] = [];
   totalAmount: number = 0;
+  totalDiscount: number = 0; // Para almacenar el total de descuento de la venta
 
 
   saleForm!: FormGroup;
@@ -30,6 +31,7 @@ export class FormSalesComponent {
   categories: any[] = [];
   products: any[] = [];
   totals: number[] = []; // Para almacenar los totales de cada producto
+  totalsDiscount: number[] = []; // Para almacenar los totales de descuento de cada producto
 
   constructor(private fb: FormBuilder,
     private productsService: ProductsService,
@@ -72,17 +74,15 @@ export class FormSalesComponent {
       status: [this.saleData?.status || 'pending', Validators.required],
       details: this.fb.array([], this.minArrayLengthValidator(1)),
       client: this.fb.group({}),
-      total_amount: [{ value: 0 }]
+      total_amount: [{ value: 0 }],
+      total_discount: [{ value: 0 }],
     });
   }
 
   handleSelectedProducts(products: any[]): void {
     this.selectedProducts = products;
-
     // ✅ Calcular el total sumando los campos `total` de cada producto
     this.totalAmount = products.reduce((acc, p) => acc + (p.total || 0), 0);
-
-
   }
 
   onClientSelected(client: any): void {
@@ -106,17 +106,18 @@ export class FormSalesComponent {
     detailsArray.clear(); // Evita duplicados
     // Limpiar el FormArray antes de agregar nuevos productos
     this.totals = [];
+    this.totalsDiscount = []; // Limpiar el array de totales de descuento
     this.selectedProducts.forEach(product => {
       const quantity = product.quantity || 1;
       const salePrice = product.sale_price || 0;
       const discount = product.discount || 0;
       const tax = product.tax || 0;
-
       const subtotal = quantity * salePrice;
       const discountAmount = subtotal * (discount / 100);
       const taxedAmount = (subtotal - discountAmount) * (tax / 100);
       const total = subtotal - discountAmount + taxedAmount;
       this.totals.push(total); // Agregar el total del producto al array de totales
+      this.totalsDiscount.push(discountAmount); // Agregar el descuento del producto al array de totales de descuento
 
       detailsArray.push(this.fb.group({
         product_id: [product.id, Validators.required],
@@ -131,7 +132,10 @@ export class FormSalesComponent {
     // Actualizar el total de la venta
     this.totalAmount = this.totals.reduce((acc, total) => acc + total, 0);
     this.saleForm.get('total_amount')?.setValue(this.totalAmount);
-  }
+    this.totalDiscount = this.totalsDiscount.reduce((acc, total) => acc + total, 0);
+    console.log('Total de descuento:', this.totalDiscount);
+    this.saleForm.get('total_discount')?.setValue(this.totalDiscount); // Actualizar el total de descuento en el formulario
+   }
 
   onSubmit(): void {
     this.loadDetails();
