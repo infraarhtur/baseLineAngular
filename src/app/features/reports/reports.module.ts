@@ -1,0 +1,24 @@
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+import { ReportsRoutingModule } from './reports-routing.module';
+import { SaleReportByPeriodComponent } from './components/sale-report-by-period/sale-report-by-period.component';
+import { HomeReportComponent } from './components/home-report/home-report.component';
+import { RouterModule, Routes } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MaterialModule } from '../../shared/material/material.module';
+
+
+@NgModule({
+  declarations: [
+    SaleReportByPeriodComponent,
+    HomeReportComponent
+  ],
+  imports: [
+    CommonModule,
+    ReportsRoutingModule,
+    ReactiveFormsModule,
+    MaterialModule
+  ]
+})
+export class ReportsModule { }

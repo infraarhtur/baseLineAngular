@@ -172,7 +172,7 @@ export class SelectProductsComponent implements OnInit, OnChanges, AfterViewInit
       ];
     } else {
       baseColumns.splice(2, 0, this.allColumns.purchase_price); // Insertar después de sale_price
-      this.displayedColumns = [this.allColumns.actions,...baseColumns];
+      this.displayedColumns = [this.allColumns.actions, ...baseColumns];
     }
   }
 
@@ -210,6 +210,20 @@ export class SelectProductsComponent implements OnInit, OnChanges, AfterViewInit
   getTotalAmount(): number {
     return this.selection.selected.reduce((sum, item) => sum + (item.total || 0), 0);
   }
+  getTotalDiscount(): number {
+    let totalDiscount = 0;
+
+    this.selection.selected.forEach(product => {
+      const quantity = product.quantity || 1;
+      const price = product.sale_price || 0;
+      const discount = product.discount || 0;
+
+      const discountAmount = (price * quantity) * (discount / 100);
+      totalDiscount += discountAmount;
+    });
+
+    return totalDiscount;
+  }
 
   validateDiscount(product: any): void {
 
@@ -243,8 +257,8 @@ la aplicacion no acepta valores negativos ni mayores a 99%
       product.quantity = 1; // Ajustar a 1 si es menor
     }
 
-    if (quantity > product.stock  ) {
-      product.quantity = product.stock ; // Ajustar a la cantidad máxima disponible
+    if (quantity > product.stock) {
+      product.quantity = product.stock; // Ajustar a la cantidad máxima disponible
       const dialogRef = this.dialog.open(AlertDialogComponent, {
         width: '450px',
         data: {

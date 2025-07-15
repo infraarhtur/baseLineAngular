@@ -10,6 +10,7 @@ const routes: Routes = [
   { path: 'providers', loadChildren: () => import('./features/providers/providers.module').then(m => m.ProvidersModule) ,canActivate: [AuthGuard]},
   { path: 'sales', loadChildren: () => import('./features/sales/sales.module').then(m => m.SalesModule),canActivate: [AuthGuard]},
   { path: 'category', loadChildren: () => import('./features/categories/categories.module').then(m => m.CategoriesModule),canActivate: [AuthGuard]},
+  { path: 'dashboard', loadChildren: () => import('./features/reports/reports.module').then(m => m.ReportsModule),canActivate: [AuthGuard]},
   { path: '**', redirectTo: '' }
 ]
 

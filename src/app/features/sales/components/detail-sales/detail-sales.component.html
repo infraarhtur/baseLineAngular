@@ -113,7 +113,9 @@
       </div>
 
       <div class="full-width center" style="grid-column: span 4;">
-        <p><strong>Monto Total:</strong> {{ saleData.total_amount | currency:'COP' }}</p>
+        <p>
+          Valor total del descuento: <strong>{{ saleData.total_discount | currency:'COP' }}</strong><br>
+          <strong>Monto Total:</strong> {{ saleData.total_amount | currency:'COP' }}</p>
       </div>
 
     </div>
@@ -131,6 +133,7 @@
     <form [formGroup]="saleForm" (ngSubmit)="onSubmit()" class="sale-form">
       <div class="full-width center">
         <p><strong>Información de la venta</strong></p>
+        Valor total del descuento: <strong>{{ saleData.total_discount | currency:'COP' }}</strong> <br>
         total de la venta: <strong>{{ saleData.total_amount | currency:'COP' }}</strong>
         <br><br>
       </div>
