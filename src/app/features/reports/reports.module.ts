@@ -7,6 +7,7 @@ import { HomeReportComponent } from './components/home-report/home-report.compon
 import { RouterModule, Routes } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../../shared/material/material.module';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { MaterialModule } from '../../shared/material/material.module';
     CommonModule,
     ReportsRoutingModule,
     ReactiveFormsModule,
-    MaterialModule
+    MaterialModule,
+    FormsModule
   ]
 })
 export class ReportsModule { }
