@@ -8,12 +8,14 @@ import { RouterModule, Routes } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../../shared/material/material.module';
 import { FormsModule } from '@angular/forms';
+import { SelectReportsComponent } from './components/select-reports/select-reports.component';
 
 
 @NgModule({
   declarations: [
     SaleReportByPeriodComponent,
-    HomeReportComponent
+    HomeReportComponent,
+    SelectReportsComponent
   ],
   imports: [
     CommonModule,
