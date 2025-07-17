@@ -1,0 +1,9 @@
+services:
+  angular-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: base-line-angular:latest
+    ports:
+      - "4200:80"
+    restart: unless-stopped
