@@ -1,11 +1,22 @@
 <mat-toolbar color="primary">
   <span>Lista de reportes </span>
 </mat-toolbar>
-<button mat-icon-button aria-label="Ver reporte">
-  <mat-icon>insert_chart</mat-icon>
-</button>
 
 
- <button matButton >
-  <a [routerLink]="['/dashboard/report_summary']">Resumen de ventas por periodo</a>
- </button>
+
+<p>
+  <mat-icon style="vertical-align: middle;">insert_chart</mat-icon>
+  <a [routerLink]="['/dashboard/report_summary']">
+   <label for="">Resumen de ventas por periodo</label> </a>
+
+</p>
+
+
+<p>
+ <a [routerLink]="['/dashboard/report_sale_by_product']">
+  <mat-icon style="vertical-align: middle;">bar_chart</mat-icon>
+ <label for="">ventas por producto</label> </a>
+</p>
+
+
+

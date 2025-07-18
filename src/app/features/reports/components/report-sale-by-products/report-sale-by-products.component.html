@@ -1,0 +1,96 @@
+<p>
+  <a [routerLink]="['/dashboard']">Gestión de Reportes</a>
+  <mat-icon style="vertical-align: middle;">navigate_next</mat-icon>
+  <label>Reporte de resumen de venta por producto</label>
+</p>
+
+<mat-toolbar color="primary">
+  <span>Reporte de resumen de venta por periodo</span>
+</mat-toolbar>
+<!-- filtro -->
+<div class="filter-container">
+
+ <!-- filter dates start an end  dates -->
+  <mat-form-field appearance="outline">
+    <mat-label>Fecha inicio</mat-label>
+    <input matInput [matDatepicker]="pickerStart" [(ngModel)]="startDate" >
+    <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
+    <mat-datepicker #pickerStart></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Fecha fin</mat-label>
+    <input matInput [matDatepicker]="pickerEnd" [(ngModel)]="endDate" >
+    <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+    <mat-datepicker #pickerEnd></mat-datepicker>
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" (click)="applyDateFilter()">
+  <mat-icon>search</mat-icon>
+  Buscar
+</button>
+</div>
+
+
+
+<table mat-table [dataSource]="this.dataSource" matSort class="mat-elevation-z8" *ngIf="this.dataSource.data.length > 0; else noSales">
+
+
+    <!-- payment_method_label Column -->
+    <ng-container matColumnDef="product_name">
+      <th mat-header-cell *matHeaderCellDef  mat-sort-header> Nombre del producto</th>
+      <td mat-cell *matCellDef="let report"> {{ report.product_name }} </td>
+    </ng-container>
+
+        <!-- payment_method_label Column -->
+    <ng-container matColumnDef="total_units_sold">
+      <th mat-header-cell *matHeaderCellDef  mat-sort-header>  Unidades vendidas </th>
+      <td mat-cell *matCellDef="let report"> {{ report.total_units_sold }} </td>
+    </ng-container>
+
+  <!-- status Column -->
+  <ng-container matColumnDef="purchase_price">
+    <th mat-header-cell *matHeaderCellDef> Precio compra del producto </th>
+    <td mat-cell *matCellDef="let report"> {{ report.purchase_price }} </td>
+  </ng-container>
+
+    <!-- status Column -->
+  <ng-container matColumnDef="sale_price">
+    <th mat-header-cell *matHeaderCellDef  mat-sort-header> precio de venta prodcuto </th>
+    <td mat-cell *matCellDef="let report"> {{ report.sale_price | currency:'COP':'symbol':'1.0-0':'es-CO' }} </td>
+  </ng-container>
+
+  <!-- status Column -->
+  <ng-container matColumnDef="total_revenue">
+    <th mat-header-cell *matHeaderCellDef  mat-sort-header> monto total </th>
+    <td mat-cell *matCellDef="let report"> {{ report.total_revenue | currency:'COP':'symbol':'1.0-0':'es-CO' }} </td>
+  </ng-container>
+
+    <!-- status Column -->
+  <ng-container matColumnDef="total_discount">
+    <th mat-header-cell *matHeaderCellDef  mat-sort-header> monto  descuento </th>
+    <td mat-cell *matCellDef="let report"> {{ report.total_discount | currency:'COP':'symbol':'1.0-0':'es-CO' }} </td>
+  </ng-container>
+
+
+  <!-- Encabezados y Filas -->
+  <thead>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  </thead>
+  <tbody>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </tbody>
+
+</table>
+
+<!-- <mat-paginator
+  [pageSize]="5"
+  [pageSizeOptions]="[5, 10, 25, 100]"
+  showFirstLastButtons>
+</mat-paginator> -->
+
+<ng-template #noSales>
+  <p>No hay ventas disponibles.</p>
+</ng-template>
+
+
