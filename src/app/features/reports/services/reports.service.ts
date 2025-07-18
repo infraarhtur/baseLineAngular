@@ -26,4 +26,13 @@ export class ReportService {
       }
     });
   }
+
+  report_sale_by_products(start_date: string, end_date: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/report_sales_by_products`, {
+      params: {
+        start_date,
+        end_date
+      }
+    });
+  }
 }

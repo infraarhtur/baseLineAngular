@@ -9,13 +9,15 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../../shared/material/material.module';
 import { FormsModule } from '@angular/forms';
 import { SelectReportsComponent } from './components/select-reports/select-reports.component';
+import { ReportSaleByProductsComponent } from './components/report-sale-by-products/report-sale-by-products.component';
 
 
 @NgModule({
   declarations: [
     SaleReportByPeriodComponent,
     HomeReportComponent,
-    SelectReportsComponent
+    SelectReportsComponent,
+    ReportSaleByProductsComponent
   ],
   imports: [
     CommonModule,
