@@ -26,6 +26,7 @@ export class ReportSaleByProductsComponent implements OnInit, AfterViewInit {
     'total_revenue',
     'total_discount'];
   dataSource = new MatTableDataSource<any>();
+  dataSourcePending = new MatTableDataSource<any>();
   // paginacion
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -48,11 +49,15 @@ export class ReportSaleByProductsComponent implements OnInit, AfterViewInit {
   }
 
 
-  loadReportData(start_date: string, end_date: string): void {
+  loadReportData(start_date: string, end_date: string, status: string): void {
     // Logic to load report data, e.g., calling a service method
-    this.reportService.report_sale_by_products(start_date,end_date).subscribe({
+    this.reportService.report_sale_by_products(start_date,end_date, status).subscribe({
      next: (data) => {
+      if(status === 'paid'){
         this.dataSource.data = data;
+      }else{
+        this.dataSourcePending.data = data;
+      }
         console.log('Datos de ventas cargados:', data);
         this.snackbar.success('Ventas cargados');
       },
@@ -67,7 +72,8 @@ export class ReportSaleByProductsComponent implements OnInit, AfterViewInit {
     if (this.startDate && this.endDate) {
       const start_date = this.startDate.toISOString().split('T')[0];
       const end_date = this.endDate.toISOString().split('T')[0];
-      this.loadReportData(start_date, end_date);
+      this.loadReportData(start_date, end_date,'paid');
+      this.loadReportData(start_date, end_date,'pending');
     } else {
       this.snackbar.error('Por favor, seleccione un rango de fechas válido.');
     }
