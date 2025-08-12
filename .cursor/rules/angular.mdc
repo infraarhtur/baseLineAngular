@@ -1,6 +1,11 @@
 ---
 globs:
- - "src/**/*.{ts,html,scss}"
+  - "src/**/*.{ts,html,scss,css,json}"
+  - "*.{ts,json,md}"
+  - "angular.json"
+  - "tsconfig*.json"
+  - "package.json"
+  
 alwaysApply: false
 ---
 
