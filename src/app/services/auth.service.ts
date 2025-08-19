@@ -70,17 +70,23 @@ export class AuthService {
 
   getUserName(): string | null {
     const payload = this.getTokenPayload();
-
-    if (!payload) return null;
-    return  payload['email'] || null;
+    if (payload && payload['email']) {
+      return payload['email'];
+    }
+    const storedEmail = localStorage.getItem('login_email');
+    return storedEmail ? storedEmail : null;
   }
 
   getUserCompany_id(): string | null {
+    const selectedCompany = localStorage.getItem('selected_company_id');
+    if (selectedCompany) {
+      return selectedCompany;
+    }
     const payload = this.getTokenPayload();
-
-    if (!payload) return null;
-     const email =  payload['email'] || null;
-     return  '00000000-0000-0000-0000-000000000001'
+    if (payload && payload['company_id']) {
+      return payload['company_id'];
+    }
+    return '00000000-0000-0000-0000-000000000001';
   }
 
   logout() {
