@@ -11,19 +11,31 @@ import { Router } from '@angular/router';
 export class AppComponent implements OnInit{
   title = 'baseLineAngular';
   opened = false;  //cambiar esto a `false` si quieres que el menú inicie cerrado
+  isLoggedIn = false;
+  userName: string | null = null;
+  userCompany_id: string | null = null;
   constructor(private router: Router, private authService: AuthService) {
 
   }
   ngOnInit(): void {
-    // this.authService.handleAuthCallback();
-    // if (!this.authService.isAuthenticated()) {
-    //   this.authService.login();
+    const token = this.authService.getToken();
+    if (!token || this.authService.isTokenExpired(token)) {
+      this.authService.login();
+      return;
+    }
 
-      const token = localStorage.getItem('token');
-      if (!token) {
-        this.authService.login();
+    this.isLoggedIn = true;
+    this.userName = this.authService.getUserName();
+    this.userCompany_id = this.authService.getUserCompany_id();
+
+    const payload = this.authService.getTokenPayload();
+    if (payload?.exp) {
+      const msToExpiry = payload.exp * 1000 - Date.now();
+      if (msToExpiry > 0) {
+        setTimeout(() => this.logout(), msToExpiry);
       }
     }
+  }
 
   logout(){
     this.authService.logout();

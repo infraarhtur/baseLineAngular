@@ -26,7 +26,7 @@ export class AuthGuard implements CanActivate {
   canActivate(): boolean {
     const token = localStorage.getItem('token');
     if (!token) {
-      window.location.href = `${this.cognitoDomain}/login?client_id=${this.clientId}&response_type=token&scope=openid&redirect_uri=${this.redirectUri}`;
+      this.router.navigate(['/login']);
       return false;
     }
     return true;

@@ -1,0 +1,31 @@
+<div class="login-container">
+  <form [formGroup]="loginForm" (ngSubmit)="submit()" class="login-form">
+    <h2>Iniciar sesión</h2>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" formControlName="email" placeholder="usuario@empresa.com" />
+      <mat-error *ngIf="loginForm.get('email')?.hasError('required')">El email es obligatorio</mat-error>
+      <mat-error *ngIf="loginForm.get('email')?.hasError('email')">Formato de email inválido</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Contraseña</mat-label>
+      <input matInput type="password" formControlName="password" />
+      <mat-error *ngIf="loginForm.get('password')?.hasError('required')">La contraseña es obligatoria</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Empresa</mat-label>
+      <mat-select formControlName="companyId" [disabled]="loadingCompanies">
+        <mat-option *ngIf="loadingCompanies" [value]="''" disabled>Cargando...</mat-option>
+        <mat-option *ngFor="let company of companies" [value]="company.id">{{ company.name }}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="loginForm.get('companyId')?.hasError('required')">Seleccione una empresa</mat-error>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" class="full-width" type="submit">Continuar</button>
+  </form>
+</div>
+
+

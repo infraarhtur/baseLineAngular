@@ -15,6 +15,8 @@ import { ConfirmDialogComponent } from './shared/components/confirm-dialog/confi
 import { SalesModule } from './features/sales/sales.module';
 import { LOCALE_ID } from '@angular/core';
 import { AlertDialogComponent } from './shared/components/alert-dialog/alert-dialog.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { LoginComponent } from './shared/components/login/login.component';
 
 
 
@@ -24,6 +26,7 @@ import { AlertDialogComponent } from './shared/components/alert-dialog/alert-dia
     HomeComponent,
     ConfirmDialogComponent,
     AlertDialogComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
@@ -33,7 +36,8 @@ import { AlertDialogComponent } from './shared/components/alert-dialog/alert-dia
     ClientsModule,
     MaterialModule,
     SalesModule,
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule
   ],
   exports:[],
   providers: [
