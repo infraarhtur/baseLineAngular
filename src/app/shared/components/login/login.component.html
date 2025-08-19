@@ -24,7 +24,9 @@
       <mat-error *ngIf="loginForm.get('companyId')?.hasError('required')">Seleccione una empresa</mat-error>
     </mat-form-field>
 
-    <button mat-raised-button color="primary" class="full-width" type="submit">Continuar</button>
+    <button mat-raised-button color="primary" class="full-width" type="submit" [disabled]="submitting || loginForm.invalid">
+      {{ submitting ? 'Ingresando...' : 'Continuar' }}
+    </button>
   </form>
 </div>
 

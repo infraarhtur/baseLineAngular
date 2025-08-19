@@ -1,33 +1,41 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { tap, map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private cognitoDomain = environment.cognitoDomain;
-  private clientId = environment.cognitoClientId;
-  private redirectUri = environment.redirectUri;
+  private authBaseUrl = `${environment.apiUrl}api/auth`;
 
-  constructor() {
-    this.handleAuthCallback();
+  constructor(private http: HttpClient, private router: Router) {}
+
+  login(email: string, password: string, companyId: string): Observable<boolean> {
+    const url = `${this.authBaseUrl}/login`;
+    return this.http
+      .post<{ token?: string; access_token?: string; idToken?: string }>(url, {
+        email,
+        password,
+        companyId
+      })
+      .pipe(
+        tap((response) => {
+          const token = response?.token || response?.access_token || response?.idToken;
+          if (token) {
+            localStorage.setItem('token', token);
+            this.router.navigate(['/home']);
+          }
+        }),
+        map(() => true)
+      );
   }
 
-  login() {
-    const authUrl = `${this.cognitoDomain}/login?client_id=${this.clientId}&response_type=token&scope=openid&redirect_uri=${this.redirectUri}`;
-    window.location.href = authUrl;
-  }
-
-  private handleAuthCallback() {
-    const hash = window.location.hash;
-    if (hash.includes('id_token')) {
-      const params = new URLSearchParams(hash.replace('#', '?'));
-      const token = params.get('id_token');
-      if (token) {
-        localStorage.setItem('token', token);
-        window.history.replaceState({}, document.title, "/home");
-      }
-    }
+  isAuthenticated(): boolean {
+    const token = this.getToken();
+    return !!token && !this.isTokenExpired(token);
   }
 
   getToken(): string | null {
@@ -91,11 +99,7 @@ export class AuthService {
 
   logout() {
     localStorage.removeItem('token');
-    const logoutUrl = `${this.cognitoDomain}/logout?client_id=${this.clientId}&logout_uri=${this.redirectUri}`;
-    window.location.href = logoutUrl;
-    setTimeout(() => {
-      window.location.href = '/login'; // Redirigir a una página de login después del logout
-    }, 500)
+    this.router.navigate(['/login']);
 
   }
 }

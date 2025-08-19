@@ -13,6 +13,7 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   companies: Array<{ id: string; name: string } > = [];
   loadingCompanies = false;
+  submitting = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -50,11 +51,18 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    const { email, companyId } = this.loginForm.value;
+    const { email, password, companyId } = this.loginForm.value;
     localStorage.setItem('selected_company_id', companyId);
     localStorage.setItem('login_email', email);
-
-    this.authService.login();
+    this.submitting = true;
+    this.authService.login(email, password, companyId).subscribe({
+      next: () => {
+        this.submitting = false;
+      },
+      error: () => {
+        this.submitting = false;
+      }
+    });
   }
 }
 

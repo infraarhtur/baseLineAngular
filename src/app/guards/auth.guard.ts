@@ -1,15 +1,11 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router } from '@angular/router';
+import { CanActivate, Router, UrlTree } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
-  private cognitoDomain = environment.cognitoDomain;
-  private clientId = environment.cognitoClientId;
-  private redirectUri = environment.redirectUri;
   constructor(private authService: AuthService, private router: Router) {}
 
   // canActivate(): boolean {
@@ -23,13 +19,11 @@ export class AuthGuard implements CanActivate {
 
 
 
-  canActivate(): boolean {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      this.router.navigate(['/login']);
-      return false;
+  canActivate(): boolean | UrlTree {
+    if (this.authService.isAuthenticated()) {
+      return true;
     }
-    return true;
+    return this.router.parseUrl('/login');
   }
 }
 
