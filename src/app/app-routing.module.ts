@@ -5,15 +5,16 @@ import { HomeComponent } from './shared/components/home/home.component';
 import { LoginComponent } from './shared/components/login/login.component';
 
 const routes: Routes = [
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
-  { path: '', component: HomeComponent, canActivate: [AuthGuard] },
+  { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'products', loadChildren: () => import('./features/products/products.module').then(m => m.ProductsModule),canActivate: [AuthGuard]},
   { path: 'clients', loadChildren: () => import('./features/clients/clients.module').then(m => m.ClientsModule) ,canActivate: [AuthGuard]},
   { path: 'providers', loadChildren: () => import('./features/providers/providers.module').then(m => m.ProvidersModule) ,canActivate: [AuthGuard]},
   { path: 'sales', loadChildren: () => import('./features/sales/sales.module').then(m => m.SalesModule),canActivate: [AuthGuard]},
   { path: 'category', loadChildren: () => import('./features/categories/categories.module').then(m => m.CategoriesModule),canActivate: [AuthGuard]},
   { path: 'dashboard', loadChildren: () => import('./features/reports/reports.module').then(m => m.ReportsModule),canActivate: [AuthGuard]},
-  { path: '**', redirectTo: '' }
+  { path: '**', redirectTo: 'login' }
 ]
 
 @NgModule({

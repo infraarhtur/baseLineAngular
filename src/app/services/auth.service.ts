@@ -25,7 +25,7 @@ export class AuthService {
       const token = params.get('id_token');
       if (token) {
         localStorage.setItem('token', token);
-        window.history.replaceState({}, document.title, "/"); // Limpiar la URL
+        window.history.replaceState({}, document.title, "/home");
       }
     }
   }
