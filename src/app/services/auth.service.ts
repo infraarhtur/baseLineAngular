@@ -13,13 +13,15 @@ export class AuthService {
   private baseUrl = `${environment.apiUrl}`;
 
   constructor(private http: HttpClient, private router: Router) {}
-  login(email: string, password: string, companyId: string): Observable<boolean> {
+  login(email: string, password: string, company_name: string): Observable<boolean> {
     const url = `${this.authBaseUrl}auth/login`;
+    const remember_me= true;
     return this.http
       .post<{ token?: string; access_token?: string; idToken?: string }>(url, {
         email,
         password,
-        companyId
+        company_name,
+        remember_me
       })
       .pipe(
         tap((response) => {

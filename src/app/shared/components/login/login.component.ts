@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
-      companyId: ['', [Validators.required]],
+      company_name: ['', [Validators.required]],
       companyQuery: ['']
     });
   }
@@ -80,7 +80,7 @@ export class LoginComponent implements OnInit {
 
   onCompanySelected(company: CompanyDto): void {
     if (company && company.id) {
-      this.loginForm.get('companyId')!.setValue(company.id);
+      this.loginForm.get('company_name')!.setValue(company.name);
       this.loginForm.get('companyQuery')!.setValue(company);
     }
   }
@@ -88,7 +88,7 @@ export class LoginComponent implements OnInit {
   onCompanyInputBlur(): void {
     const value = this.loginForm.get('companyQuery')!.value;
     if (!value || typeof value === 'string') {
-      this.loginForm.get('companyId')!.setValue('');
+      this.loginForm.get('company_name')!.setValue('');
     }
   }
 
@@ -98,11 +98,11 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    const { email, password, companyId } = this.loginForm.value;
-    localStorage.setItem('selected_company_id', companyId);
+    const { email, password, company_name } = this.loginForm.value;
+    localStorage.setItem('selected_company_id', company_name);
     localStorage.setItem('login_email', email);
     this.submitting = true;
-    this.authService.login(email, password, companyId).subscribe({
+    this.authService.login(email, password, company_name).subscribe({
       next: () => {
         this.submitting = false;
       },
