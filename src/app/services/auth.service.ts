@@ -9,12 +9,12 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class AuthService {
-  private authBaseUrl = `${environment.apiUrl}api/auth`;
+  private authBaseUrl = `${environment.apiUrlAuth}`;
+  private baseUrl = `${environment.apiUrl}`;
 
   constructor(private http: HttpClient, private router: Router) {}
-
   login(email: string, password: string, companyId: string): Observable<boolean> {
-    const url = `${this.authBaseUrl}/login`;
+    const url = `${this.authBaseUrl}auth/login`;
     return this.http
       .post<{ token?: string; access_token?: string; idToken?: string }>(url, {
         email,

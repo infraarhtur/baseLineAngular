@@ -1,44 +1,47 @@
 
-   <mat-sidenav-container class="container">
-      <!-- Sidebar -->
-      <mat-sidenav #sidenav mode="side" [(opened)]="opened" color="">
-        <mat-nav-list >
-          <mat-list-item [routerLink]="''" (click)="sidenav.close()">Inicio</mat-list-item>
-          <mat-list-item [routerLink]="'/clients'" (click)="sidenav.close()">Clientes</mat-list-item>
-          <mat-list-item [routerLink]="['/products']" (click)="sidenav.close()">Productos</mat-list-item>
-          <mat-list-item [routerLink]="['/providers']" (click)="sidenav.close()">Proveedores</mat-list-item>
-          <mat-list-item [routerLink]="['/sales']" (click)="sidenav.close()">Ventas</mat-list-item>
-          <mat-list-item [routerLink]="['/category']" (click)="sidenav.close()">Categorias</mat-list-item>
-          <mat-list-item [routerLink]="['/dashboard']" (click)="sidenav.close()">dashboard</mat-list-item>
-          <mat-list-item (click)="sidenav.close()">Contacto</mat-list-item>
-        </mat-nav-list>
-      </mat-sidenav>
+   <ng-container *ngIf="authService.isAuthenticated(); else publicLayout">
+     <mat-sidenav-container class="container">
+       <!-- Sidebar -->
+       <mat-sidenav #sidenav mode="side" [(opened)]="opened" color="">
+         <mat-nav-list >
+           <mat-list-item [routerLink]="'/home'" (click)="sidenav.close()">Inicio</mat-list-item>
+           <mat-list-item [routerLink]="'/clients'" (click)="sidenav.close()">Clientes</mat-list-item>
+           <mat-list-item [routerLink]="['/products']" (click)="sidenav.close()">Productos</mat-list-item>
+           <mat-list-item [routerLink]="['/providers']" (click)="sidenav.close()">Proveedores</mat-list-item>
+           <mat-list-item [routerLink]="['/sales']" (click)="sidenav.close()">Ventas</mat-list-item>
+           <mat-list-item [routerLink]="['/category']" (click)="sidenav.close()">Categorias</mat-list-item>
+           <mat-list-item [routerLink]="['/dashboard']" (click)="sidenav.close()">dashboard</mat-list-item>
+           <mat-list-item (click)="sidenav.close()">Contacto</mat-list-item>
+         </mat-nav-list>
+       </mat-sidenav>
 
-      <!-- Contenido principal -->
-      <mat-sidenav-content>
-        <mat-toolbar color="accent">
-          <button mat-icon-button (click)="sidenav.toggle()" color="primary">
-            <mat-icon>menu</mat-icon>
-          </button>
-          <button mat-button [routerLink]="'/home'">Inicio</button>
-          <button mat-button [routerLink]="'/clients'">clients</button>
-          <button mat-button [routerLink]="['/products']">products</button>
+       <!-- Contenido principal -->
+       <mat-sidenav-content>
+         <mat-toolbar color="accent">
+           <button mat-icon-button (click)="sidenav.toggle()" color="primary">
+             <mat-icon>menu</mat-icon>
+           </button>
+           <button mat-button [routerLink]="'/home'">Inicio</button>
+           <button mat-button [routerLink]="'/clients'">clients</button>
+           <button mat-button [routerLink]="['/products']">products</button>
 
-          <span class="spacer"></span>
-          <div *ngIf="isLoggedIn" style="margin-right: 12px;">Bienvenido, {{ userName || 'usuario' }}</div>
-          <button mat-button (click)="logout()">salir
-          <mat-icon>exit_to_app</mat-icon>
-        </button>
-          <span>Mi Aplicación</span>
+           <span class="spacer"></span>
+           <div *ngIf="authService.isAuthenticated()" style="margin-right: 12px;">Bienvenido, {{ userName || 'usuario' }}</div>
+           <button mat-button (click)="logout()">salir
+             <mat-icon>exit_to_app</mat-icon>
+           </button>
+           <span>Mi Aplicación</span>
 
-        </mat-toolbar>
+         </mat-toolbar>
 
-        <div class="content">
-          <!-- <h1>Bienvenido a mi aplicación</h1> -->
-          company_id: {{userCompany_id}}
-          <router-outlet/>
+         <div class="content">
+           company_id: {{userCompany_id}}
+           <router-outlet/>
+         </div>
+       </mat-sidenav-content>
+     </mat-sidenav-container>
+   </ng-container>
 
-
-        </div>
-      </mat-sidenav-content>
-    </mat-sidenav-container>
+   <ng-template #publicLayout>
+     <router-outlet></router-outlet>
+   </ng-template>

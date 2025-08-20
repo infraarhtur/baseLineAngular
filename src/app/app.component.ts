@@ -14,13 +14,13 @@ export class AppComponent implements OnInit{
   isLoggedIn = false;
   userName: string | null = null;
   userCompany_id: string | null = null;
-  constructor(private router: Router, private authService: AuthService) {
+  constructor(private router: Router, public authService: AuthService) {
 
   }
   ngOnInit(): void {
     const token = this.authService.getToken();
     if (!token || this.authService.isTokenExpired(token)) {
-      this.authService.login();
+     // this.authService.login();
       return;
     }
 
