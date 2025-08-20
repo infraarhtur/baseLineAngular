@@ -17,10 +17,17 @@
 
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Empresa</mat-label>
-      <mat-select formControlName="companyId" [disabled]="loadingCompanies">
-        <mat-option *ngIf="loadingCompanies" [value]="''" disabled>Cargando...</mat-option>
-        <mat-option *ngFor="let company of companies" [value]="company.id">{{ company.name }}</mat-option>
-      </mat-select>
+      <input type="text"
+             matInput
+             [matAutocomplete]="autoCompany"
+             formControlName="companyQuery" />
+      <mat-autocomplete #autoCompany="matAutocomplete" [displayWith]="displayCompany" (optionSelected)="onCompanySelected($event.option.value)">
+        <ng-container *ngIf="filteredCompanies$ | async as options">
+          <mat-option *ngIf="companySearchLoading" disabled>Cargando...</mat-option>
+          <mat-option *ngFor="let company of options" [value]="company">{{ company.name }}</mat-option>
+          <mat-option *ngIf="!companySearchLoading && options.length === 0" disabled>Sin resultados</mat-option>
+        </ng-container>
+      </mat-autocomplete>
       <mat-error *ngIf="loginForm.get('companyId')?.hasError('required')">Seleccione una empresa</mat-error>
     </mat-form-field>
 
