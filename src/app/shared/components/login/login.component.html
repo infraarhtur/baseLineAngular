@@ -28,8 +28,12 @@
           <mat-option *ngIf="!companySearchLoading && options.length === 0" disabled>Sin resultados</mat-option>
         </ng-container>
       </mat-autocomplete>
+
       <mat-error *ngIf="loginForm.get('companyId')?.hasError('required')">Seleccione una empresa</mat-error>
     </mat-form-field>
+    <mat-checkbox formControlName="rememberMe" class="full-width">
+      Recordarme
+    </mat-checkbox>
 
     <button mat-raised-button color="primary" class="full-width" type="submit" [disabled]="submitting || loginForm.invalid">
       {{ submitting ? 'Ingresando...' : 'Continuar' }}

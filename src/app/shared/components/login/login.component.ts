@@ -28,7 +28,8 @@ export class LoginComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
       company_name: ['', [Validators.required]],
-      companyQuery: ['']
+      companyQuery: [''],
+      rememberMe: [false]
     });
   }
 
@@ -98,11 +99,12 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    const { email, password, company_name } = this.loginForm.value;
+    const { email, password, company_name, rememberMe } = this.loginForm.value;
     localStorage.setItem('selected_company_id', company_name);
     localStorage.setItem('login_email', email);
+    localStorage.setItem('remember_me', rememberMe);
     this.submitting = true;
-    this.authService.login(email, password, company_name).subscribe({
+    this.authService.login(email, password, company_name, rememberMe).subscribe({
       next: () => {
         this.submitting = false;
       },
