@@ -13,13 +13,13 @@ export class AuthService {
   private baseUrl = `${environment.apiUrl}`;
 
   constructor(private http: HttpClient, private router: Router) {}
-  login(email: string, hashed_password: string, company_name: string, remember_me: boolean): Observable<boolean> {
+  login(email: string, password: string, company_name: string, remember_me: boolean): Observable<boolean> {
     const url = `${this.authBaseUrl}auth/login`;
     //const remember_me= true;
     return this.http
       .post<{ token?: string; access_token?: string; idToken?: string }>(url, {
         email,
-        hashed_password,
+        password,
         company_name,
         remember_me
       })
