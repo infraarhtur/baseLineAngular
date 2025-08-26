@@ -35,9 +35,14 @@
       Recordarme
     </mat-checkbox>
 
+
     <button mat-raised-button color="primary" class="full-width" type="submit" [disabled]="submitting || loginForm.invalid">
       {{ submitting ? 'Ingresando...' : 'Continuar' }}
     </button>
+    <br>
+    <div class="forgot-password-container">
+      <a href="/reset-password" class="forgot-password-link">¿Olvidaste tu contraseña?</a>
+    </div>
   </form>
 </div>
 
