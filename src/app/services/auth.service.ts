@@ -104,4 +104,8 @@ export class AuthService {
     this.router.navigate(['/login']);
 
   }
+  resetPassword(email: string): Observable<any> {
+    const url = `${this.authBaseUrl}auth/password-reset`;
+    return this.http.post<any>(url, { email });
+  }
 }
