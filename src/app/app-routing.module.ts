@@ -4,10 +4,13 @@ import { AuthGuard } from './guards/auth.guard';
 import { HomeComponent } from './shared/components/home/home.component';
 import { LoginComponent } from './shared/components/login/login.component';
 import { PasswordResetComponent } from './shared/components/password-reset/password-reset.component';
+import { TokenValidateComponent } from './shared/components/token-validate/token-validate.component';
+
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
+  { path: 'token-validate/:token', component: TokenValidateComponent },
   { path: 'reset-password', component: PasswordResetComponent },
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'products', loadChildren: () => import('./features/products/products.module').then(m => m.ProductsModule),canActivate: [AuthGuard]},

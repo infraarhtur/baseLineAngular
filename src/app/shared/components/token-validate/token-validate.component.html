@@ -1,0 +1,14 @@
+<div class="token-validate-container">
+  <h2>Validación de Token</h2>
+  <div *ngIf="token; else noToken">
+    <p>Token recibido correctamente:</p>
+    <div class="token-display">
+      <p>{{ token }}</p>
+    </div>
+    <p>Este token será procesado para validación.</p>
+  </div>
+  <ng-template #noToken>
+    <p>No se recibió ningún token en la URL.</p>
+    <p>Ejemplo de uso: <code>/token-validate/abc123</code></p>
+  </ng-template>
+</div>
