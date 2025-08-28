@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/fo
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../../services/auth.service';
+import { SnackbarService } from '../../services/snackbar.service';
 
 @Component({
   selector: 'app-password-reset-confirm',
@@ -22,7 +23,8 @@ export class PasswordResetConfirmComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private snackbarService: SnackbarService,
   ) {
     this.resetForm = this.fb.group({
       password: ['', [Validators.required, Validators.minLength(8), this.hasUppercaseValidator, this.hasNumberValidator]],
@@ -107,6 +109,20 @@ export class PasswordResetConfirmComponent implements OnInit {
       const { password } = this.resetForm.value;
 
       // Aquí deberías llamar al servicio de autenticación
+      this.authService.resetPasswordConfirm(this.token, password).subscribe({
+        next: (data) => {
+          console.log(data);
+          debugger;
+        this.snackbarService.success(data.message);
+        },error: (error) => {
+          console.log(error);
+          this.snackBar.open(error.error.message, 'Cerrar', {
+            duration: 5000,
+            panelClass: ['error-snackbar']
+          });
+        }
+      });
+
       // this.authService.resetPassword(this.token, password).subscribe({
       //   next: (response) => {
       //     this.snackBar.open('Contraseña actualizada exitosamente', 'Cerrar', {

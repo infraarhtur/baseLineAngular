@@ -44,7 +44,7 @@ export class TokenValidateComponent implements OnInit {
           }, 3000);
         }else{
           console.log('Es valido');
-          //this.router.navigate(['/login']);
+          this.router.navigate(['/reset-password-confirm', this.token]);
         }
       },
       error: (error) => {
@@ -54,7 +54,7 @@ export class TokenValidateComponent implements OnInit {
           width: '450px',
           data: {
             message: `
-            ${error.error.message}
+            El token no es valido.
           ` }
         });
         setTimeout(() => {

@@ -112,4 +112,8 @@ export class AuthService {
     const url = `${this.authBaseUrl}auth/password-reset/validate`;
     return this.http.get<any>(url, { params: { token } });
   }
+  resetPasswordConfirm(token: string, new_password: string): Observable<any> {
+    const url = `${this.authBaseUrl}auth/password-reset/confirm`;
+    return this.http.post<any>(url, { token, new_password });
+  }
 }
