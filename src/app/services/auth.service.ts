@@ -65,7 +65,7 @@ export class AuthService {
 
     const token = this.getToken();
     return token ? this.decodeToken(token) : null;
-    debugger;
+
 
   }
 
@@ -83,20 +83,23 @@ export class AuthService {
     if (payload && payload['email']) {
       return payload['email'];
     }
-    const storedEmail = localStorage.getItem('login_email');
-    return storedEmail ? storedEmail : null;
+    return null;
   }
 
   getUserCompany_id(): string | null {
-    const selectedCompany = localStorage.getItem('selected_company_id');
-    if (selectedCompany) {
-      return selectedCompany;
-    }
     const payload = this.getTokenPayload();
     if (payload && payload['company_id']) {
       return payload['company_id'];
     }
-    return '00000000-0000-0000-0000-000000000001';
+    return null;
+  }
+
+  getUserCompanyName(): string | null {
+    const payload = this.getTokenPayload();
+    if (payload && payload['company_name']) {
+      return payload['company_name'];
+    }
+    return null;
   }
 
   logout() {

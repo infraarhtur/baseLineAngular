@@ -35,7 +35,7 @@ export class TokenValidateComponent implements OnInit {
     this.authService.validateToken(this.token).subscribe({
       next: (data) => {
         console.log(data);
-        debugger;
+
         this.snackbarService.success(data.message);
         if (!data.valid) {
           setTimeout(() => {

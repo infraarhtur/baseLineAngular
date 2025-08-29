@@ -26,16 +26,15 @@
            <button mat-button [routerLink]="['/products']">products</button>
 
            <span class="spacer"></span>
-           <div *ngIf="authService.isAuthenticated()" style="margin-right: 12px;">Bienvenido, {{ userName || 'usuario' }}</div>
+           <div *ngIf="authService.isAuthenticated()" style="margin-right: 12px;"> {{userCompanyName}}</div>
            <button mat-button (click)="logout()">salir
              <mat-icon>exit_to_app</mat-icon>
            </button>
-           <span>Mi Aplicación</span>
 
          </mat-toolbar>
 
          <div class="content">
-           company_id: {{userCompany_id}}
+          <mat-icon>person</mat-icon> {{ userName || 'usuario' }}
            <router-outlet/>
          </div>
        </mat-sidenav-content>

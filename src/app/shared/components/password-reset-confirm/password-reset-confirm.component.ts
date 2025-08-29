@@ -112,7 +112,7 @@ export class PasswordResetConfirmComponent implements OnInit {
       this.authService.resetPasswordConfirm(this.token, password).subscribe({
         next: (data) => {
           console.log(data);
-          debugger;
+
         this.snackbarService.success(data.message);
         },error: (error) => {
           console.log(error);

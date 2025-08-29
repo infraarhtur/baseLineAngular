@@ -44,7 +44,7 @@ export class PasswordResetComponent implements OnInit {
         },
         error: (error) => {
           console.log(error);
-          debugger;
+
           this.snackbarService.error('Error al enviar el enlace para restablecer tu contraseña');
 
         }

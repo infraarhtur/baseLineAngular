@@ -4,6 +4,7 @@ import { AuthService } from '../../../services/auth.service';
 import { CompaniesService, CompanyDto } from '../../services/companies.service';
 import { Observable, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, switchMap, tap, catchError, map, startWith } from 'rxjs/operators';
+import { SnackbarService } from '../../services/snackbar.service';
 
 @Component({
   selector: 'app-login',
@@ -18,10 +19,12 @@ export class LoginComponent implements OnInit {
   companySearchLoading = false;
   loadingCompanies = false;
   submitting = false;
+  loginError = '';
 
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
+    private snackbarService: SnackbarService,
     @Inject(CompaniesService) private companiesService: CompaniesService
   ) {
     this.loginForm = this.formBuilder.group({
@@ -103,13 +106,17 @@ export class LoginComponent implements OnInit {
     localStorage.setItem('selected_company_id', company_name);
     localStorage.setItem('login_email', email);
     localStorage.setItem('remember_me', rememberMe);
+    this.loginError = '';
     this.submitting = true;
     this.authService.login(email, password, company_name, rememberMe).subscribe({
-      next: () => {
+      next: (data) => {
+        console.log(data);
         this.submitting = false;
       },
-      error: () => {
+      error: (error) => {
+        console.log(error);
         this.submitting = false;
+        this.loginError = 'Por favor verifique su usuario y contraseña';
       }
     });
   }
