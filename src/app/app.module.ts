@@ -17,6 +17,9 @@ import { LOCALE_ID } from '@angular/core';
 import { AlertDialogComponent } from './shared/components/alert-dialog/alert-dialog.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './shared/components/login/login.component';
+import { PasswordResetComponent } from './shared/components/password-reset/password-reset.component';
+import { TokenValidateComponent } from './shared/components/token-validate/token-validate.component';
+import { PasswordResetConfirmComponent } from './shared/components/password-reset-confirm/password-reset-confirm.component';
 
 
 
@@ -27,6 +30,9 @@ import { LoginComponent } from './shared/components/login/login.component';
     ConfirmDialogComponent,
     AlertDialogComponent,
     LoginComponent,
+    PasswordResetComponent,
+    TokenValidateComponent,
+    PasswordResetConfirmComponent,
   ],
   imports: [
     BrowserModule,

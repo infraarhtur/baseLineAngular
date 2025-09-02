@@ -17,14 +17,37 @@
 
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Empresa</mat-label>
-      <mat-select formControlName="companyId" [disabled]="loadingCompanies">
-        <mat-option *ngIf="loadingCompanies" [value]="''" disabled>Cargando...</mat-option>
-        <mat-option *ngFor="let company of companies" [value]="company.id">{{ company.name }}</mat-option>
-      </mat-select>
+      <input type="text"
+             matInput
+             [matAutocomplete]="autoCompany"
+             formControlName="companyQuery" />
+      <mat-autocomplete #autoCompany="matAutocomplete" [displayWith]="displayCompany" (optionSelected)="onCompanySelected($event.option.value)">
+        <ng-container *ngIf="filteredCompanies$ | async as options">
+          <mat-option *ngIf="companySearchLoading" disabled>Cargando...</mat-option>
+          <mat-option *ngFor="let company of options" [value]="company">{{ company.name }}</mat-option>
+          <mat-option *ngIf="!companySearchLoading && options.length === 0" disabled>Sin resultados</mat-option>
+        </ng-container>
+      </mat-autocomplete>
+
       <mat-error *ngIf="loginForm.get('companyId')?.hasError('required')">Seleccione una empresa</mat-error>
     </mat-form-field>
+    <mat-checkbox formControlName="rememberMe" class="full-width">
+      Recordarme
+    </mat-checkbox>
 
-    <button mat-raised-button color="primary" class="full-width" type="submit">Continuar</button>
+
+    <button mat-raised-button color="primary" class="full-width" type="submit" [disabled]="submitting || loginForm.invalid">
+      {{ submitting ? 'Ingresando...' : 'Continuar' }}
+    </button>
+
+    <div *ngIf="loginError" class="error-message">
+      {{ loginError }}
+    </div>
+
+    <br>
+    <div class="forgot-password-container">
+      <a href="/reset-password" class="forgot-password-link">¿Olvidaste tu contraseña?</a>
+    </div>
   </form>
 </div>
 

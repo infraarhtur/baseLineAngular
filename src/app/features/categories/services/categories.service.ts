@@ -26,7 +26,6 @@ export class CategoriesService {
 
   // crear una categoria
   createCategory(data: any): Observable<any> {
-    debugger;
     return this.http.post<any>(this.baseUrl, data);
   }
   // actualizar una categoria

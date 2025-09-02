@@ -1,33 +1,43 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { tap, map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private cognitoDomain = environment.cognitoDomain;
-  private clientId = environment.cognitoClientId;
-  private redirectUri = environment.redirectUri;
+  private authBaseUrl = `${environment.apiUrlAuth}`;
+  private baseUrl = `${environment.apiUrl}`;
 
-  constructor() {
-    this.handleAuthCallback();
+  constructor(private http: HttpClient, private router: Router) {}
+  login(email: string, password: string, company_name: string, remember_me: boolean): Observable<boolean> {
+    const url = `${this.authBaseUrl}auth/login`;
+    //const remember_me= true;
+    return this.http
+      .post<{ token?: string; access_token?: string; idToken?: string }>(url, {
+        email,
+        password,
+        company_name,
+        remember_me
+      })
+      .pipe(
+        tap((response) => {
+          const token = response?.token || response?.access_token || response?.idToken;
+          if (token) {
+            localStorage.setItem('token', token);
+            this.router.navigate(['/home']);
+          }
+        }),
+        map(() => true)
+      );
   }
 
-  login() {
-    const authUrl = `${this.cognitoDomain}/login?client_id=${this.clientId}&response_type=token&scope=openid&redirect_uri=${this.redirectUri}`;
-    window.location.href = authUrl;
-  }
-
-  private handleAuthCallback() {
-    const hash = window.location.hash;
-    if (hash.includes('id_token')) {
-      const params = new URLSearchParams(hash.replace('#', '?'));
-      const token = params.get('id_token');
-      if (token) {
-        localStorage.setItem('token', token);
-        window.history.replaceState({}, document.title, "/"); // Limpiar la URL
-      }
-    }
+  isAuthenticated(): boolean {
+    const token = this.getToken();
+    return !!token && !this.isTokenExpired(token);
   }
 
   getToken(): string | null {
@@ -55,7 +65,7 @@ export class AuthService {
 
     const token = this.getToken();
     return token ? this.decodeToken(token) : null;
-    debugger;
+
 
   }
 
@@ -73,29 +83,40 @@ export class AuthService {
     if (payload && payload['email']) {
       return payload['email'];
     }
-    const storedEmail = localStorage.getItem('login_email');
-    return storedEmail ? storedEmail : null;
+    return null;
   }
 
   getUserCompany_id(): string | null {
-    const selectedCompany = localStorage.getItem('selected_company_id');
-    if (selectedCompany) {
-      return selectedCompany;
-    }
     const payload = this.getTokenPayload();
     if (payload && payload['company_id']) {
       return payload['company_id'];
     }
-    return '00000000-0000-0000-0000-000000000001';
+    return null;
+  }
+
+  getUserCompanyName(): string | null {
+    const payload = this.getTokenPayload();
+    if (payload && payload['company_name']) {
+      return payload['company_name'];
+    }
+    return null;
   }
 
   logout() {
     localStorage.removeItem('token');
-    const logoutUrl = `${this.cognitoDomain}/logout?client_id=${this.clientId}&logout_uri=${this.redirectUri}`;
-    window.location.href = logoutUrl;
-    setTimeout(() => {
-      window.location.href = '/login'; // Redirigir a una página de login después del logout
-    }, 500)
+    this.router.navigate(['/login']);
 
+  }
+  resetPassword(email: string): Observable<any> {
+    const url = `${this.authBaseUrl}auth/password-reset`;
+    return this.http.post<any>(url, { email });
+  }
+  validateToken(token: string): Observable<any> {
+    const url = `${this.authBaseUrl}auth/password-reset/validate`;
+    return this.http.get<any>(url, { params: { token } });
+  }
+  resetPasswordConfirm(token: string, new_password: string): Observable<any> {
+    const url = `${this.authBaseUrl}auth/password-reset/confirm`;
+    return this.http.post<any>(url, { token, new_password });
   }
 }

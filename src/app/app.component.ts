@@ -14,20 +14,20 @@ export class AppComponent implements OnInit{
   isLoggedIn = false;
   userName: string | null = null;
   userCompany_id: string | null = null;
-  constructor(private router: Router, private authService: AuthService) {
+  userCompanyName: string | null = null;
+  constructor(private router: Router, public authService: AuthService) {
 
   }
   ngOnInit(): void {
     const token = this.authService.getToken();
     if (!token || this.authService.isTokenExpired(token)) {
-      this.authService.login();
+     // this.authService.login();
       return;
-    }
-
+    }else{
     this.isLoggedIn = true;
     this.userName = this.authService.getUserName();
-    this.userCompany_id = this.authService.getUserCompany_id();
-
+   this.userCompany_id = this.authService.getUserCompany_id();
+    this.userCompanyName = this.authService.getUserCompanyName();
     const payload = this.authService.getTokenPayload();
     if (payload?.exp) {
       const msToExpiry = payload.exp * 1000 - Date.now();
@@ -35,6 +35,8 @@ export class AppComponent implements OnInit{
         setTimeout(() => this.logout(), msToExpiry);
       }
     }
+    }
+
   }
 
   logout(){
