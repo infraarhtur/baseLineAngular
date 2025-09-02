@@ -1,0 +1,99 @@
+// Estilos para notificaciones de token
+.token-notification-warning {
+  background-color: #ff9800 !important;
+  color: white !important;
+
+  .mat-simple-snackbar-action {
+    color: white !important;
+    font-weight: bold !important;
+  }
+}
+
+.token-notification-error {
+  background-color: #f44336 !important;
+  color: white !important;
+
+  .mat-simple-snackbar-action {
+    color: white !important;
+    font-weight: bold !important;
+  }
+}
+
+.token-notification-success {
+  background-color: #4caf50 !important;
+  color: white !important;
+
+  .mat-simple-snackbar-action {
+    color: white !important;
+    font-weight: bold !important;
+  }
+}
+
+.token-notification-info {
+  background-color: #2196f3 !important;
+  color: white !important;
+
+  .mat-simple-snackbar-action {
+    color: white !important;
+    font-weight: bold !important;
+  }
+}
+
+// Animaciones para las notificaciones
+.token-notification-warning,
+.token-notification-error,
+.token-notification-success,
+.token-notification-info {
+  animation: slideInFromTop 0.3s ease-out;
+
+  &.mat-snack-bar-container {
+    min-width: 300px;
+    max-width: 500px;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+}
+
+@keyframes slideInFromTop {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+// Estilos responsivos
+@media (max-width: 768px) {
+  .token-notification-warning,
+  .token-notification-error,
+  .token-notification-success,
+  .token-notification-info {
+    &.mat-snack-bar-container {
+      min-width: 250px;
+      max-width: 90vw;
+      margin: 0 16px;
+    }
+  }
+}
+
+// Estilos para modo oscuro (si se implementa)
+@media (prefers-color-scheme: dark) {
+  .token-notification-warning {
+    background-color: #ff6f00 !important;
+  }
+
+  .token-notification-error {
+    background-color: #d32f2f !important;
+  }
+
+  .token-notification-success {
+    background-color: #388e3c !important;
+  }
+
+  .token-notification-info {
+    background-color: #1976d2 !important;
+  }
+}

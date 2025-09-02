@@ -1,5 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 
+// Importar estilos para notificaciones de token
+@import 'app/shared/styles/token-notifications.scss';
+
 .snackbar-success {
   background-color: #4caf50 !important;
   color: #fff !important;
