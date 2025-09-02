@@ -5,6 +5,7 @@ import { CompaniesService, CompanyDto } from '../../services/companies.service';
 import { Observable, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, switchMap, tap, catchError, map, startWith } from 'rxjs/operators';
 import { SnackbarService } from '../../services/snackbar.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -25,6 +26,7 @@ export class LoginComponent implements OnInit {
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private snackbarService: SnackbarService,
+    private router: Router,
     @Inject(CompaniesService) private companiesService: CompaniesService
   ) {
     this.loginForm = this.formBuilder.group({
@@ -112,10 +114,13 @@ export class LoginComponent implements OnInit {
       next: (data) => {
         console.log(data);
         this.submitting = false;
+        //this.router.navigate(['/home']);
+        window.location.href = '/home';
       },
       error: (error) => {
         console.log(error);
         this.submitting = false;
+
         this.loginError = 'Por favor verifique su usuario y contraseña';
       }
     });
