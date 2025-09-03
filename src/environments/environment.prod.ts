@@ -5,7 +5,7 @@ export const environment = {
 
   // Token refresh configuration
   tokenRefreshIntervalMinutes: 5, // Verificar cada 5 minutos
-  tokenWarningMinutesBeforeExpiry: 10, // Avisar 10 minutos antes de expirar
+  tokenWarningMinutesBeforeExpiry: 2, // Avisar 2 minutos antes de expirar
   autoRefreshEnabled: true, // Habilitar refresh automático
 
   // Token endpoints

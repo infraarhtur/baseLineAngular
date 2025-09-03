@@ -1,5 +1,6 @@
 import { AfterContentInit, Component, OnInit, } from '@angular/core';
 import { AuthService } from './services/auth.service';
+import { TokenRefreshService } from './services/token-refresh.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -15,7 +16,11 @@ export class AppComponent implements OnInit, AfterContentInit {
   userName: string | null = null;
   userCompany_id: string | null = null;
   userCompanyName: string | null = null;
-  constructor(private router: Router, public authService: AuthService) {
+  constructor(
+    private router: Router,
+    public authService: AuthService,
+    private tokenRefreshService: TokenRefreshService
+  ) {
 
   }
   ngOnInit(): void {
@@ -25,19 +30,17 @@ export class AppComponent implements OnInit, AfterContentInit {
       return;
     } else {
       this.loadInfo();
-      const payload = this.authService.getTokenPayload();
-      if (payload?.exp) {
-        const msToExpiry = payload.exp * 1000 - Date.now();
-        if (msToExpiry > 0) {
-          setTimeout(() => this.logout(), msToExpiry);
-        }
-      }
+
+      // Iniciar el servicio de refresh automático de tokens
+      this.tokenRefreshService.startAutoRefresh();
     }
   }
   ngAfterContentInit(): void {
     this.loadInfo();
   }
   logout() {
+    // Detener el servicio de refresh automático
+    this.tokenRefreshService.stopAutoRefresh();
     this.authService.logout();
   }
   redirectToCreateProduct() {
