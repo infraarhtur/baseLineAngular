@@ -24,8 +24,31 @@ export class AppComponent implements OnInit, AfterContentInit {
 
   }
   ngOnInit(): void {
+    // Verificar si estamos en una ruta que no requiere autenticación
+    const currentUrl = this.router.url;
+    console.log('AppComponent ngOnInit - Current URL:', currentUrl);
+
+    const publicRoutes = ['/login', '/token-validate', '/reset-password', '/reset-password-confirm'];
+    const isPublicRoute = publicRoutes.some(route => currentUrl.startsWith(route));
+    console.log('AppComponent ngOnInit - Is public route:', isPublicRoute);
+
+    if (isPublicRoute) {
+      console.log('AppComponent ngOnInit - Processing public route');
+      // Si estamos en una ruta pública, solo cargar la info si hay token válido
+      const token = this.authService.getToken();
+      if (token && !this.authService.isTokenExpired(token)) {
+        this.loadInfo();
+        // No iniciar el servicio de refresh en rutas públicas
+        // this.tokenRefreshService.startAutoRefresh();
+      }
+      return;
+    }
+
+    console.log('AppComponent ngOnInit - Processing protected route');
+    // Para rutas protegidas, verificar autenticación
     const token = this.authService.getToken();
     if (!token || this.authService.isTokenExpired(token)) {
+      console.log('AppComponent ngOnInit - No valid token, redirecting to login');
       // Si no hay token o está expirado, redirigir al login
       this.authService.logout();
       return;
@@ -37,7 +60,14 @@ export class AppComponent implements OnInit, AfterContentInit {
     }
   }
   ngAfterContentInit(): void {
-    this.loadInfo();
+    // Solo cargar info si no estamos en una ruta pública
+    const currentUrl = this.router.url;
+    const publicRoutes = ['/login', '/token-validate', '/reset-password', '/reset-password-confirm'];
+    const isPublicRoute = publicRoutes.some(route => currentUrl.startsWith(route));
+
+    if (!isPublicRoute) {
+      this.loadInfo();
+    }
   }
   logout() {
     // Detener el servicio de refresh automático
