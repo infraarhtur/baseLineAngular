@@ -26,7 +26,8 @@ export class AuthGuard implements CanActivate {
       return this.attemptTokenRefresh();
     }
 
-    // Si no hay refresh token o está expirado, redirigir a login
+    // Si no hay refresh token o está expirado, limpiar tokens y redirigir a login
+    this.authService.logout();
     return this.router.parseUrl('/login');
   }
 

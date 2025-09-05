@@ -179,6 +179,10 @@ export class TokenRefreshService {
       console.warn('Refresh token expired or failed, logging out user');
       this.tokenNotificationService.showLogoutNotification();
       this.authService.logout();
+    } else {
+      // Para otros errores, también hacer logout para asegurar consistencia
+      console.warn('Token refresh failed, logging out user');
+      this.authService.logout();
     }
   }
 

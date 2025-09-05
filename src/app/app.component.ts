@@ -26,7 +26,8 @@ export class AppComponent implements OnInit, AfterContentInit {
   ngOnInit(): void {
     const token = this.authService.getToken();
     if (!token || this.authService.isTokenExpired(token)) {
-      // this.authService.login();
+      // Si no hay token o está expirado, redirigir al login
+      this.authService.logout();
       return;
     } else {
       this.loadInfo();

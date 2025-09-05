@@ -75,6 +75,7 @@ export class AuthInterceptor implements HttpInterceptor {
             return this.retryRequest(request, next);
           } else {
             this.refreshTokenSubject.next(null);
+            // Limpiar tokens y redirigir al login
             this.authService.logout();
             return throwError(() => new Error('Token refresh failed'));
           }
@@ -82,6 +83,7 @@ export class AuthInterceptor implements HttpInterceptor {
         catchError((error) => {
           this.isRefreshing = false;
           this.refreshTokenSubject.next(null);
+          // Limpiar tokens y redirigir al login
           this.authService.logout();
           return throwError(() => error);
         })
