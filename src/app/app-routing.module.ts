@@ -10,10 +10,10 @@ import { PasswordResetConfirmComponent } from './shared/components/password-rese
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
-  { path: 'token-validate/:token', component: TokenValidateComponent },
-  { path: 'reset-password', component: PasswordResetComponent },
-  { path: 'reset-password-confirm/:token', component: PasswordResetConfirmComponent },
+  { path: 'login', component: LoginComponent, data: { public: true } },
+  { path: 'token-validate/:token', component: TokenValidateComponent, data: { public: true } },
+  { path: 'reset-password', component: PasswordResetComponent, data: { public: true } },
+  { path: 'reset-password-confirm/:token', component: PasswordResetConfirmComponent, data: { public: true } },
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'products', loadChildren: () => import('./features/products/products.module').then(m => m.ProductsModule),canActivate: [AuthGuard]},
   { path: 'clients', loadChildren: () => import('./features/clients/clients.module').then(m => m.ClientsModule) ,canActivate: [AuthGuard]},
