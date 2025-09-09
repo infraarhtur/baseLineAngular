@@ -91,5 +91,35 @@ export class AppComponent implements OnInit, AfterContentInit {
     this.userCompany_id = this.authService.getUserCompany_id();
     this.userCompanyName = this.authService.getUserCompanyName();
   }
+
+  // Funciones del menú de administración
+  closeMenu() {
+    // Esta función se puede usar para cerrar el menú si es necesario
+    // Por ahora no es necesaria ya que el menú se cierra automáticamente
+  }
+
+  openUserProfile() {
+    // TODO: Implementar navegación al perfil de usuario
+    console.log('Abrir perfil de usuario');
+    // this.router.navigate(['/user-profile']);
+  }
+
+  openCompanySettings() {
+    // TODO: Implementar navegación a configuración de empresa
+    console.log('Abrir configuración de empresa');
+    // this.router.navigate(['/company-settings']);
+  }
+
+  openSystemSettings() {
+    // TODO: Implementar navegación a configuración del sistema
+    console.log('Abrir configuración del sistema');
+    // this.router.navigate(['/system-settings']);
+  }
+
+  openBackupRestore() {
+    // TODO: Implementar navegación a respaldo y restauración
+    console.log('Abrir respaldo y restauración');
+    // this.router.navigate(['/backup-restore']);
+  }
 }
 

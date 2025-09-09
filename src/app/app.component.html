@@ -21,15 +21,49 @@
            <button mat-icon-button (click)="sidenav.toggle()" color="primary">
              <mat-icon>menu</mat-icon>
            </button>
-           <button mat-button [routerLink]="'/home'">Inicio</button>
-           <button mat-button [routerLink]="'/clients'">clients</button>
-           <button mat-button [routerLink]="['/products']">products</button>
+           <div *ngIf="authService.isAuthenticated()" style="margin-right: 12px;"> {{userCompanyName}}</div>
 
            <span class="spacer"></span>
-           <div *ngIf="authService.isAuthenticated()" style="margin-right: 12px;"> {{userCompanyName}}</div>
-           <button mat-button (click)="logout()">salir
-             <mat-icon>exit_to_app</mat-icon>
-           </button>
+ <!-- Menu de Administración -->
+           <button mat-button [matMenuTriggerFor]="adminMenu" aria-label="Menú de administración">
+            <mat-icon>admin_panel_settings</mat-icon>
+            <span>Administración</span>
+          </button>
+          <mat-menu #adminMenu="matMenu">
+            <button mat-menu-item [routerLink]="['/dashboard']" (click)="closeMenu()">
+              <mat-icon>dashboard</mat-icon>
+              <span>Dashboard</span>
+            </button>
+            <button mat-menu-item [routerLink]="['/reports']" (click)="closeMenu()">
+              <mat-icon>assessment</mat-icon>
+              <span>Reportes</span>
+            </button>
+            <mat-divider></mat-divider>
+            <button mat-menu-item (click)="openUserProfile()">
+              <mat-icon>person</mat-icon>
+              <span>Perfil de Usuario</span>
+            </button>
+            <button mat-menu-item (click)="openCompanySettings()">
+              <mat-icon>business</mat-icon>
+              <span>Configuración de Empresa</span>
+            </button>
+            <mat-divider></mat-divider>
+            <button mat-menu-item (click)="openSystemSettings()">
+              <mat-icon>settings</mat-icon>
+              <span>Configuración del Sistema</span>
+            </button>
+            <button mat-menu-item (click)="openBackupRestore()">
+              <mat-icon>backup</mat-icon>
+              <span>Respaldo y Restauración</span>
+            </button>
+            <mat-divider></mat-divider>
+            <button mat-menu-item (click)="logout()">
+              <mat-icon>exit_to_app</mat-icon>
+              <span>Salir</span>
+            </button>
+          </mat-menu>
+
+ <!-- Menu fin -->
 
          </mat-toolbar>
 
