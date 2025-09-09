@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterContentInit, Component, OnInit, } from '@angular/core';
 import { AuthService } from './services/auth.service';
+import { TokenRefreshService } from './services/token-refresh.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -8,42 +9,80 @@ import { Router } from '@angular/router';
   standalone: false,
   styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit, AfterContentInit {
   title = 'baseLineAngular';
   opened = false;  //cambiar esto a `false` si quieres que el menú inicie cerrado
   isLoggedIn = false;
   userName: string | null = null;
   userCompany_id: string | null = null;
   userCompanyName: string | null = null;
-  constructor(private router: Router, public authService: AuthService) {
+  constructor(
+    private router: Router,
+    public authService: AuthService,
+    private tokenRefreshService: TokenRefreshService
+  ) {
 
   }
   ngOnInit(): void {
+    // Verificar si estamos en una ruta que no requiere autenticación
+    const currentUrl = this.router.url;
+    console.log('AppComponent ngOnInit - Current URL:', currentUrl);
+
+    const publicRoutes = ['/login', '/token-validate', '/reset-password', '/reset-password-confirm'];
+    const isPublicRoute = publicRoutes.some(route => currentUrl.startsWith(route));
+    console.log('AppComponent ngOnInit - Is public route:', isPublicRoute);
+
+    if (isPublicRoute) {
+      console.log('AppComponent ngOnInit - Processing public route');
+      // Si estamos en una ruta pública, solo cargar la info si hay token válido
+      const token = this.authService.getToken();
+      if (token && !this.authService.isTokenExpired(token)) {
+        this.loadInfo();
+        // No iniciar el servicio de refresh en rutas públicas
+        // this.tokenRefreshService.startAutoRefresh();
+      }
+      return;
+    }
+
+    console.log('AppComponent ngOnInit - Processing protected route');
+    // Para rutas protegidas, verificar autenticación
     const token = this.authService.getToken();
     if (!token || this.authService.isTokenExpired(token)) {
-     // this.authService.login();
+      console.log('AppComponent ngOnInit - No valid token, redirecting to login');
+      // Si no hay token o está expirado, redirigir al login
+      this.authService.logout();
       return;
-    }else{
-    this.isLoggedIn = true;
-    this.userName = this.authService.getUserName();
-   this.userCompany_id = this.authService.getUserCompany_id();
-    this.userCompanyName = this.authService.getUserCompanyName();
-    const payload = this.authService.getTokenPayload();
-    if (payload?.exp) {
-      const msToExpiry = payload.exp * 1000 - Date.now();
-      if (msToExpiry > 0) {
-        setTimeout(() => this.logout(), msToExpiry);
-      }
-    }
-    }
+    } else {
+      this.loadInfo();
 
+      // Iniciar el servicio de refresh automático de tokens
+      this.tokenRefreshService.startAutoRefresh();
+    }
   }
+  ngAfterContentInit(): void {
+    // Solo cargar info si no estamos en una ruta pública
+    const currentUrl = this.router.url;
+    const publicRoutes = ['/login', '/token-validate', '/reset-password', '/reset-password-confirm'];
+    const isPublicRoute = publicRoutes.some(route => currentUrl.startsWith(route));
 
-  logout(){
+    if (!isPublicRoute) {
+      this.loadInfo();
+    }
+  }
+  logout() {
+    // Detener el servicio de refresh automático
+    this.tokenRefreshService.stopAutoRefresh();
     this.authService.logout();
   }
   redirectToCreateProduct() {
     this.router.navigate(['/products/create']);
   }
+
+  loadInfo() {
+    this.isLoggedIn = this.authService.isAuthenticated();
+    this.userName = this.authService.getUserName();
+    this.userCompany_id = this.authService.getUserCompany_id();
+    this.userCompanyName = this.authService.getUserCompanyName();
   }
+}
 

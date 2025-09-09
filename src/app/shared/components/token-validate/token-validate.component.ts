@@ -27,8 +27,15 @@ export class TokenValidateComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.token = params['token'] || '';
       console.log('Token recibido:', this.token);
+
+      // Validar el token solo si se recibió uno
+      if (this.token) {
+        this.validateToken();
+      } else {
+        console.error('No se recibió token en la URL');
+        this.router.navigate(['/login']);
+      }
     });
-    this.validateToken();
   }
 
   validateToken(): void {

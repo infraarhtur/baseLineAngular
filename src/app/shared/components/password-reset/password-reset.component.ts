@@ -17,7 +17,8 @@ export class PasswordResetComponent implements OnInit {
   constructor(private fb: FormBuilder,
     private authService: AuthService,
     private snackbarService: SnackbarService,
-    private router: Router) {}
+    private router: Router) {
+    }
 
   ngOnInit(): void {
     this.initForm();

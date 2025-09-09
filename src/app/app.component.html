@@ -34,7 +34,10 @@
          </mat-toolbar>
 
          <div class="content">
-          <mat-icon>person</mat-icon> {{ userName || 'usuario' }}
+          <div *ngIf="authService.isAuthenticated()">
+            <mat-icon style=" vertical-align: bottom;">person</mat-icon> {{ userName || 'usuario' }}
+          </div>
+
            <router-outlet/>
          </div>
        </mat-sidenav-content>

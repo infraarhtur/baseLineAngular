@@ -10,7 +10,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { ProductsModule } from './features/products/products.module';
 import { MaterialModule } from './shared/material/material.module';
 import { ClientsModule } from './features/clients/clients.module';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ConfirmDialogComponent } from './shared/components/confirm-dialog/confirm-dialog.component';
 import { SalesModule } from './features/sales/sales.module';
 import { LOCALE_ID } from '@angular/core';
@@ -20,6 +20,7 @@ import { LoginComponent } from './shared/components/login/login.component';
 import { PasswordResetComponent } from './shared/components/password-reset/password-reset.component';
 import { TokenValidateComponent } from './shared/components/token-validate/token-validate.component';
 import { PasswordResetConfirmComponent } from './shared/components/password-reset-confirm/password-reset-confirm.component';
+import { AuthInterceptor } from './shared/interceptors';
 
 
 
@@ -48,6 +49,11 @@ import { PasswordResetConfirmComponent } from './shared/components/password-rese
   exports:[],
   providers: [
      { provide: LOCALE_ID, useValue: 'es-CO' },
+     {
+       provide: HTTP_INTERCEPTORS,
+       useClass: AuthInterceptor,
+       multi: true
+     },
     provideAnimationsAsync()
   ],
   bootstrap: [AppComponent]
