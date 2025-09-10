@@ -101,7 +101,7 @@ export class AppComponent implements OnInit, AfterContentInit {
   openUserProfile() {
     // TODO: Implementar navegación al perfil de usuario
     console.log('Abrir perfil de usuario');
-    // this.router.navigate(['/user-profile']);
+    this.router.navigate(['administration/select-user']);
   }
 
   openCompanySettings() {
