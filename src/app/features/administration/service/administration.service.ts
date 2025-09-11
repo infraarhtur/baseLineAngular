@@ -32,7 +32,9 @@ let params = new HttpParams()
   }
 
   createUser(userData: any): Observable<any> {
-    
+    console.log('createUser',userData);
+   debugger
+
     return this.http.post<any>(`${this.authBaseUrl}users/`, userData);
   }
 }

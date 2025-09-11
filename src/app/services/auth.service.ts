@@ -175,7 +175,8 @@ export class AuthService {
     localStorage.removeItem('token');
     localStorage.removeItem('refresh_token');
     this.router.navigate(['/login']);
-    window.location.reload();
+
+    //window.location.reload();
   }
   resetPassword(email: string): Observable<any> {
     const url = `${this.authBaseUrl}auth/password-reset`;
