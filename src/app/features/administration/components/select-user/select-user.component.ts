@@ -22,7 +22,7 @@ export class SelectUserComponent implements OnInit, AfterViewInit {
   companyId: string = '';
   selection = new SelectionModel<any>(true, []);
   dataSource = new MatTableDataSource<any>();
-  displayedColumns: string[] = [ 'user_name', 'user_email', 'actions'];
+  displayedColumns: string[] = [ 'actions','user_name', 'user_email','joined_at'];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -31,8 +31,6 @@ export class SelectUserComponent implements OnInit, AfterViewInit {
     private authService: AuthService,
      private snackBar: SnackbarService,
      private dialog: MatDialog) {
-
-
   }
 
   ngOnInit(): void {
@@ -98,6 +96,12 @@ export class SelectUserComponent implements OnInit, AfterViewInit {
     console.log('Actualizar usuario con ID:', id);
     this.router.navigate(['/administration/update-user', id]);
   }
+  applyFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+
 
 
 }

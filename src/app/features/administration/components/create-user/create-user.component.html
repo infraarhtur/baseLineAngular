@@ -1,1 +1,7 @@
-<p>create-user works!</p>
+
+<p>
+  <a [routerLink]="['/administration/select-user']">Gestión de usuarios</a>
+  <mat-icon style="vertical-align: middle;">navigate_next</mat-icon>
+  <label>Crear usuarios</label>
+</p>
+<app-from-user (formSubmitted)="createUser($event)"></app-from-user >

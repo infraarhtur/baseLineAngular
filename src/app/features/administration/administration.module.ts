@@ -9,6 +9,7 @@ import { SelectUserComponent } from './components/select-user/select-user.compon
 import { SelectRoleComponent } from './components/select-role/select-role.component';
 import { MaterialModule } from '../../shared/material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { FromUserComponent } from './components/from-user/from-user.component';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     CreateUserComponent,
     CreateRoleComponent,
     SelectUserComponent,
-    SelectRoleComponent
+    SelectRoleComponent,
+    FromUserComponent
   ],
   imports: [
     CommonModule,

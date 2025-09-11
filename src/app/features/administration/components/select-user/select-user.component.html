@@ -1,4 +1,22 @@
-<p>select-user works!</p>
+<h2>Lista de Usuarios</h2>
+
+
+<div class="button-container">
+  <!-- botón para agregar cliente -->
+  <button mat-fab extended [routerLink]="['/administration/create-user']">
+    <mat-icon>person_add_alt</mat-icon>
+    Agregar usuario
+  </button>
+  </div>
+  <br>
+<!-- filtro -->
+<mat-form-field appearance="outline" class="full-width" >
+  <mat-label>Buscar usuarios</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Filtrar nombre, email.">
+</mat-form-field>
+<br>
+
+
 <table mat-table [dataSource]="this.dataSource" class="mat-elevation-z8"  *ngIf="this.dataSource.data.length > 0; else noUsers">
 
     <!-- Acciones Column -->
@@ -20,6 +38,11 @@
     <ng-container matColumnDef="user_email">
       <th mat-header-cell *matHeaderCellDef> Email </th>
       <td mat-cell *matCellDef="let users"> ✉️ {{ users.user_email }} </td>
+    </ng-container>
+    <!-- joined_at Column -->
+    <ng-container matColumnDef="joined_at">
+      <th mat-header-cell *matHeaderCellDef> Fecha de registro </th>
+      <td mat-cell *matCellDef="let users"> {{ users.joined_at | date:'dd/MM/yyyy' }} </td>
     </ng-container>
 
     <!-- Encabezados y Filas -->
