@@ -23,7 +23,6 @@ export class UpdateCategoriesComponent implements OnInit {
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       this.categoryId = String(params.get('id')); // ✅ Obtener el ID de la URL
-      console.log('proveedor a actualizar:', this.categoryId);
       this.loadCategory();
     });
   }

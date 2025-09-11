@@ -102,7 +102,6 @@ export class SelectProductsComponent implements OnInit, OnChanges, AfterViewInit
   }
 
   updateProduct(id: number): void {
-    console.log('actualizar productp con ID:', id);
     this.router.navigate(['/products/update', id]);
     // Aquí puedes llamar a un servicio para eliminar el producto
   }

@@ -23,7 +23,6 @@ export class UpdateClientsComponent implements OnInit {
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       this.clientId = String(params.get('id')); // ✅ Obtener el ID de la URL
-      console.log('Cliente a actualizar:', this.clientId);
       this.loadClient();
     });
   }

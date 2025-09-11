@@ -55,8 +55,7 @@ export class FromUserComponent  implements OnInit,OnChanges {
   getRoles() {
     this.adminService.getRoles(this.companyId).subscribe({
       next: (data) => {
-        console.log('Datos recibidos:', data.roles);
-        this.roles = data.roles || [];
+             this.roles = data.roles || [];
       },
       error: (error) => {
         console.error('Error al obtener roles:', error);
@@ -66,7 +65,6 @@ export class FromUserComponent  implements OnInit,OnChanges {
   }
   getPayload() {
     const payload = this.authService.getTokenPayload();
-    console.log('payload:', payload);
     if (payload && payload.company_id) {
       this.companyId = payload.company_id;
     } else {
