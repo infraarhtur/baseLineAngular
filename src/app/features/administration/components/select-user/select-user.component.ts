@@ -22,7 +22,7 @@ export class SelectUserComponent implements OnInit, AfterViewInit {
   companyId: string = '';
   selection = new SelectionModel<any>(true, []);
   dataSource = new MatTableDataSource<any>();
-  displayedColumns: string[] = [ 'actions','user_name', 'user_email','joined_at'];
+  displayedColumns: string[] = [ 'actions','user_name', 'user_email','roles','is_active','is_verified','joined_at'];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 

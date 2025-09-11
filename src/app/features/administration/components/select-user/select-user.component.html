@@ -39,6 +39,33 @@
       <th mat-header-cell *matHeaderCellDef> Email </th>
       <td mat-cell *matCellDef="let users"> ✉️ {{ users.user_email }} </td>
     </ng-container>
+    <!-- roles Column -->
+    <ng-container matColumnDef="roles">
+      <th mat-header-cell *matHeaderCellDef> Roles </th>
+      <td mat-cell *matCellDef="let users"> {{ users.roles }} </td>
+    </ng-container>
+    <!-- is_active Column -->
+    <ng-container matColumnDef="is_active">
+      <th mat-header-cell *matHeaderCellDef> Activo </th>
+      <td mat-cell *matCellDef="let users">
+        <mat-checkbox
+          [checked]="users.is_active"
+          [disabled]="true"
+          color="primary">
+        </mat-checkbox>
+      </td>
+    </ng-container>
+    <!-- is_verified Column -->
+    <ng-container matColumnDef="is_verified">
+      <th mat-header-cell *matHeaderCellDef> Verificado </th>
+      <td mat-cell *matCellDef="let users">
+        <mat-checkbox
+          [checked]="users.is_verified"
+          [disabled]="true"
+          color="accent">
+        </mat-checkbox>
+      </td>
+    </ng-container>
     <!-- joined_at Column -->
     <ng-container matColumnDef="joined_at">
       <th mat-header-cell *matHeaderCellDef> Fecha de registro </th>
