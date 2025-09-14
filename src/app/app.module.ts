@@ -21,6 +21,7 @@ import { PasswordResetComponent } from './shared/components/password-reset/passw
 import { TokenValidateComponent } from './shared/components/token-validate/token-validate.component';
 import { PasswordResetConfirmComponent } from './shared/components/password-reset-confirm/password-reset-confirm.component';
 import { AuthInterceptor } from './shared/interceptors';
+import { EmailValidateComponent } from './shared/components/email-validate/email-validate.component';
 
 
 
@@ -34,6 +35,7 @@ import { AuthInterceptor } from './shared/interceptors';
     PasswordResetComponent,
     TokenValidateComponent,
     PasswordResetConfirmComponent,
+    EmailValidateComponent,
   ],
   imports: [
     BrowserModule,

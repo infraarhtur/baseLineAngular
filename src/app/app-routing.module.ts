@@ -6,6 +6,7 @@ import { LoginComponent } from './shared/components/login/login.component';
 import { PasswordResetComponent } from './shared/components/password-reset/password-reset.component';
 import { TokenValidateComponent } from './shared/components/token-validate/token-validate.component';
 import { PasswordResetConfirmComponent } from './shared/components/password-reset-confirm/password-reset-confirm.component';
+import { EmailValidateComponent } from './shared/components/email-validate/email-validate.component';
 
 
 const routes: Routes = [
@@ -14,6 +15,7 @@ const routes: Routes = [
   { path: 'token-validate/:token', component: TokenValidateComponent, data: { public: true } },
   { path: 'reset-password', component: PasswordResetComponent, data: { public: true } },
   { path: 'reset-password-confirm/:token', component: PasswordResetConfirmComponent, data: { public: true } },
+  { path: 'email-validate/:token', component: EmailValidateComponent, data: { public: true } },
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'products', loadChildren: () => import('./features/products/products.module').then(m => m.ProductsModule),canActivate: [AuthGuard]},
   { path: 'clients', loadChildren: () => import('./features/clients/clients.module').then(m => m.ClientsModule) ,canActivate: [AuthGuard]},

@@ -7,27 +7,27 @@ import { AlertDialogComponent } from '../alert-dialog/alert-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-token-validate',
+  selector: 'app-email-validate',
   standalone: false,
-  templateUrl: './token-validate.component.html',
-  styleUrl: './token-validate.component.scss'
+  templateUrl: './email-validate.component.html',
+  styleUrl: './email-validate.component.scss'
 })
-export class TokenValidateComponent implements OnInit {
+export class EmailValidateComponent  implements OnInit {
 
   token: string = '';
 
   constructor(private route: ActivatedRoute,
-     private authService: AuthService,
-     private snackbarService: SnackbarService,
-     private router: Router,
-     private dialog: MatDialog) {}
+    private authService: AuthService,
+    private snackbarService: SnackbarService,
+    private router: Router,
+    private dialog: MatDialog) {}
 
   ngOnInit(): void {
-    // Obtener el token del parámetro de la URL
+     // Obtener el token del parámetro de la URL
     this.route.params.subscribe(params => {
       this.token = params['token'] || '';
       console.log('Token recibido:', this.token);
-
+debugger
       // Validar el token solo si se recibió uno
       if (this.token) {
         this.validateToken();
@@ -39,20 +39,9 @@ export class TokenValidateComponent implements OnInit {
   }
 
   validateToken(): void {
-    this.authService.validateToken(this.token).subscribe({
+    this.authService.emailVerifiedConfirm(this.token).subscribe({
       next: (data) => {
         console.log(data);
-
-        this.snackbarService.success(data.message);
-        if (!data.valid) {
-          setTimeout(() => {
-            console.log('No es valido');
-            this.router.navigate(['/login']);
-          }, 3000);
-        }else{
-          console.log('Es valido');
-          this.router.navigate(['/reset-password-confirm', this.token]);
-        }
       },
       error: (error) => {
         console.log(error);
@@ -64,10 +53,10 @@ export class TokenValidateComponent implements OnInit {
             El token no es valido.
           ` }
         });
-        setTimeout(() => {
-          this.router.navigate(['/login']);
-        }, 5000);
       }
     });
+    setTimeout(() => {
+      this.router.navigate(['/login']);
+    }, 3000);
   }
 }
