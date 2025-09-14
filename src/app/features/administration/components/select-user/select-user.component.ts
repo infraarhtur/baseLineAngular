@@ -101,7 +101,14 @@ export class SelectUserComponent implements OnInit, AfterViewInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-
+  validateEmail(email: string): void {
+    this.authService.emailVerified(email).subscribe({
+      next: () => {
+        console.log('Email enviado con éxito');
+        this.snackBar.success('✅  se envio el email de verificación')
+      }
+    });
+  }
 
 
 }
