@@ -28,10 +28,18 @@ let params = new HttpParams()
   }
 
   getUserById(id: string): Observable<any> {
-    return this.http.get<any>(`${this.authBaseUrl}/api/users/${id}`);
+    const company_name= localStorage.getItem('selected_company_id');
+    return this.http.get<any>(`${this.authBaseUrl}users/${id}/${company_name}`);
   }
 
   createUser(userData: any): Observable<any> {
     return this.http.post<any>(`${this.authBaseUrl}users/`, userData);
+  }
+  updateUser(userData: any): Observable<any> {
+    return this.http.put<any>(`${this.authBaseUrl}users/${userData.id}`, userData);
+  }
+
+  deleteUser(id: string): Observable<any> {
+    return this.http.delete<any>(`${this.authBaseUrl}users/${id}`);
   }
 }

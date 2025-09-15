@@ -4,6 +4,7 @@ import { HomeAdminComponent } from './components/home-admin/home-admin.component
 import { CreateUserComponent } from './components/create-user/create-user.component';
 import { CreateRoleComponent } from './components/create-role/create-role.component';
 import { SelectUserComponent } from './components/select-user/select-user.component';
+import { UpdateUserComponent } from './components/update-user/update-user.component';
 
 const routes: Routes = [
   {
@@ -13,7 +14,8 @@ const routes: Routes = [
       { path: '', redirectTo: 'select', pathMatch: 'full' }, // Redirección automática
       { path: 'create-user', component: CreateUserComponent },
       { path: 'create-role', component: CreateRoleComponent },
-      { path: 'select-user', component: SelectUserComponent }
+      { path: 'select-user', component: SelectUserComponent },
+       { path: 'update-user/:id', component: UpdateUserComponent }
     ]
   }
 ];

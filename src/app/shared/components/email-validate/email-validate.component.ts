@@ -27,7 +27,6 @@ export class EmailValidateComponent  implements OnInit {
     this.route.params.subscribe(params => {
       this.token = params['token'] || '';
       console.log('Token recibido:', this.token);
-debugger
       // Validar el token solo si se recibió uno
       if (this.token) {
         this.validateToken();

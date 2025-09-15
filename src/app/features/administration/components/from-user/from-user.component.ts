@@ -47,6 +47,11 @@ export class FromUserComponent  implements OnInit,OnChanges {
     });
   }
 
+  onSubmit(): void {
+    if (this.userForm.valid) {
+      this.formSubmitted.emit(this.userForm.value);
+    }
+  }
 
   goBack(): void {
     this.router.navigate(['/administration/select-user']);

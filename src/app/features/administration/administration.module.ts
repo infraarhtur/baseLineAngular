@@ -10,6 +10,7 @@ import { SelectRoleComponent } from './components/select-role/select-role.compon
 import { MaterialModule } from '../../shared/material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FromUserComponent } from './components/from-user/from-user.component';
+import { UpdateUserComponent } from './components/update-user/update-user.component';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { FromUserComponent } from './components/from-user/from-user.component';
     CreateRoleComponent,
     SelectUserComponent,
     SelectRoleComponent,
-    FromUserComponent
+    FromUserComponent,
+    UpdateUserComponent
   ],
   imports: [
     CommonModule,
