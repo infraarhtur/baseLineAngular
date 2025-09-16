@@ -23,7 +23,6 @@ let params = new HttpParams()
     .set('limit', 100)
     .set('company_id', company_id);
 
-
     return this.http.get<any>(`${this.authBaseUrl}roles/`, { params });
   }
 
@@ -35,8 +34,11 @@ let params = new HttpParams()
   createUser(userData: any): Observable<any> {
     return this.http.post<any>(`${this.authBaseUrl}users/`, userData);
   }
-  updateUser(userData: any): Observable<any> {
-    return this.http.put<any>(`${this.authBaseUrl}users/${userData.id}`, userData);
+  updateUser(id: string, userData: any): Observable<any> {
+    delete userData.password;
+    delete  userData.company_id;
+debugger
+    return this.http.put<any>(`${this.authBaseUrl}users/${id}`, userData);
   }
 
   deleteUser(id: string): Observable<any> {

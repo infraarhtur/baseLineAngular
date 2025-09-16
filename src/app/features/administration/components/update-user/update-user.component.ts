@@ -31,8 +31,8 @@ export class UpdateUserComponent implements OnInit {
   }
 
   updateUser(formData: any): void {
-    debugger;
-    this.adminService.updateUser(formData).subscribe({
+
+    this.adminService.updateUser(this.userId ,formData).subscribe({
       next: () => {
         console.log('Usuario actualizado con éxito');
       }

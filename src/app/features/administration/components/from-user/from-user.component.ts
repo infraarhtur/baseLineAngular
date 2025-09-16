@@ -34,6 +34,10 @@ export class FromUserComponent  implements OnInit,OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['userData'] && this.userData) {
       this.buildForm();
+      // Si los roles ya están cargados, actualizar el valor del rol
+      if (this.roles.length > 0) {
+        this.userForm.patchValue({ role: this.userData.role });
+      }
     }
   }
 
@@ -41,7 +45,7 @@ export class FromUserComponent  implements OnInit,OnChanges {
     this.userForm = this.fb.group({
       name: [this.userData?.name || '', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
       email: [this.userData?.email || '', [Validators.required, Validators.email, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$')]], // Mejor validación,
-      password: [this.userData?.password || '', [Validators.required, Validators.minLength(8)]],
+      password: ['pwd1234'],
       role: [this.userData?.role || '', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
       company_id: [this.companyId || '']
     });
@@ -49,6 +53,7 @@ export class FromUserComponent  implements OnInit,OnChanges {
 
   onSubmit(): void {
     if (this.userForm.valid) {
+      console.log(this.userForm.value);
       this.formSubmitted.emit(this.userForm.value);
     }
   }
@@ -61,6 +66,10 @@ export class FromUserComponent  implements OnInit,OnChanges {
     this.adminService.getRoles(this.companyId).subscribe({
       next: (data) => {
              this.roles = data.roles || [];
+             // Si hay userData y el formulario ya existe, actualizar el valor del rol
+             if (this.userData && this.userForm) {
+               this.userForm.patchValue({ role: this.userData.roles[0] });
+             }
       },
       error: (error) => {
         console.error('Error al obtener roles:', error);
