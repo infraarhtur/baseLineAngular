@@ -37,7 +37,6 @@ let params = new HttpParams()
   updateUser(id: string, userData: any): Observable<any> {
     delete userData.password;
     delete  userData.company_id;
-debugger
     return this.http.put<any>(`${this.authBaseUrl}users/${id}`, userData);
   }
 

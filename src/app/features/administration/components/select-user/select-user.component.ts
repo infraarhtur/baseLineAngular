@@ -84,11 +84,18 @@ export class SelectUserComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        console.log('Usuario eliminado:', id);
-        // Aquí deberías implementar la lógica para eliminar el usuario
-        this.snackBar.success('Usuario eliminado correctamente');
-        // Recargar la lista de usuarios
-        this.getUsersByCompany();
+        this.administrationService.deleteUser(id).subscribe({
+          next: () => {
+            console.log('Usuario eliminado:', id);
+            this.snackBar.success('Usuario eliminado correctamente');
+            this.getUsersByCompany();
+          },
+          error: (err) => {
+            console.error('Error al eliminar el usuario', err);
+            this.snackBar.error('Error al eliminar el usuario');
+          }
+        });
+
       }
     });
   }

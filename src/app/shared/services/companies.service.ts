@@ -19,7 +19,7 @@ export class CompaniesService {
   constructor(private http: HttpClient) {}
 
   getCompanies(): Observable<CompanyDto[]> {
-    return this.http.get<any>(this.baseUrl).pipe(
+    return this.http.get<any>(this.authBaseUrl).pipe(
       map((response: any) => {
         const items = Array.isArray(response)
           ? response
