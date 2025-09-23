@@ -183,7 +183,7 @@ export class AuthService {
     return this.http.post<any>(url, { email, company_name  });
   }
   validateToken(token: string): Observable<any> {
-    const url = `${this.authBaseUrl}auth/password-reset/validate`;
+     const url = `${this.authBaseUrl}auth/password-reset/validate`;
     return this.http.get<any>(url, { params: { token } });
   }
   resetPasswordConfirm(token: string, new_password: string): Observable<any> {
