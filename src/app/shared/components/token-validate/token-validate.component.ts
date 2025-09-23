@@ -39,6 +39,7 @@ export class TokenValidateComponent implements OnInit {
   }
 
   validateToken(): void {
+    
     this.authService.validateToken(this.token).subscribe({
       next: (data) => {
         console.log(data);
