@@ -1,0 +1,11 @@
+<p>
+  <a [routerLink]="['/administration/select-user']">Gestión de usuarios</a>
+  <mat-icon style="vertical-align: middle;">navigate_next</mat-icon>
+  <label>Actualizar usuarios</label>
+</p>
+
+<app-from-user
+*ngIf="userdata"
+[userData]="userdata"
+(formSubmitted)="updateUser($event)">
+</app-from-user >

@@ -23,7 +23,6 @@ export class UpdateProvidersComponent implements OnInit {
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       this.providerId = String(params.get('id')); // ✅ Obtener el ID de la URL
-      console.log('proveedor a actualizar:', this.providerId);
       this.loadProvider();
     });
   }
@@ -32,7 +31,6 @@ export class UpdateProvidersComponent implements OnInit {
     this.providersService.getProviderById(this.providerId).subscribe({
       next: (data) => {
         this.providerData = data;
-        console.log('proveedor adaptado para el formulario:', this.providerData);
       },
       error: (err) => {
         console.error('Error al cargar proveedor:', err);

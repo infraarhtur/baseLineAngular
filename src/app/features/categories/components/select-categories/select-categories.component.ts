@@ -55,7 +55,6 @@ export class SelectCategoriesComponent implements OnInit, OnChanges, AfterViewIn
     this.categoriesService.getAllCategories().subscribe({
       next: (data) => {
         this.dataSource.data = data;
-        console.log('Categorias cargadas:', this.dataSource.data);
         this.snackbar.success('Categorias cargadas');
       },
       error: (err) => {
@@ -66,7 +65,6 @@ export class SelectCategoriesComponent implements OnInit, OnChanges, AfterViewIn
   }
 
   deleteCategory(id: string, name: string): void {
-    console.log('Eliminar categoria con ID:', id);
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '450px',
       data: { message: `¿Estás seguro de que deseas eliminar la categoria \n ${name} ?  ` }
@@ -90,7 +88,6 @@ export class SelectCategoriesComponent implements OnInit, OnChanges, AfterViewIn
 
   updateCategory(id: number): void {
     // Método para actualizar una categoria
-    console.log('actualizar providerp con ID:', id);
     this.router.navigate(['/category/update', id]);
     // Aquí puedes llamar a un servicio para eliminar el proveedores
   }

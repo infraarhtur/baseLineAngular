@@ -58,8 +58,7 @@ export class ReportSaleByProductsComponent implements OnInit, AfterViewInit {
       }else{
         this.dataSourcePending.data = data;
       }
-        console.log('Datos de ventas cargados:', data);
-        this.snackbar.success('Ventas cargados');
+         this.snackbar.success('Ventas cargados');
       },
       error: (err) => {
         this.snackbar.error('Error al obtener clientes');

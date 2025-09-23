@@ -30,18 +30,10 @@
             <span>Administración</span>
           </button>
           <mat-menu #adminMenu="matMenu">
-            <button mat-menu-item [routerLink]="['/dashboard']" (click)="closeMenu()">
-              <mat-icon>dashboard</mat-icon>
-              <span>Dashboard</span>
-            </button>
-            <button mat-menu-item [routerLink]="['/reports']" (click)="closeMenu()">
-              <mat-icon>assessment</mat-icon>
-              <span>Reportes</span>
-            </button>
-            <mat-divider></mat-divider>
+
             <button mat-menu-item (click)="openUserProfile()">
-              <mat-icon>person</mat-icon>
-              <span>Perfil de Usuario</span>
+              <mat-icon>manage_accounts</mat-icon>
+              <span>Administrar Usuarios</span>
             </button>
             <button mat-menu-item (click)="openCompanySettings()">
               <mat-icon>business</mat-icon>

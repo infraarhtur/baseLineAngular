@@ -34,7 +34,7 @@ export class AppComponent implements OnInit, AfterContentInit {
     const currentUrl =window.location.toString().split('/')[3];
     console.log('AppComponent ngOnInit - Current URL:', currentUrl);
 
-    const publicRoutes = ['login', 'token-validate', 'reset-password', 'reset-password-confirm'];
+    const publicRoutes = ['login', 'token-validate', 'reset-password', 'reset-password-confirm', 'email-validate'];
     const isPublicRoute = publicRoutes.some(route => currentUrl.startsWith(route));
     console.log('AppComponent ngOnInit - Is public route:', isPublicRoute);
 
@@ -68,9 +68,10 @@ export class AppComponent implements OnInit, AfterContentInit {
   }
   ngAfterContentInit(): void {
     // Solo cargar info si no estamos en una ruta pública
-    const currentUrl = this.router.url;
-    const publicRoutes = ['/login', '/token-validate', '/reset-password', '/reset-password-confirm'];
+    const currentUrl = window.location.href.split('/')[3];
+    const publicRoutes = ['login', 'token-validate', 'reset-password', 'reset-password-confirm', 'email-validate'];
     const isPublicRoute = publicRoutes.some(route => currentUrl.startsWith(route));
+    console.log('AppComponent ngAfterContentInit - Is public route:', isPublicRoute);
 
     if (!isPublicRoute) {
       this.loadInfo();
@@ -101,7 +102,7 @@ export class AppComponent implements OnInit, AfterContentInit {
   openUserProfile() {
     // TODO: Implementar navegación al perfil de usuario
     console.log('Abrir perfil de usuario');
-    // this.router.navigate(['/user-profile']);
+    this.router.navigate(['administration/select-user']);
   }
 
   openCompanySettings() {

@@ -39,7 +39,6 @@ export class SelectProvidersComponent implements  OnInit, AfterViewInit {
     this.providersService.getAllProviders().subscribe({
       next: (data) => {
         this.dataSource.data = data;
-        console.log('Proveedores cargados:', this.dataSource.data );
         this.snackbar.success('Proveedores cargados');
             },
       error: (err) => {
@@ -50,7 +49,6 @@ export class SelectProvidersComponent implements  OnInit, AfterViewInit {
   }
 
   deleteProvider(id: string,name:string): void {
-    console.log('Eliminar proveedores con ID:', id);
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '450px',
       data: { message: `¿Estás seguro de que deseas eliminar el proveedor \n ${name} ?  ` }
@@ -75,7 +73,6 @@ export class SelectProvidersComponent implements  OnInit, AfterViewInit {
   }
 
   updateProvider(id: number): void {
-    console.log('actualizar providerp con ID:', id);
     this.router.navigate(['/providers/update', id]);
     // Aquí puedes llamar a un servicio para eliminar el proveedores
   }

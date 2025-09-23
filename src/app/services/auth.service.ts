@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { tap, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
@@ -175,11 +175,12 @@ export class AuthService {
     localStorage.removeItem('token');
     localStorage.removeItem('refresh_token');
     this.router.navigate(['/login']);
-    window.location.reload();
+
+    //window.location.reload();
   }
-  resetPassword(email: string): Observable<any> {
+  resetPassword(email: string, company_name: string): Observable<any> {
     const url = `${this.authBaseUrl}auth/password-reset`;
-    return this.http.post<any>(url, { email });
+    return this.http.post<any>(url, { email, company_name  });
   }
   validateToken(token: string): Observable<any> {
     const url = `${this.authBaseUrl}auth/password-reset/validate`;
@@ -228,5 +229,14 @@ export class AuthService {
           refresh_token: response.refresh_token
         }))
       );
+  }
+
+  emailVerified(email: string): Observable<any> {
+    const url = `${this.authBaseUrl}auth/email-verification`;
+    return this.http.post<any>(url, { email });
+  }
+  emailVerifiedConfirm(token: string): Observable<any> {
+    const url = `${this.authBaseUrl}auth/email-verification/confirm`;
+    return this.http.post<any>(url, { token });
   }
 }
