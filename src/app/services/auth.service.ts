@@ -178,9 +178,9 @@ export class AuthService {
 
     //window.location.reload();
   }
-  resetPassword(email: string): Observable<any> {
+  resetPassword(email: string, company_name: string): Observable<any> {
     const url = `${this.authBaseUrl}auth/password-reset`;
-    return this.http.post<any>(url, { email });
+    return this.http.post<any>(url, { email, company_name  });
   }
   validateToken(token: string): Observable<any> {
     const url = `${this.authBaseUrl}auth/password-reset/validate`;

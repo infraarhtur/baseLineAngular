@@ -51,7 +51,7 @@ export class PasswordResetComponent implements OnInit {
       this.submitting = true;
       // TODO: Implement password reset logic here
       console.log('Password reset requested for:', this.passwordResetForm.value.email);
-      this.authService.resetPassword(this.passwordResetForm.value.email).subscribe({
+      this.authService.resetPassword(this.passwordResetForm.value.email, this.passwordResetForm.value.company_name).subscribe({
         next: (data) => {
           console.log(data);
           this.snackbarService.success(data.message);
