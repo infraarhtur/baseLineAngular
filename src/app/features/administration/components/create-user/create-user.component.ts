@@ -32,6 +32,10 @@ export class CreateUserComponent {
           this.router.navigate(['/administration/select-user']);
         }, 3000);
 
+      },
+      error: (error) => {
+        console.error('Error al crear usuario:', error);
+        this.snackbar.error('❌ '+ error.error.detail);
       }
     });
   }
@@ -43,6 +47,7 @@ export class CreateUserComponent {
         this.snackbar.success('✅  se envio el email de verificación')
       },
       error: (error) => {
+        debugger
         console.error('Error enviar email:', error);
         this.snackbar.error('❌ Ocurrió un error al verificar el email.');
       }

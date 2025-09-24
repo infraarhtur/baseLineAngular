@@ -43,4 +43,7 @@ let params = new HttpParams()
   deleteUser(id: string): Observable<any> {
     return this.http.delete<any>(`${this.authBaseUrl}users/${id}`);
   }
+  activateUser(id: string): Observable<any> {
+    return this.http.put<any>(`${this.authBaseUrl}users/${id}/activate`, {});
+  }
 }
