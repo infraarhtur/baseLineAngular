@@ -38,6 +38,7 @@ export class EmailValidateComponent  implements OnInit {
   }
 
   validateToken(): void {
+    debugger
     this.authService.emailVerifiedConfirm(this.token).subscribe({
       next: (data) => {
         console.log(data);
