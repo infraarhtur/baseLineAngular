@@ -101,7 +101,6 @@ export class AppComponent implements OnInit, AfterContentInit {
 
   openUserProfile() {
     // TODO: Implementar navegación al perfil de usuario
-    console.log('Abrir perfil de usuario');
     this.router.navigate(['administration/select-user']);
   }
 
@@ -121,6 +120,12 @@ export class AppComponent implements OnInit, AfterContentInit {
     // TODO: Implementar navegación a respaldo y restauración
     console.log('Abrir respaldo y restauración');
     // this.router.navigate(['/backup-restore']);
+  }
+
+  openRolesSettings() {
+    // TODO: Implementar navegación a configuración de roles
+    console.log('Abrir configuración de roles');
+    this.router.navigate(['administration/select-role']);
   }
 }
 
