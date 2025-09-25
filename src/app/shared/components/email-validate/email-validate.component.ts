@@ -38,9 +38,9 @@ export class EmailValidateComponent  implements OnInit {
   }
 
   validateToken(): void {
-    debugger
     this.authService.emailVerifiedConfirm(this.token).subscribe({
       next: (data) => {
+        this.snackbarService.success('✅ Email validado correctamente');
         console.log(data);
       },
       error: (error) => {
@@ -56,7 +56,7 @@ export class EmailValidateComponent  implements OnInit {
       }
     });
     setTimeout(() => {
-      this.router.navigate(['/login']);
+      this.router.navigate(['/']);
     }, 3000);
   }
 }
