@@ -1,1 +1,79 @@
-<p>select-role works!</p>
+<h2>Gestión de Roles y Permisos</h2>
+
+<div class="subtitle">
+  <p>Asigne permisos agrupados por categoría a cada rol.</p>
+</div>
+
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8" *ngIf="dataSource.data.length > 0; else noPermissions">
+
+  <!-- Permission Column -->
+  <ng-container matColumnDef="permission">
+    <th mat-header-cell *matHeaderCellDef class="text-center-black">CATEGORÍA / PERMISO</th>
+    <td mat-cell *matCellDef="let permission"
+        [class]="getPermissionRowClass(permission)"
+        [class.category-cell]="isCategoryRow(permission)">
+      {{ permission.name }}
+    </td>
+  </ng-container>
+
+  <!-- Administrator Column -->
+  <ng-container matColumnDef="administrator">
+    <th mat-header-cell *matHeaderCellDef class="text-center-black">ADMINISTRADOR</th>
+    <td mat-cell *matCellDef="let permission"
+        [class]="getPermissionRowClass(permission)"
+        [class.category-cell]="isCategoryRow(permission)">
+      <mat-checkbox
+        *ngIf="!isCategoryRow(permission)"
+        color="primary"
+        [checked]="isPermissionChecked(permission.id, 'ADMINISTRADOR')"
+        (change)="onPermissionChange(permission.id, 'ADMINISTRADOR', $event.checked)">
+      </mat-checkbox>
+    </td>
+  </ng-container>
+
+  <!-- Editor Column -->
+  <ng-container matColumnDef="editor">
+    <th mat-header-cell *matHeaderCellDef class="text-center-black">EDITOR</th>
+    <td mat-cell *matCellDef="let permission"
+        [class]="getPermissionRowClass(permission)"
+        [class.category-cell]="isCategoryRow(permission)">
+      <mat-checkbox
+        *ngIf="!isCategoryRow(permission)"
+        color="primary"
+        [checked]="isPermissionChecked(permission.id, 'EDITOR')"
+        (change)="onPermissionChange(permission.id, 'EDITOR', $event.checked)">
+      </mat-checkbox>
+    </td>
+  </ng-container>
+
+  <!-- Viewer Column -->
+  <ng-container matColumnDef="viewer">
+    <th mat-header-cell *matHeaderCellDef class="text-center-black">VISUALIZADOR</th>
+    <td mat-cell *matCellDef="let permission"
+        [class]="getPermissionRowClass(permission)"
+        [class.category-cell]="isCategoryRow(permission)">
+      <mat-checkbox
+        *ngIf="!isCategoryRow(permission)"
+        color="primary"
+        [checked]="isPermissionChecked(permission.id, 'VISUALIZADOR')"
+        (change)="onPermissionChange(permission.id, 'VISUALIZADOR', $event.checked)">
+      </mat-checkbox>
+    </td>
+  </ng-container>
+
+  <!-- Table Rows -->
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+      [class]="getPermissionRowClass(row)"></tr>
+</table>
+
+<ng-template #noPermissions>
+  <p>No hay permisos disponibles.</p>
+</ng-template>
+
+<div class="actions-container">
+  <button mat-raised-button color="primary" (click)="savePermissions()">
+    <mat-icon>save</mat-icon>
+    Guardar Permisos
+  </button>
+</div>
