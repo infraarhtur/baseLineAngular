@@ -32,6 +32,10 @@ export class CreateUserComponent {
           this.router.navigate(['/administration/select-user']);
         }, 3000);
 
+      },
+      error: (error) => {
+        console.error('Error al crear usuario:', error);
+        this.snackbar.error('❌ '+ error.error.detail);
       }
     });
   }

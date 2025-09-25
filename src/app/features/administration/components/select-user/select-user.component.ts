@@ -75,11 +75,11 @@ export class SelectUserComponent implements OnInit, AfterViewInit {
     });
   }
 
-  deleteUser(id: string, name: string, email: string): void {
+  desactivateUser(id: string, name: string, email: string): void {
     console.log('Eliminar usuario con ID:', id);
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '450px',
-      data: { message: `¿Estás seguro de que deseas eliminar el usuario \n ${name} con email ${email}?  ` }
+      data: { message: `¿Estás seguro de que deseas desactivar el usuario \n ${name} con email ${email}?  ` }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -99,6 +99,23 @@ export class SelectUserComponent implements OnInit, AfterViewInit {
       }
     });
   }
+
+  activateUser(id: string, name: string, email: string): void {
+    console.log('Activar usuario con ID:', id);
+    this.administrationService.activateUser(id).subscribe({
+      next: () => {
+        console.log('Usuario activado:', id);
+        this.snackBar.success('Usuario activado correctamente');
+        this.getUsersByCompany();
+      },
+      error: (err) => {
+        console.error('Error al activar el usuario', err);
+        this.snackBar.error('Error al activar el usuario');
+      }
+    });
+  }
+
+
   updateUser(id: string): void {
     console.log('Actualizar usuario con ID:', id);
     this.router.navigate(['/administration/update-user', id]);
