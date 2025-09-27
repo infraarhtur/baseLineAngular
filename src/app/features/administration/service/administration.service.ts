@@ -17,12 +17,10 @@ export class AdministrationService {
     return this.http.get<any>(`${this.authBaseUrl}companies/${company_id}/users`);
   }
 
-  getRoles(company_id: string): Observable<any> {
-let params = new HttpParams()
+  getRoles(): Observable<any> {
+   let params = new HttpParams()
     .set('skip', 0)
     .set('limit', 100)
-    .set('company_id', company_id);
-
     return this.http.get<any>(`${this.authBaseUrl}roles/`, { params });
   }
 
