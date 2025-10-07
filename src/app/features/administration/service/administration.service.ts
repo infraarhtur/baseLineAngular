@@ -29,6 +29,10 @@ export class AdministrationService {
     return this.http.get<any>(`${this.authBaseUrl}users/${id}/${company_name}`);
   }
 
+  getAllSectionsWithPermissions(): Observable<any> {
+    return this.http.get<any>(`${this.authBaseUrl}roles/all_sections_with_permissions`);
+  }
+
   createUser(userData: any): Observable<any> {
     return this.http.post<any>(`${this.authBaseUrl}users/`, userData);
   }
