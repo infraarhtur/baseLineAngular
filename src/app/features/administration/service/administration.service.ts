@@ -17,20 +17,11 @@ export class AdministrationService {
     return this.http.get<any>(`${this.authBaseUrl}companies/${company_id}/users`);
   }
 
-  getRoles(): Observable<any> {
-   let params = new HttpParams()
-    .set('skip', 0)
-    .set('limit', 100)
-    return this.http.get<any>(`${this.authBaseUrl}roles/`, { params });
+  deleteUser(id: string): Observable<any> {
+    return this.http.delete<any>(`${this.authBaseUrl}users/${id}`);
   }
-
-  getUserById(id: string): Observable<any> {
-    const company_name= localStorage.getItem('selected_company_id');
-    return this.http.get<any>(`${this.authBaseUrl}users/${id}/${company_name}`);
-  }
-
-  getAllSectionsWithPermissions(): Observable<any> {
-    return this.http.get<any>(`${this.authBaseUrl}roles/all_sections_with_permissions`);
+  activateUser(id: string): Observable<any> {
+    return this.http.put<any>(`${this.authBaseUrl}users/${id}/activate_user`, {});
   }
 
   createUser(userData: any): Observable<any> {
@@ -42,10 +33,26 @@ export class AdministrationService {
     return this.http.put<any>(`${this.authBaseUrl}users/${id}`, userData);
   }
 
-  deleteUser(id: string): Observable<any> {
-    return this.http.delete<any>(`${this.authBaseUrl}users/${id}`);
-  }
-  activateUser(id: string): Observable<any> {
-    return this.http.put<any>(`${this.authBaseUrl}users/${id}/activate_user`, {});
-  }
+//roles
+  getRoles(): Observable<any> {
+    let params = new HttpParams()
+     .set('skip', 0)
+     .set('limit', 100)
+     return this.http.get<any>(`${this.authBaseUrl}roles/`, { params });
+   }
+
+   getUserById(id: string): Observable<any> {
+     const company_name= localStorage.getItem('selected_company_id');
+     return this.http.get<any>(`${this.authBaseUrl}users/${id}/${company_name}`);
+   }
+
+   getAllSectionsWithPermissions(): Observable<any> {
+     return this.http.get<any>(`${this.authBaseUrl}roles/all_sections_with_permissions`);
+   }
+
+   updateRoleByIdRole(id: string, roleData: any): Observable<any> {
+     return this.http.put<any>(`${this.authBaseUrl}roles/${id}`, roleData);
+   }
+
+
 }

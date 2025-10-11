@@ -11,6 +11,8 @@ import { MaterialModule } from '../../shared/material/material.module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { FromUserComponent } from './components/from-user/from-user.component';
 import { UpdateUserComponent } from './components/update-user/update-user.component';
+import { RoleCheckBoxComponent } from './components/role-check-box/role-check-box.component';
+import { DialogoExampleComponent } from './components/dialogo-example/dialogo-example.component';
 
 
 @NgModule({
@@ -21,7 +23,9 @@ import { UpdateUserComponent } from './components/update-user/update-user.compon
     SelectUserComponent,
     SelectRoleComponent,
     FromUserComponent,
-    UpdateUserComponent
+    UpdateUserComponent,
+    RoleCheckBoxComponent,
+    DialogoExampleComponent
   ],
   imports: [
     CommonModule,

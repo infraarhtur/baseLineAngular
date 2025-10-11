@@ -5,6 +5,9 @@ import { SnackbarService } from '../../../../shared/services/snackbar.service';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { RoleCheckBoxComponent } from '../role-check-box/role-check-box.component';
+//import { DialogoExampleComponent } from '../dialogo-example/dialogo-example.component';
+
 
 export interface Permission {
   id: string;
@@ -54,6 +57,7 @@ export class SelectRoleComponent implements OnInit {
 
   // Datos transformados listos para la vista
   rolesWithCategories: OutRole[] = [];
+
   constructor(private adminService: AdministrationService,
     private snackbar: SnackbarService,
     private router: Router,
@@ -170,4 +174,51 @@ private transformRolesToCategories(roles: InRole[], includeMisc = false): OutRol
 addPermission(id: string) {
   console.log('Agregar permiso con ID:', id);
 }
+
+
+
+openDialog(event: MouseEvent,role: any): void {
+  event.stopPropagation();
+  const dialogRef = this.dialog.open(RoleCheckBoxComponent, {
+    width: '450px',
+    data: { message: 'Hola desde el componente padre',
+      role:role
+    }
+  });
+
+  dialogRef.afterClosed().subscribe(result => {
+    if (result) {
+      console.log('result llego del dialogo:', result);
+      debugger;
+      const permissions =result.resultFiltered.flatMap((section: any) =>
+        section.permissions
+          .filter((p: any) => p.checked)
+          .map((p: any) => p.id)
+      );
+
+      const objPermissions = {
+        permissions: permissions
+      };
+
+      ;
+      this.adminService.updateRoleByIdRole(result.role.id, objPermissions).subscribe({
+        next: () => {
+          this.snackbar.success('✅ Rol actualizado con éxito');
+        this.getRoles();
+        }
+      });
+      this.snackbar.success('✅ Rol actualizado con éxito');
+      /*
+      this.adminService.updateRoleByIdRole(role.id, result).subscribe({
+        next: () => {
+          this.snackbar.success('✅ Rol actualizado con éxito');
+        }
+      });*/
+    } else {
+      this.snackbar.error('✅ Rol no actualizado');
+    }
+    console.log('El diálogo se cerró con:', result);
+  });
+}
+
 }

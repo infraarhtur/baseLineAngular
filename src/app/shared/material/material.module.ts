@@ -26,6 +26,9 @@ import { MatNativeDateModule } from '@angular/material/core'; // Import this if 
 import {MatMenuModule} from '@angular/material/menu';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatExpansionModule} from '@angular/material/expansion';
+import { MatTreeModule } from '@angular/material/tree';
+
+
 
 
 
@@ -68,6 +71,8 @@ import {MatExpansionModule} from '@angular/material/expansion';
     MatPaginatorModule,
     MatSortModule,
     MatExpansionModule,
+    MatTreeModule,
+
   ],
   exports: [
     MatButtonModule,
@@ -94,6 +99,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
     MatMenuModule,
     MatDividerModule,
     MatExpansionModule,
+    MatTreeModule
   ]
 })
 export class MaterialModule { }
