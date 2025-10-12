@@ -73,12 +73,7 @@ private crudOrder(a: string): number {
 
 
   ngOnInit() {
-
     this.getRoles();
-
-  }
-  removePermission(role: Role, perm: Permission) {
-    role.permissions = role.permissions.filter(p => p.id !== perm.id);
   }
 
   getRoles() {
@@ -97,44 +92,27 @@ private crudOrder(a: string): number {
     });
   }
 
-deletePermission(id: string,perm: any, section: string, role: string) {
-  console.log('Eliminar permiso con ID:', id);
+openDialogDeleteRole(event: MouseEvent,role: any) {
+  event.stopPropagation();
+  console.log('Eliminar role:', role);
   const dialogRef = this.dialog.open(ConfirmDialogComponent, {
     width: '450px',
-    data: { message: `¿Estás seguro de que deseas eliminar el permiso
-      ${perm.name} de la sección ${section} del rol  ${role}?  ` }
+    data: { message: `Si elimina el rol ${role.name} , se eliminarán los permisos asociados a él, se desasociaran los usuarios que tengan asignado este rol y se eliminará de la lista.
+           <b> ¿Estás seguro de que deseas eliminar el role ${role.name} ?   </b> ` }
   });
 
   dialogRef.afterClosed().subscribe(result => {
     if (result) {
-      console.log('Permiso eliminado:', id);
-      this.snackbar.success('Permiso eliminado correctamente');
+      console.log('Role eliminado:', role);
+      this.DeleteRole(role);
     }
     else{
-      console.log('Permiso no eliminado:', id);
-      this.snackbar.error('Permiso no eliminado');
+      console.log('Permiso no eliminado:', role.name);
+      this.snackbar.error('Role no eliminado');
     }
   });
 
 }
-
-
-  ejecutarAccionDelIcono(event: MouseEvent) {
-    event.stopPropagation();
-    this.adminService.getAllSectionsWithPermissions().subscribe({
-      next: (data) => {
-        console.log('Secciones con permisos:', data);
-      },
-      error: (err) => {
-        console.error('Error al obtener secciones con permisos:', err);
-      }
-    });
-    console.log('Ejecutar acción del ícono:', event);
-    this.snackbar.success('Acción del ícono ejecutada');
-  }
-
-
-
 // --- Transformador: de roles[] a roles con categories[] ---
 private transformRolesToCategories(roles: InRole[], includeMisc = false): OutRole[] {
   return (roles ?? []).map(role => {
@@ -171,17 +149,24 @@ private transformRolesToCategories(roles: InRole[], includeMisc = false): OutRol
   });
 }
 
-addPermission(id: string) {
-  console.log('Agregar permiso con ID:', id);
+DeleteRole(role: any) {
+  this.adminService.deleteRoleByIdRole(role.id).subscribe({
+    next: () => {
+      this.snackbar.success('Role eliminado correctamente');
+      this.getRoles();
+    },
+    error: (err) => {
+      this.snackbar.error('Error al eliminar el role');
+      console.error('Error al eliminar el role', err);
+    }
+  });
 }
-
-
 
 openDialog(event: MouseEvent,role: any): void {
   event.stopPropagation();
   const dialogRef = this.dialog.open(RoleCheckBoxComponent, {
     width: '450px',
-    data: { message: 'Hola desde el componente padre',
+    data: { message: 'Agrega o quitar permisos al rol seleccionado',
       role:role
     }
   });
@@ -219,6 +204,10 @@ openDialog(event: MouseEvent,role: any): void {
     }
     console.log('El diálogo se cerró con:', result);
   });
+}
+
+addRole() {
+  console.log('Agregar role');
 }
 
 }

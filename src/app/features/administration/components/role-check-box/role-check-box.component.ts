@@ -83,11 +83,11 @@ export class RoleCheckBoxComponent implements OnInit {
       next: (data) => {
         this.sections = Object.keys(data.data).map(key => ({
           name: key,
-          permissions: data.data[key].map((p:any) => ({ ...p, checked: false })),
+          permissions: data.data[key].map((p: any) => ({ ...p, checked: false })),
           checked: false
         }));
 
-        this.markPermissionsFromRole(this.dataPrent.role.categories,this.dataPrent.role.name);
+        this.markPermissionsFromRole(this.dataPrent.role.categories, this.dataPrent.role.name);
         console.log('sections:', this.sections);
       },
       error: (err) => {
@@ -97,8 +97,8 @@ export class RoleCheckBoxComponent implements OnInit {
     });
   }
 
-  markPermissionsFromRole(category: any ,roleName: string): void {
-      this.sections.forEach((section) => {
+  markPermissionsFromRole(category: any, roleName: string): void {
+    this.sections.forEach((section) => {
       section.permissions.forEach((permission) => {
         category.forEach((category: any) => {
           if (category.name === section.name) {
@@ -115,15 +115,15 @@ export class RoleCheckBoxComponent implements OnInit {
     console.log('sections:', this.sections);
   }
   onSubmit(): void {
-console.log('sections:', this.dataPrent);
+    console.log('sections:', this.dataPrent);
     let resultFiltered = this.sections.map(sec => ({
       ...sec,
       permissions: sec.permissions.filter(p => p.checked)
     }))
-    .filter(sec => sec.permissions.length > 0);
+      .filter(sec => sec.permissions.length > 0);
     console.log('filteredSections:', resultFiltered);
 
-   let result = {resultFiltered: resultFiltered, role: this.dataPrent.role};
+    let result = { resultFiltered: resultFiltered, role: this.dataPrent.role };
 
     this.dialogRef.close(result);
   }

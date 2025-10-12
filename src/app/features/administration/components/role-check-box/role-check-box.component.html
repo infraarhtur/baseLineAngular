@@ -1,7 +1,7 @@
-<h2 mat-dialog-title>seccions y permisos {{ dataPrent?.role.name }}</h2>
+<h2 mat-dialog-title>Permisos del rol {{ dataPrent?.role.name }}</h2>
 <mat-dialog-content>
-  <p><strong>Dato recibido:</strong> {{ dataPrent?.message }}</p>
-  <p><strong>Dato recibido:</strong> {{ dataPrent?.role }}</p>
+  <p><strong>NOTA:</strong> {{ dataPrent?.message }}</p>
+
 <div *ngFor="let section of sections" class="section-container">
   <!-- Padre -->
   <mat-checkbox
@@ -31,7 +31,7 @@
 <mat-dialog-actions>
   <button mat-button (click)="closeDialog()">Cerrar</button>
   <button mat-flat-button color="primary" (click)="onSubmit()">
-    Mostrar seleccionados
+    Guardar
   </button>
 </mat-dialog-actions>
 <!-- Botón para mostrar seleccionados -->

@@ -1,54 +1,46 @@
+<div class="button-container">
+<button mat-icon-button (click)="addRole()" aria-label="Acción del ícono" >
+  <mat-icon>group_add</mat-icon>
+</button>
+<span style="padding-left: 5px;"> Agregar role</span>
+</div>
+
 <mat-accordion>
   <mat-expansion-panel *ngFor="let role of rolesWithCategories">
     <mat-expansion-panel-header>
       <mat-panel-title>
 
-        <mat-icon >label_important</mat-icon>
-       <span style="padding-left: 5px;"> {{ role.name }}</span>
+        <mat-icon>label_important</mat-icon>
+        <span style="padding-left: 5px;"> {{ role.name }}</span>
       </mat-panel-title>
-      <button mat-icon-button
-      (click)="openDialog($event,role)"
-      aria-label="Acción del ícono">
-<mat-icon>library_add</mat-icon>
-agregar sección
-</button>
+      <button mat-icon-button (click)="openDialog($event,role)" aria-label="Acción del ícono" *ngIf="role.name !== 'admin'">
+        <mat-icon>edit_note</mat-icon>
+        Agregar sección
+      </button>
+      <button mat-icon-button (click)="openDialogDeleteRole($event,role)" aria-label="Acción del ícono"  *ngIf="role.name !== 'admin'">
+        <mat-icon>delete_forever</mat-icon>
+        Eliminar role
+      </button>
       <mat-panel-description>
-
-
       </mat-panel-description>
     </mat-expansion-panel-header>
 
     <ng-container *ngIf="role.categories && role.categories.length > 0; else noPerms">
 
-
       <section *ngFor="let cat of role.categories;">
         <header class="category-header">
           <span class="category-name">{{ cat.name | titlecase }}
-
-            <mat-icon style="cursor: pointer; vertical-align: bottom;" (click)="addPermission(cat.name)">add_circle_outline</mat-icon>
-
           </span>
-
         </header>
 
         <div class="chip-container">
           <mat-chip-set class="chip-set">
             <mat-chip *ngFor="let perm of cat.permissions; ">
               {{ perm.name }}
-              <button matChipRemove
-                      aria-label="Eliminar permiso"
-                      (click)="deletePermission(perm.id,perm, cat.name, role.name)">
-                <mat-icon>cancel</mat-icon>
-              </button>
             </mat-chip>
           </mat-chip-set>
         </div>
-
-
       </section>
-
-
-
     </ng-container>
 
     <ng-template #noPerms>
