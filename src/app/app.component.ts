@@ -1,8 +1,10 @@
-import { AfterContentInit, Component, OnInit, } from '@angular/core';
+import { AfterContentInit, Component, OnInit, OnDestroy} from '@angular/core';
 import { AuthService } from './services/auth.service';
 import { TokenRefreshService } from './services/token-refresh.service';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-root',
@@ -10,26 +12,48 @@ import { filter } from 'rxjs/operators';
   standalone: false,
   styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit, AfterContentInit {
+export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
   title = 'baseLineAngular';
-  opened = false;  //cambiar esto a `false` si quieres que el menú inicie cerrado
+  isExpanded = true;      // rail expandido por defecto en desktop
+  isHandset = false;      // móvil/tablet => drawer real
+  opened = true;  //cambiar esto a `false` si quieres que el menú inicie cerrado
   isLoggedIn = false;
   userName: string | null = null;
   userCompany_id: string | null = null;
   userCompanyName: string | null = null;
+
   constructor(
     private router: Router,
     public authService: AuthService,
     private tokenRefreshService: TokenRefreshService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private bp: BreakpointObserver
   ) {
 
+    this.sub = this.bp.observe(['(max-width: 768px)'])
+    .subscribe(state => {
+      this.isHandset = state.matches;
+      // En móvil no usamos rail; en desktop lo dejamos como esté
+    });
   }
+ private sub: Subscription;
+  menuItems = [
+    { label: 'Inicio', icon: 'home_outline', route: '/home' },
+    { label: 'Clientes', icon: 'people', route: '/clients' },
+    { label: 'Productos', icon: 'inventory_2', route: '/products' },
+    { label: 'Proveedores', icon: 'local_shipping', route: '/providers' },
+    { label: 'Ventas', icon: 'point_of_sale', route: '/sales' },
+    { label: 'Categorías', icon: 'category', route: '/category' },
+    { label: 'Dashboard', icon: 'dashboard', route: '/dashboard' },
+    { label: 'Contacto', icon: 'contact_mail', route: '/contact' }
+  ];
+
   ngOnInit(): void {
     /*let route = this.activatedRoute.snapshot;
     while (route.firstChild) {
       route = route.firstChild;
     } */
+
 
     const currentUrl =window.location.toString().split('/')[3];
     console.log('AppComponent ngOnInit - Current URL:', currentUrl);
@@ -65,6 +89,10 @@ export class AppComponent implements OnInit, AfterContentInit {
       // Iniciar el servicio de refresh automático de tokens
       this.tokenRefreshService.startAutoRefresh();
     }
+  }
+
+  toggleSidenav() {
+    this.opened = !this.opened;
   }
   ngAfterContentInit(): void {
     // Solo cargar info si no estamos en una ruta pública
@@ -127,5 +155,14 @@ export class AppComponent implements OnInit, AfterContentInit {
     console.log('Abrir configuración de roles');
     this.router.navigate(['administration/select-role']);
   }
+
+  toggleRail() {
+    this.isExpanded = !this.isExpanded; // solo cambia ancho, no cierra
+  }
+
+  ngOnDestroy() {
+    this.sub?.unsubscribe();
+  }
+
 }
 
