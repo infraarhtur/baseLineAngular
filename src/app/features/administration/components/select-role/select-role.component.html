@@ -1,9 +1,12 @@
 <div class="button-container">
-<button mat-icon-button (click)="addRole()" aria-label="Acción del ícono" >
+<button mat-fab extended (click)="addRole()">
   <mat-icon>group_add</mat-icon>
+  Agregar role usuario
 </button>
-<span style="padding-left: 5px;"> Agregar role</span>
 </div>
+<br>
+
+
 
 <mat-accordion>
   <mat-expansion-panel *ngFor="let role of rolesWithCategories">

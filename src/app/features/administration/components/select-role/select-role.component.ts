@@ -6,7 +6,8 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { RoleCheckBoxComponent } from '../role-check-box/role-check-box.component';
-//import { DialogoExampleComponent } from '../dialogo-example/dialogo-example.component';
+import { CreateRoleComponent } from '../create-role/create-role.component';
+
 
 
 export interface Permission {
@@ -166,15 +167,15 @@ openDialog(event: MouseEvent,role: any): void {
   event.stopPropagation();
   const dialogRef = this.dialog.open(RoleCheckBoxComponent, {
     width: '450px',
-    data: { message: 'Agrega o quitar permisos al rol seleccionado',
+    data: {isEdit: true,
+      title: 'Permisos del rol',
+      message: 'Agrega o quitar permisos al rol seleccionado',
       role:role
     }
   });
 
   dialogRef.afterClosed().subscribe(result => {
     if (result) {
-      console.log('result llego del dialogo:', result);
-      debugger;
       const permissions =result.resultFiltered.flatMap((section: any) =>
         section.permissions
           .filter((p: any) => p.checked)
@@ -185,7 +186,7 @@ openDialog(event: MouseEvent,role: any): void {
         permissions: permissions
       };
 
-      ;
+
       this.adminService.updateRoleByIdRole(result.role.id, objPermissions).subscribe({
         next: () => {
           this.snackbar.success('✅ Rol actualizado con éxito');
@@ -193,12 +194,7 @@ openDialog(event: MouseEvent,role: any): void {
         }
       });
       this.snackbar.success('✅ Rol actualizado con éxito');
-      /*
-      this.adminService.updateRoleByIdRole(role.id, result).subscribe({
-        next: () => {
-          this.snackbar.success('✅ Rol actualizado con éxito');
-        }
-      });*/
+
     } else {
       this.snackbar.error('✅ Rol no actualizado');
     }
@@ -207,7 +203,38 @@ openDialog(event: MouseEvent,role: any): void {
 }
 
 addRole() {
-  console.log('Agregar role');
+
+
+  const dialogRef = this.dialog.open(CreateRoleComponent, {
+    width: '450px',
+    data: {isEdit: false,
+      title: 'Agregar role nuevo',
+      message: 'Aqui creas el nombre del rol y en edicion posterior agregas los permisos',
+      role: null
+    }
+  });
+  dialogRef.afterClosed().subscribe(result => {
+    if (result) {
+
+      const company_id = localStorage.getItem('selected_company_id');
+      const roleData = {
+        name: result.name,
+        company_id: company_id,
+        permissions: []
+
+      }
+      this.adminService.createRole(roleData).subscribe({
+        next: () => {
+          this.snackbar.success('✅ Role creado con éxito');
+          this.getRoles();
+        }
+      });
+      console.log('result llego del dialogo:', result);
+      this.getRoles();
+    } else {
+      this.snackbar.error('✅ Role no agregado');
+    }
+  });
 }
 
 }

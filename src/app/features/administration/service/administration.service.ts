@@ -57,4 +57,8 @@ export class AdministrationService {
    deleteRoleByIdRole(id: string): Observable<any> {
     return this.http.delete<any>(`${this.authBaseUrl}roles/${id}`);
   }
+
+  createRole(roleData: any): Observable<any> {
+    return this.http.post<any>(`${this.authBaseUrl}roles/`, roleData);
+  }
 }

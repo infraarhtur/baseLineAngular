@@ -1,1 +1,19 @@
-<p>create-role works!</p>
+<h3 mat-dialog-title style="text-align: center;">{{ dataPrent?.title }} </h3>
+<mat-dialog-content  style="text-align: center;">
+  <p><strong>NOTA:</strong> {{ dataPrent?.message }}</p>
+  <form [formGroup]="roleForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline">
+      <mat-label>Nombre del rol</mat-label>
+      <input matInput formControlName="name" required />
+    </mat-form-field>
+    <mat-error *ngIf="roleForm.get('name')?.hasError('required')">Nombre del rol es obligatorio</mat-error>
+    <mat-error *ngIf="roleForm.get('name')?.hasError('minlength')">Nombre del rol debe tener al menos 3 caracteres</mat-error>
+    <mat-error *ngIf="roleForm.get('name')?.hasError('maxlength')">Nombre del rol no puede tener más de 40 caracteres</mat-error>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="closeDialog()">Cerrar</button>
+  <button mat-flat-button color="primary" (click)="onSubmit()">
+    Guardar
+  </button>
+</mat-dialog-actions>
