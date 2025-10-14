@@ -116,7 +116,7 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
 
   loadInfo() {
     this.isLoggedIn = this.authService.isAuthenticated();
-    this.userName = this.authService.getUserName();
+    this.userName = this.authService.getUserName().name;
     this.userCompany_id = this.authService.getUserCompany_id();
     this.userCompanyName = this.authService.getUserCompanyName();
   }

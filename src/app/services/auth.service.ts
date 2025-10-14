@@ -147,10 +147,14 @@ export class AuthService {
     return nowSec >= payload.exp;
   }
 
-  getUserName(): string | null {
+  getUserName():  any | null {
     const payload = this.getTokenPayload();
+    console.log(payload);
+    const email = payload['email'];
+    const name = payload['name'];
+
     if (payload && payload['email']) {
-      return payload['email'];
+      return {email, name};
     }
     return null;
   }

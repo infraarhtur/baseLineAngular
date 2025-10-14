@@ -123,3 +123,37 @@ mat-sidenav-content {
   .sidenav { position: fixed; z-index: 1000; }
   mat-sidenav-content { padding-left: 0 !important; }
 }
+
+
+/* ============================
+   ESTILO PARA EL ENLACE ACTIVO
+=============================== */
+
+a[mat-list-item].active-link {
+  background: #e0f7f4 !important;  /* Verde suave tipo techcorp */
+  color: #00897b !important;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: all 0.25s ease;
+
+  .item-icon {
+    color: #00897b !important;
+  }
+
+  &:hover {
+    background: #c8f5ec !important;
+  }
+}
+
+/* ===== En modo colapsado ===== */
+.sidenav.collapsed a[mat-list-item].active-link {
+  background: transparent !important;
+
+  .item-icon {
+    background-color: #e0f7f4 !important;
+    color:  #00897b  !important;
+    border-radius: 8px;
+    padding: 6px;
+    transition: all 0.3s ease;
+  }
+}

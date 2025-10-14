@@ -9,9 +9,13 @@
         class="sidenav"
         [class.collapsed]="!isExpanded && !isHandset">
 
-        <div class="sidenav-header" style="justify-content: end"
-        (click)="isHandset ? sidenav.toggle() : toggleRail()">
-          <mat-icon class="toggle-icon">
+        <div class="sidenav-header"
+        (click)="isHandset ? sidenav.toggle() : toggleRail()" style="justify-content: space-between">
+
+        <span style="margin-left: 10px;" *ngIf="isExpanded">
+         {{ userName }}</span>
+
+          <mat-icon class="toggle-icon"  >
             {{ !isHandset && isExpanded ? 'chevron_left' : 'chevron_right' }}
           </mat-icon>
         </div>
@@ -20,6 +24,8 @@
           <a
             mat-list-item
             *ngFor="let item of menuItems"
+            routerLinkActive="active-link"
+           [routerLinkActiveOptions]="{ exact: false }"
             [routerLink]="item.route"
             (click)="isHandset ? sidenav.close() : null"
           >
