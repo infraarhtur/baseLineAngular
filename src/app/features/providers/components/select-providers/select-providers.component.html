@@ -1,6 +1,6 @@
 <h2>Lista de Proveedores</h2>
 <!-- botón para agregar proveedor -->
-<div class="button-container">
+<div class="button-container" *appHasPermission="'provider:create'">
 <button mat-fab extended [routerLink]="['/providers/create']">
   <mat-icon>person_add_alt</mat-icon>
   Agregar proveedor
@@ -8,6 +8,7 @@
 </div>
  <br>
 <!-- filtro -->
+<ng-container *appHasPermission="'provider:read'">
 <mat-form-field appearance="outline" class="full-width" >
   <mat-label>Buscar clientes</mat-label>
   <input matInput (keyup)="applyFilter($event)" placeholder="Filtrar nombre, email.">
@@ -42,16 +43,12 @@
     <td mat-cell *matCellDef="let provider"> {{ provider.address }} </td>
   </ng-container>
 
-
-
-
-
   <!-- Acciones Column -->
   <ng-container matColumnDef="actions">
     <th mat-header-cell *matHeaderCellDef> Acciones </th>
     <td mat-cell *matCellDef="let provider">
-      <button mat-button color="warn" (click)="deleteProvider(provider.id,provider.name)">Eliminar</button>
-      <button mat-button color="warn" (click)="updateProvider(provider.id)">Actualizar</button>
+      <button mat-button color="warn" (click)="deleteProvider(provider.id,provider.name)" *appHasPermission="'provider:delete'">Eliminar</button>
+      <button mat-button color="warn" (click)="updateProvider(provider.id)" *appHasPermission="'provider:update'">Actualizar</button>
     </td>
   </ng-container>
 
@@ -62,15 +59,15 @@
   <tbody>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </tbody>
-
 </table>
 
 <mat-paginator
   [pageSize]="5"
   [pageSizeOptions]="[5, 10, 25, 100]"
-  showFirstLastButtons> 
+  showFirstLastButtons>
 </mat-paginator>
 
 <ng-template #noProviders>
   <p>No hay clientes disponibles.</p>
 </ng-template>
+</ng-container>

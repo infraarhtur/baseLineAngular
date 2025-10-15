@@ -1,77 +1,77 @@
-
 <mat-toolbar color="primary">
   <span>Lista de Ventas</span>
 </mat-toolbar>
 
-<div class="button-container">
-<button mat-fab extended [routerLink]="['/sales/create']">
-  <mat-icon>add_shopping_cart</mat-icon>
-  Agregar venta
-</button>
+<div class="button-container" *appHasPermission="'sale:create'">
+  <button mat-fab extended [routerLink]="['/sales/create']">
+    <mat-icon>add_shopping_cart</mat-icon>
+    Agregar venta
+  </button>
 </div>
 <br>
 
+<ng-container *appHasPermission="'sale:read'">
 
-<!-- filtro -->
-<div class="filter-container">
-  <!-- filter general search-->
-  <mat-form-field appearance="outline" class="full-width">
-  <mat-label>Buscar ventas</mat-label>
-  <input matInput (keyup)="applyFilter($event)" placeholder="Filtrar por nombre, descripción, etc.">
-</mat-form-field>
+  <!-- filtro -->
+  <div class="filter-container">
+    <!-- filter general search-->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Buscar ventas</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Filtrar por nombre, descripción, etc.">
+    </mat-form-field>
 
- <!-- filter dates start an end  dates -->
-  <mat-form-field appearance="outline">
-    <mat-label>Fecha inicio</mat-label>
-    <input matInput [matDatepicker]="pickerStart" [(ngModel)]="startDate" (dateChange)="applyDateFilter()">
-    <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
-    <mat-datepicker #pickerStart></mat-datepicker>
-  </mat-form-field>
+    <!-- filter dates start an end  dates -->
+    <mat-form-field appearance="outline">
+      <mat-label>Fecha inicio</mat-label>
+      <input matInput [matDatepicker]="pickerStart" [(ngModel)]="startDate" (dateChange)="applyDateFilter()">
+      <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
+      <mat-datepicker #pickerStart></mat-datepicker>
+    </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Fecha fin</mat-label>
-    <input matInput [matDatepicker]="pickerEnd" [(ngModel)]="endDate" (dateChange)="applyDateFilter()">
-    <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
-    <mat-datepicker #pickerEnd></mat-datepicker>
-  </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Fecha fin</mat-label>
+      <input matInput [matDatepicker]="pickerEnd" [(ngModel)]="endDate" (dateChange)="applyDateFilter()">
+      <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+      <mat-datepicker #pickerEnd></mat-datepicker>
+    </mat-form-field>
 
-  <!-- filter status -->
-  <mat-form-field appearance="outline">
-    <mat-label>Estado</mat-label>
-    <mat-select [(ngModel)]="selectedStatus" (selectionChange)="applyStatusFilter( $event.value)">
-      <mat-option value="">Todos</mat-option>
-      <mat-option value="paid">Pagada</mat-option>
-      <mat-option value="pending">Pendiente</mat-option>
-      <mat-option value="canceled">Cancelada</mat-option>
-    </mat-select>
-  </mat-form-field>
-</div>
+    <!-- filter status -->
+    <mat-form-field appearance="outline">
+      <mat-label>Estado</mat-label>
+      <mat-select [(ngModel)]="selectedStatus" (selectionChange)="applyStatusFilter( $event.value)">
+        <mat-option value="">Todos</mat-option>
+        <mat-option value="paid">Pagada</mat-option>
+        <mat-option value="pending">Pendiente</mat-option>
+        <mat-option value="canceled">Cancelada</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
 
-<table mat-table [dataSource]="this.dataSource" matSort class="mat-elevation-z8" *ngIf="this.dataSource.data.length > 0; else noSales">
+  <table mat-table [dataSource]="this.dataSource" matSort class="mat-elevation-z8"
+    *ngIf="this.dataSource.data.length > 0; else noSales">
 
-  <!-- Acciones Column -->
-  <ng-container matColumnDef="actions">
-    <th mat-header-cell *matHeaderCellDef> Acciones </th>
-    <td mat-cell *matCellDef="let sale">
-      <!-- <button mat-button color="warn" (click)="deleteSale(sale.id)">Anular</button> -->
-      <button mat-button color="warn"
-      (click)="updateSale(sale.id)"
-      *ngIf="sale.status !== 'canceled'"
-      >Actualizar</button>
-      <button mat-button color="warn" (click)="detailSale(sale.id)">Detalle</button>
-    </td>
-  </ng-container>
+    <!-- Acciones Column -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Acciones </th>
+      <td mat-cell *matCellDef="let sale">
+        @if (sale.status !== 'canceled') {
+        <button mat-button color="warn" (click)="updateSale(sale.id)"
+          *appHasPermission="'sale:update'">Actualizar</button>
+        }
+        <button mat-button color="warn" (click)="detailSale(sale.id)" *appHasPermission="'sale:detail'">Detalle</button>
+      </td>
+    </ng-container>
 
-  <!-- client name Column -->
-  <ng-container matColumnDef="client">
-    <th mat-header-cell *matHeaderCellDef  mat-sort-header> cliente </th>
-    <td mat-cell *matCellDef="let sale"> {{ sale.client.name }} </td>
-  </ng-container>
-   <!-- client_id Column -->
-  <ng-container matColumnDef="client.email">
-    <th mat-header-cell *matHeaderCellDef  mat-sort-header> email </th>
-    <td mat-cell *matCellDef="let sale"> {{ sale.client.email }} </td>
-  </ng-container>
+    <!-- client name Column -->
+    <ng-container matColumnDef="client">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> cliente </th>
+      <td mat-cell *matCellDef="let sale"> {{ sale.client.name }} </td>
+    </ng-container>
+    <!-- client_id Column -->
+    <ng-container matColumnDef="client.email">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> email </th>
+      <td mat-cell *matCellDef="let sale"> {{ sale.client.email }} </td>
+    </ng-container>
 
     <!-- sale_date Column -->
     <ng-container matColumnDef="sale_date">
@@ -82,48 +82,47 @@
 
     <!-- sale_date Column -->
     <ng-container matColumnDef="payment_method">
-      <th mat-header-cell *matHeaderCellDef  mat-sort-header> metodo de pago</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> metodo de pago</th>
       <td mat-cell *matCellDef="let sale"> {{ sale.payment_method }} </td>
     </ng-container>
 
-  <!-- status Column -->
-  <ng-container matColumnDef="status">
-    <th mat-header-cell *matHeaderCellDef> estado </th>
-    <td mat-cell *matCellDef="let sale"> {{ sale.status }} </td>
-  </ng-container>
+    <!-- status Column -->
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef> estado </th>
+      <td mat-cell *matCellDef="let sale"> {{ sale.status }} </td>
+    </ng-container>
 
     <!-- status Column -->
-  <ng-container matColumnDef="total_amount">
-    <th mat-header-cell *matHeaderCellDef  mat-sort-header> Monto total </th>
-    <td mat-cell *matCellDef="let sale"> {{ sale.total_amount | currency:'COP':'symbol':'1.0-0':'es-CO' }} </td>
-  </ng-container>
+    <ng-container matColumnDef="total_amount">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Monto total </th>
+      <td mat-cell *matCellDef="let sale"> {{ sale.total_amount | currency:'COP':'symbol':'1.0-0':'es-CO' }} </td>
+    </ng-container>
 
-  <!-- status Column -->
-<ng-container matColumnDef="comment">
-  <th mat-header-cell *matHeaderCellDef> Comentario </th>
-  <td mat-cell *matCellDef="let sale" >
-    {{ sale.comment | slice:0:100 }}{{ sale.comment.length > 100 ? '…' : '' }}
-  </td>
+    <!-- status Column -->
+    <ng-container matColumnDef="comment">
+      <th mat-header-cell *matHeaderCellDef> Comentario </th>
+      <td mat-cell *matCellDef="let sale">
+        {{ sale.comment | slice:0:100 }}{{ sale.comment.length > 100 ? '…' : '' }}
+      </td>
+    </ng-container>
+
+
+
+    <!-- Encabezados y Filas -->
+    <thead>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    </thead>
+    <tbody>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </tbody>
+
+  </table>
+
+  <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons>
+  </mat-paginator>
+
+  <ng-template #noSales>
+    <p>No hay ventas disponibles.</p>
+  </ng-template>
+
 </ng-container>
-
-
-
-  <!-- Encabezados y Filas -->
-  <thead>
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  </thead>
-  <tbody>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </tbody>
-
-</table>
-
-<mat-paginator
-  [pageSize]="5"
-  [pageSizeOptions]="[5, 10, 25, 100]"
-  showFirstLastButtons>
-</mat-paginator>
-
-<ng-template #noSales>
-  <p>No hay ventas disponibles.</p>
-</ng-template>
