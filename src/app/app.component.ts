@@ -38,13 +38,13 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
   }
  private sub: Subscription;
   menuItems = [
-    { label: 'Inicio', icon: 'home_outline', route: '/home',},
-    { label: 'Clientes', icon: 'people', route: '/clients', permission: 'client:read' },
-    { label: 'Productos', icon: 'inventory_2', route: '/products', permission: null },
-    { label: 'Proveedores', icon: 'local_shipping', route: '/providers', permission: '' },
+    { label: 'Inicio', icon: 'home_outline', route: '/home',permission: ''},
+    { label: 'Clientes', icon: 'people', route: '/clients', permission: 'client:view' },
+    { label: 'Productos', icon: 'inventory_2', route: '/products', permission: '' },
+    { label: 'Proveedores', icon: 'local_shipping', route: '/providers', permission: ''},
     { label: 'Ventas', icon: 'point_of_sale', route: '/sales', permission: '' },
     { label: 'Categorías', icon: 'category', route: '/category', permission: '' },
-    { label: 'Dashboard', icon: 'dashboard', route: '/dashboard', permission: '' },
+    { label: 'Dashboard', icon: 'dashboard', route: '/dashboard', permission:  '' },
     { label: 'Contacto', icon: 'contact_mail', route: '/contact', permission: '' }
   ];
 
