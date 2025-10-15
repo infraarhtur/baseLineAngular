@@ -12,6 +12,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { FromUserComponent } from './components/from-user/from-user.component';
 import { UpdateUserComponent } from './components/update-user/update-user.component';
 import { RoleCheckBoxComponent } from './components/role-check-box/role-check-box.component';
+import { SharedModule } from '../../shared/shared.module';
 
 
 
@@ -31,7 +32,8 @@ import { RoleCheckBoxComponent } from './components/role-check-box/role-check-bo
     AdministrationRoutingModule,
     MaterialModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    SharedModule
   ]
 })
 export class AdministrationModule { }

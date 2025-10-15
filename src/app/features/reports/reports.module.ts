@@ -10,6 +10,7 @@ import { MaterialModule } from '../../shared/material/material.module';
 import { FormsModule } from '@angular/forms';
 import { SelectReportsComponent } from './components/select-reports/select-reports.component';
 import { ReportSaleByProductsComponent } from './components/report-sale-by-products/report-sale-by-products.component';
+import { SharedModule } from '../../shared/shared.module';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { ReportSaleByProductsComponent } from './components/report-sale-by-produ
     ReportsRoutingModule,
     ReactiveFormsModule,
     MaterialModule,
-    FormsModule
+    FormsModule,
+    SharedModule
   ]
 })
 export class ReportsModule { }

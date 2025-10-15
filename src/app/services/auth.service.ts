@@ -243,4 +243,11 @@ export class AuthService {
     const url = `${this.authBaseUrl}auth/email-verification/confirm`;
     return this.http.post<any>(url, { token });
   }
+
+  hasPermission(permission: string): boolean {
+    const payload = this.getTokenPayload();
+    console.log(payload);
+
+    return payload && payload['permissions'] && payload['permissions'].includes(permission);
+  }
 }

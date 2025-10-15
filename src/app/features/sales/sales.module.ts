@@ -13,6 +13,7 @@ import { MaterialModule } from '../../shared/material/material.module';
 import { DetailSalesComponent } from './components/detail-sales/detail-sales.component';
 import { ProductsModule } from '../products/products.module';
 import { ClientsModule } from '../clients/clients.module';
+import { SharedModule } from '../../shared/shared.module';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import { ClientsModule } from '../clients/clients.module';
     MaterialModule,
     ProductsModule,
     ClientsModule,
-    FormsModule
+    FormsModule,
+    SharedModule
   ]
 })
 export class SalesModule { }
