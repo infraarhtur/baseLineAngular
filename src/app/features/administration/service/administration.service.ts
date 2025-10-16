@@ -42,8 +42,7 @@ export class AdministrationService {
    }
 
    getUserById(id: string): Observable<any> {
-     const company_name= localStorage.getItem('selected_company_id');
-     return this.http.get<any>(`${this.authBaseUrl}users/${id}/${company_name}`);
+     return this.http.get<any>(`${this.authBaseUrl}users/${id}`);
    }
 
    getAllSectionsWithPermissions(): Observable<any> {
