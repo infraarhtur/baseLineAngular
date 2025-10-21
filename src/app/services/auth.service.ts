@@ -149,7 +149,7 @@ export class AuthService {
 
   getUserName():  any | null {
     const payload = this.getTokenPayload();
-    console.log(payload);
+
     const email = payload['email'];
     const name = payload['name'];
 
@@ -246,7 +246,6 @@ export class AuthService {
 
   hasPermission(permission: string): boolean {
     const payload = this.getTokenPayload();
-    console.log(payload);
 
     return payload && payload['permissions'] && payload['permissions'].includes(permission);
   }

@@ -37,9 +37,7 @@ export class RoleCheckBoxComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log('data:', this.dataPrent);
-    console.log('data role:');
-    console.log(this.dataPrent.role);
+
     this.getSectionsWithPermissions();
 
   }
@@ -74,7 +72,7 @@ export class RoleCheckBoxComponent implements OnInit {
       const selected = section.permissions.filter(p => p.checked);
       if (selected.length > 0) result[section.name] = selected;
     });
-    console.log(result);
+
     return result;
   }
 

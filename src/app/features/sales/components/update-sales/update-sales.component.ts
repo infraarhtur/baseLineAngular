@@ -27,13 +27,10 @@ export class UpdateSalesComponent  implements OnInit{
    ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       this.saleId = String(params.get('id')); // ✅ Obtener el ID de la URL
-      console.log('venta a actualizar:', this.saleId);
-      // this.loadProvider();
     });
   }
 
   updateSale(data: any): void {
-    console.log('Datos a actualizar:', data);
     this.saleService.updateSale(this.saleId, data).subscribe({
       next: () => {
         this.snackbar.success('venta editada con éxito')

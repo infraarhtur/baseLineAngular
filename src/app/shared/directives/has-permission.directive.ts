@@ -15,7 +15,6 @@ export class HasPermissionDirective {
   ) {}
 
   @Input() set appHasPermission(permission: string) {
-    console.log('Setting permission:', permission);
     this.permission = permission;
     this.updateView();
   }
