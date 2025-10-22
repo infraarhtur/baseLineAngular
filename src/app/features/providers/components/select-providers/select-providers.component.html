@@ -16,6 +16,7 @@
 
  <br>
 
+<div class="table-container">
 <table mat-table [dataSource]="this.dataSource" class="mat-elevation-z8" *ngIf="this.dataSource.data.length > 0; else noProviders">
 
 
@@ -60,7 +61,7 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </tbody>
 </table>
-
+</div>
 <mat-paginator
   [pageSize]="5"
   [pageSizeOptions]="[5, 10, 25, 100]"

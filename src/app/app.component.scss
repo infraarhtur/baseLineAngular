@@ -157,3 +157,10 @@ a[mat-list-item].active-link {
     transition: all 0.3s ease;
   }
 }
+
+.table-container {
+  width: 100%;
+  height: auto;
+  min-width: 350px;
+  overflow: auto;
+}

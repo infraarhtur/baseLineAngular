@@ -31,11 +31,9 @@
 </button>
 </div>
 
-
-
+<div class="table-container">
+  <!-- tabla de productos -->
 <table mat-table [dataSource]="this.dataSource" matSort class="mat-elevation-z8" *ngIf="this.dataSource.data.length > 0; else noSales">
-
-
     <!-- payment_method_label Column -->
     <ng-container matColumnDef="product_name">
       <th mat-header-cell *matHeaderCellDef  mat-sort-header> Nombre del producto</th>
@@ -82,6 +80,7 @@
   </tbody>
 
 </table>
+</div>
 
 <!-- <mat-paginator
   [pageSize]="5"

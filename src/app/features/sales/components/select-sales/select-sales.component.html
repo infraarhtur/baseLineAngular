@@ -47,77 +47,79 @@
     </mat-form-field>
   </div>
 
-  <table mat-table [dataSource]="this.dataSource" matSort class="mat-elevation-z8"
-    *ngIf="this.dataSource.data.length > 0; else noSales">
+  <div class="table-container">
+    <table mat-table [dataSource]="this.dataSource" matSort class="mat-elevation-z8"
+      *ngIf="this.dataSource.data.length > 0; else noSales">
 
-    <!-- Acciones Column -->
-    <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef> Acciones </th>
-      <td mat-cell *matCellDef="let sale">
-        @if (sale.status !== 'canceled') {
-        <button mat-button color="warn" (click)="updateSale(sale.id)"
-          *appHasPermission="'sale:update'">Actualizar</button>
-        }
-        <button mat-button color="warn" (click)="detailSale(sale.id)" *appHasPermission="'sale:detail'">Detalle</button>
-      </td>
-    </ng-container>
+      <!-- Acciones Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> Acciones </th>
+        <td mat-cell *matCellDef="let sale">
+          @if (sale.status !== 'canceled') {
+          <button mat-button color="warn" (click)="updateSale(sale.id)"
+            *appHasPermission="'sale:update'">Actualizar</button>
+          }
+          <button mat-button color="warn" (click)="detailSale(sale.id)"
+            *appHasPermission="'sale:detail'">Detalle</button>
+        </td>
+      </ng-container>
 
-    <!-- client name Column -->
-    <ng-container matColumnDef="client">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> cliente </th>
-      <td mat-cell *matCellDef="let sale"> {{ sale.client.name }} </td>
-    </ng-container>
-    <!-- client_id Column -->
-    <ng-container matColumnDef="client.email">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> email </th>
-      <td mat-cell *matCellDef="let sale"> {{ sale.client.email }} </td>
-    </ng-container>
+      <!-- client name Column -->
+      <ng-container matColumnDef="client">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> cliente </th>
+        <td mat-cell *matCellDef="let sale"> {{ sale.client.name }} </td>
+      </ng-container>
+      <!-- client_id Column -->
+      <ng-container matColumnDef="client.email">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> email </th>
+        <td mat-cell *matCellDef="let sale"> {{ sale.client.email }} </td>
+      </ng-container>
 
-    <!-- sale_date Column -->
-    <ng-container matColumnDef="sale_date">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> fecha</th>
-      <td mat-cell *matCellDef="let sale"> {{ sale.sale_date | date:'dd/MM/yyyy' }} </td>
-    </ng-container>
-
-
-    <!-- sale_date Column -->
-    <ng-container matColumnDef="payment_method">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> metodo de pago</th>
-      <td mat-cell *matCellDef="let sale"> {{ sale.payment_method }} </td>
-    </ng-container>
-
-    <!-- status Column -->
-    <ng-container matColumnDef="status">
-      <th mat-header-cell *matHeaderCellDef> estado </th>
-      <td mat-cell *matCellDef="let sale"> {{ sale.status }} </td>
-    </ng-container>
-
-    <!-- status Column -->
-    <ng-container matColumnDef="total_amount">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Monto total </th>
-      <td mat-cell *matCellDef="let sale"> {{ sale.total_amount | currency:'COP':'symbol':'1.0-0':'es-CO' }} </td>
-    </ng-container>
-
-    <!-- status Column -->
-    <ng-container matColumnDef="comment">
-      <th mat-header-cell *matHeaderCellDef> Comentario </th>
-      <td mat-cell *matCellDef="let sale">
-        {{ sale.comment | slice:0:100 }}{{ sale.comment.length > 100 ? '…' : '' }}
-      </td>
-    </ng-container>
+      <!-- sale_date Column -->
+      <ng-container matColumnDef="sale_date">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> fecha</th>
+        <td mat-cell *matCellDef="let sale"> {{ sale.sale_date | date:'dd/MM/yyyy' }} </td>
+      </ng-container>
 
 
+      <!-- sale_date Column -->
+      <ng-container matColumnDef="payment_method">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> metodo de pago</th>
+        <td mat-cell *matCellDef="let sale"> {{ sale.payment_method }} </td>
+      </ng-container>
 
-    <!-- Encabezados y Filas -->
-    <thead>
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    </thead>
-    <tbody>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </tbody>
+      <!-- status Column -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef> estado </th>
+        <td mat-cell *matCellDef="let sale"> {{ sale.status }} </td>
+      </ng-container>
 
-  </table>
+      <!-- status Column -->
+      <ng-container matColumnDef="total_amount">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Monto total </th>
+        <td mat-cell *matCellDef="let sale"> {{ sale.total_amount | currency:'COP':'symbol':'1.0-0':'es-CO' }} </td>
+      </ng-container>
 
+      <!-- status Column -->
+      <ng-container matColumnDef="comment">
+        <th mat-header-cell *matHeaderCellDef> Comentario </th>
+        <td mat-cell *matCellDef="let sale">
+          {{ sale.comment | slice:0:100 }}{{ sale.comment.length > 100 ? '…' : '' }}
+        </td>
+      </ng-container>
+
+
+
+      <!-- Encabezados y Filas -->
+      <thead>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      </thead>
+      <tbody>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </tbody>
+
+    </table>
+  </div>
   <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons>
   </mat-paginator>
 
