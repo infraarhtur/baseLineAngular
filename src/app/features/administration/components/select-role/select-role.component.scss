@@ -1,0 +1,33 @@
+.category-row {
+  display: flex;
+  justify-content: space-between; /* cat.name a la izquierda, chips a la derecha */
+  align-items: center;
+  width: 100%;
+  gap: 1rem; /* espacio entre texto y chips */
+}
+
+.category-name {
+  font-weight: 600;
+  color: #444; /* opcional, para resaltar */
+}
+
+.chip-set {
+  display: flex;
+  flex-wrap: wrap; /* si hay muchos chips, bajan a la siguiente línea */
+  gap: 0.5rem;
+  justify-content: flex-end; /* alinea los chips al borde derecho */
+}
+
+.category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.chip-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}

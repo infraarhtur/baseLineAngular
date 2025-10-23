@@ -34,7 +34,12 @@ export class UpdateUserComponent implements OnInit {
 
     this.adminService.updateUser(this.userId ,formData).subscribe({
       next: () => {
-        console.log('Usuario actualizado con éxito');
+        this.snackbar.success('Usuario actualizado con éxito');
+        this.router.navigate(['/administration/select-user']);
+      },
+      error: (err) => {
+        console.error('Error al actualizar usuario:', err);
+        this.snackbar.error('❌ No se pudo actualizar el usuario');
       }
     });
   }
@@ -43,7 +48,7 @@ export class UpdateUserComponent implements OnInit {
     this.adminService.getUserById(this.userId).subscribe({
       next: (data) => {
         this.userdata = data;
-        console.log('Usuario adaptado para el formulario:', this.userdata);
+        this.snackbar.success('Usuario cargado con éxito');
       },
       error: (err) => {
         console.error('Error al cargar usuario:', err);

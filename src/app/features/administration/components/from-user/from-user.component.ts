@@ -63,7 +63,7 @@ export class FromUserComponent  implements OnInit,OnChanges {
   }
 
   getRoles() {
-    this.adminService.getRoles(this.companyId).subscribe({
+    this.adminService.getRoles().subscribe({
       next: (data) => {
              this.roles = data.roles || [];
              // Si hay userData y el formulario ya existe, actualizar el valor del rol

@@ -5,6 +5,8 @@ import { CreateUserComponent } from './components/create-user/create-user.compon
 import { CreateRoleComponent } from './components/create-role/create-role.component';
 import { SelectUserComponent } from './components/select-user/select-user.component';
 import { UpdateUserComponent } from './components/update-user/update-user.component';
+import { SelectRoleComponent } from './components/select-role/select-role.component';
+import { RoleCheckBoxComponent } from './components/role-check-box/role-check-box.component';
 
 const routes: Routes = [
   {
@@ -15,7 +17,9 @@ const routes: Routes = [
       { path: 'create-user', component: CreateUserComponent },
       { path: 'create-role', component: CreateRoleComponent },
       { path: 'select-user', component: SelectUserComponent },
-       { path: 'update-user/:id', component: UpdateUserComponent }
+      { path: 'select-role', component: SelectRoleComponent },
+       { path: 'update-user/:id', component: UpdateUserComponent },
+       { path: 'role-check-box', component: RoleCheckBoxComponent }
     ]
   }
 ];

@@ -1,7 +1,7 @@
 <h2>Lista de Productos</h2>
 
 
-<div class="button-container">
+<div class="button-container" *appHasPermission="'product:create'">
   <!-- botón para agregar producto -->
   <button mat-fab extended [routerLink]="['/products/create']" *ngIf="!isSelected">
     <mat-icon>playlist_add</mat-icon>
@@ -12,160 +12,171 @@
 <br>
 
 <!-- filtro -->
-<mat-form-field appearance="outline" class="full-width">
-  <mat-label>Buscar productos</mat-label>
-  <input matInput (keyup)="applyFilter($event)" placeholder="Filtrar por nombre, descripción, etc.">
-</mat-form-field>
+<ng-container *appHasPermission="'product:read'">
+  <mat-form-field appearance="outline" class="full-width" >
+    <mat-label>Buscar productos</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Filtrar por nombre, descripción, etc.">
+  </mat-form-field>
 
-<!-- tabla de productos -->
-<table mat-table [dataSource]="this.dataSource" class="mat-elevation-z8"
-  *ngIf="this.dataSource.data.length > 0; else noProducts">
+  <!-- tabla de productos -->
+  <div class="table-container" >
+  <table mat-table [dataSource]="this.dataSource" class="mat-elevation-z8"
+    *ngIf="this.dataSource.data.length > 0; else noProducts">
 
-  <!-- Checkbox Column -->
-  <ng-container matColumnDef="select" *ngIf="isSelected">
-    <th mat-header-cell *matHeaderCellDef>
-      <mat-checkbox color="primary" (change)="toggleAllRows($event)" [checked]="selection.hasValue() && isAllSelected()"
-        [indeterminate]="selection.hasValue() && !isAllSelected()">
-      </mat-checkbox>
-    </th>
-    <td mat-cell *matCellDef="let row">
-      <mat-checkbox color="primary"
-       (click)="$event.stopPropagation()"
-       (change)="toggleSelection(row, $event.checked)"
-        [checked]="selection.isSelected(row)"
-        [disabled]="row.stock < 1">
-      </mat-checkbox>
-    </td>
-    <!-- <td mat-footer-cell *matFooterCellDef></td> -->
-  </ng-container>
+    <!-- Checkbox Column -->
+    <ng-container matColumnDef="select" *ngIf="isSelected">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox color="primary" (change)="toggleAllRows($event)"
+          [checked]="selection.hasValue() && isAllSelected()"
+          [indeterminate]="selection.hasValue() && !isAllSelected()">
+        </mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <mat-checkbox color="primary" (click)="$event.stopPropagation()" (change)="toggleSelection(row, $event.checked)"
+          [checked]="selection.isSelected(row)" [disabled]="row.stock < 1">
+        </mat-checkbox>
+      </td>
+      <!-- <td mat-footer-cell *matFooterCellDef></td> -->
+    </ng-container>
 
-  <!-- Nombre Column -->
-  <ng-container matColumnDef="name">
-    <th mat-header-cell *matHeaderCellDef> Nombre </th>
-    <td mat-cell *matCellDef="let product"> {{ product.name }} </td>
-    <!-- <td mat-footer-cell *matFooterCellDef></td> -->
-  </ng-container>
+    <!-- Nombre Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Nombre </th>
+      <td mat-cell *matCellDef="let product"> {{ product.name }} </td>
+      <!-- <td mat-footer-cell *matFooterCellDef></td> -->
+    </ng-container>
 
-  <!-- description Column -->
-  <ng-container matColumnDef="description">
-    <th mat-header-cell *matHeaderCellDef> Descripción </th>
-    <td mat-cell *matCellDef="let product"> {{ product.description }} </td>
-    <!-- <td mat-footer-cell *matFooterCellDef></td> -->
-  </ng-container>
+    <!-- description Column -->
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef> Descripción </th>
+      <td mat-cell *matCellDef="let product"> {{ product.description }} </td>
+      <!-- <td mat-footer-cell *matFooterCellDef></td> -->
+    </ng-container>
 
-  <!-- sale_price Column -->
-  <ng-container matColumnDef="sale_price">
-    <th mat-header-cell *matHeaderCellDef> precio venta </th>
-    <td mat-cell *matCellDef="let product"> {{ product.sale_price | currency:'COP':'symbol':'1.0-0':'es-CO'}} </td>
-    <!-- <td mat-footer-cell *matFooterCellDef></td> -->
-  </ng-container>
+    <!-- sale_price Column -->
+    <ng-container matColumnDef="sale_price">
+      <th mat-header-cell *matHeaderCellDef> precio venta </th>
+      <td mat-cell *matCellDef="let product"> {{ product.sale_price | currency:'COP':'symbol':'1.0-0':'es-CO'}} </td>
+      <!-- <td mat-footer-cell *matFooterCellDef></td> -->
+    </ng-container>
 
-  <!-- purchase_price Column -->
-  <ng-container matColumnDef="purchase_price">
-    <th mat-header-cell *matHeaderCellDef> Precio de compra </th>
-    <td mat-cell *matCellDef="let product"> {{ product.purchase_price | currency:'COP':'symbol':'1.0-0':'es-CO' }} </td>
-    <!-- <td mat-footer-cell *matFooterCellDef></td> -->
-  </ng-container>
+    <!-- purchase_price Column -->
+    <ng-container matColumnDef="purchase_price">
+      <th mat-header-cell *matHeaderCellDef> Precio de compra </th>
+      <td mat-cell *matCellDef="let product"> {{ product.purchase_price | currency:'COP':'symbol':'1.0-0':'es-CO' }}
+      </td>
+      <!-- <td mat-footer-cell *matFooterCellDef></td> -->
+    </ng-container>
 
-  <!-- stock Column -->
-  <ng-container matColumnDef="stock">
-    <th mat-header-cell *matHeaderCellDef> stock </th>
-    <td mat-cell *matCellDef="let product"> {{ product.stock }} </td>
-    <!-- <td mat-footer-cell *matFooterCellDef></td> -->
-  </ng-container>
+    <!-- stock Column -->
+    <ng-container matColumnDef="stock">
+      <th mat-header-cell *matHeaderCellDef> stock </th>
+      <td mat-cell *matCellDef="let product"> {{ product.stock }} </td>
+      <!-- <td mat-footer-cell *matFooterCellDef></td> -->
+    </ng-container>
 
-  <!-- Provider Column -->
-  <ng-container matColumnDef="provider">
-    <th mat-header-cell *matHeaderCellDef> proveedor </th>
-    <td mat-cell *matCellDef="let product"> {{ getProvidersNames(product)}} </td>
-    <!-- <td mat-footer-cell *matFooterCellDef></td> -->
-  </ng-container>
+    <!-- Provider Column -->
+    <ng-container matColumnDef="provider">
+      <th mat-header-cell *matHeaderCellDef> proveedor </th>
+      <td mat-cell *matCellDef="let product"> {{ getProvidersNames(product)}} </td>
+      <!-- <td mat-footer-cell *matFooterCellDef></td> -->
+    </ng-container>
 
 
-  <!-- Categories Column -->
-  <ng-container matColumnDef="categories">
-    <th mat-header-cell *matHeaderCellDef> categorias </th>
-    <td mat-cell *matCellDef="let product"> {{ getCategoryNames(product) }} </td>
-    <!-- <td mat-footer-cell *matFooterCellDef></td> -->
-  </ng-container>
+    <!-- Categories Column -->
+    <ng-container matColumnDef="categories">
+      <th mat-header-cell *matHeaderCellDef> categorias </th>
+      <td mat-cell *matCellDef="let product"> {{ getCategoryNames(product) }} </td>
+      <!-- <td mat-footer-cell *matFooterCellDef></td> -->
+    </ng-container>
 
-  <!-- Cantidad -->
-  <ng-container matColumnDef="quantity" *ngIf="isSelected">
-    <th mat-header-cell *matHeaderCellDef> Cantidad </th>
-    <td mat-cell *matCellDef="let product">
-      <input type="number"
-       [disabled]="!selection.isSelected(product)"
-       [(ngModel)]="product.quantity"
-        min="1"
-        max="1000"
-        maxlength="4"
-        class="input-cell"
-        (input)="updateTotal(product)"
-         (change)="validateQuantity(product)">
-    </td>
-    <!-- <td mat-footer-cell *matFooterCellDef></td> -->
-  </ng-container>
+    <!-- Cantidad -->
+    <ng-container matColumnDef="quantity" *ngIf="isSelected">
+      <th mat-header-cell *matHeaderCellDef> Cantidad </th>
+      <td mat-cell *matCellDef="let product">
+        <input type="number" [disabled]="!selection.isSelected(product)" [(ngModel)]="product.quantity" min="1"
+          max="1000" maxlength="4" class="input-cell" (input)="updateTotal(product)"
+          (change)="validateQuantity(product)">
+      </td>
+      <!-- <td mat-footer-cell *matFooterCellDef></td> -->
+    </ng-container>
 
-  <!-- Descuento -->
-  <ng-container matColumnDef="discount" *ngIf="isSelected">
-    <th mat-header-cell *matHeaderCellDef> Descuento (%)</th>
-    <td mat-cell *matCellDef="let product">
-      <input type="number"
-       [disabled]="!selection.isSelected(product)"
-       [(ngModel)]="product.discount"
-        min="0" max="99"
-        maxlength="3"
-        class="input-cell"
-        (input)="updateTotal(product)"
-        (change)="validateDiscount(product)">
-    </td>
-    <!-- <td mat-footer-cell *matFooterCellDef></td> -->
-  </ng-container>
+    <!-- Descuento -->
+    <ng-container matColumnDef="discount" *ngIf="isSelected">
+      <th mat-header-cell *matHeaderCellDef> Descuento (%)</th>
+      <td mat-cell *matCellDef="let product">
+        <input type="number" [disabled]="!selection.isSelected(product)" [(ngModel)]="product.discount" min="0" max="99"
+          maxlength="3" class="input-cell" (input)="updateTotal(product)" (change)="validateDiscount(product)">
+      </td>
+      <!-- <td mat-footer-cell *matFooterCellDef></td> -->
+    </ng-container>
 
-  <!-- Impuesto -->
-  <!-- <ng-container matColumnDef="tax" *ngIf="isSelected">
+    <!-- Impuesto -->
+    <!-- <ng-container matColumnDef="tax" *ngIf="isSelected">
   <th mat-header-cell *matHeaderCellDef> Impuesto (%) </th>
   <td mat-cell *matCellDef="let product">
     <input type="number" [(ngModel)]="product.tax" min="0" class="input-cell" (input)="updateTotal(product)">
   </td>
 </ng-container> -->
 
-  <!-- Total -->
-  <ng-container matColumnDef="total" *ngIf="isSelected">
-    <th mat-header-cell *matHeaderCellDef> Total </th>
-    <td mat-cell *matCellDef="let product">
-      {{ product.total | currency:'COP' }}
-    </td>
-        <!-- <td mat-footer-cell *matFooterCellDef>
+    <!-- Total -->
+    <ng-container matColumnDef="total" *ngIf="isSelected">
+      <th mat-header-cell *matHeaderCellDef> Total </th>
+      <td mat-cell *matCellDef="let product">
+        {{ product.total | currency:'COP' }}
+      </td>
+      <!-- <td mat-footer-cell *matFooterCellDef>
       <strong>Total:</strong> {{ getTotalAmount() | currency:'COP' }}
     </td> -->
-  </ng-container>
+    </ng-container>
 
-  <!-- Acciones Column -->
-  <ng-container matColumnDef="actions" *ngIf="isSelected== false">
-    <th mat-header-cell *matHeaderCellDef> Acciones </th>
-    <td mat-cell *matCellDef="let product">
-      <button mat-button color="warn" (click)="deleteProduct(product.id,product.name)">Eliminar</button>
-      <button mat-button color="warn" (click)="updateProduct(product.id)">Actualizar</button>
-    </td>
-  </ng-container>
+    <!-- Acciones Column -->
+    <ng-container matColumnDef="actions" *ngIf="isSelected== false" class="mat-column-actions" sticky="right">
+      <th mat-header-cell *matHeaderCellDef> Acciones </th>
+      <td mat-cell *matCellDef="let product">
 
-  <!-- Encabezados y Filas -->
-  <thead>
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  </thead>
-  <tbody>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </tbody>
+ <!-- Acciones con menú desplegable -->
+      <button mat-button [matMenuTriggerFor]="adminMenu" aria-label="Menú de administración">
+        <mat-icon>more_vert</mat-icon>
+        <span></span>
+      </button>
+      <mat-menu #adminMenu="matMenu">
 
-</table>
+        <button mat-menu-item (click)="deleteProduct(product.id,product.name)" *appHasPermission="'product:delete'">
+          <mat-icon>clear</mat-icon>
+          <span>Eliminar</span>
+        </button>
+        <button mat-menu-item (click)="updateProduct(product.id)" *appHasPermission="'product:update'">
+          <mat-icon>edit</mat-icon>
+          <span>Actualizar</span>
+        </button>
+        </mat-menu>
 
-<mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons>
-</mat-paginator>
 
-<ng-template #noProducts>
-  <p>No hay productos disponibles.</p>
-</ng-template>
+       <!-- <button mat-button color="warn" (click)="deleteProduct(product.id,product.name)"
+          *appHasPermission="'product:delete'">Eliminar</button>
+        <button mat-button color="warn" (click)="updateProduct(product.id)"
+          *appHasPermission="'product:update'">Actualizar</button> -->
+      </td>
+    </ng-container>
+
+    <!-- Encabezados y Filas -->
+    <thead>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    </thead>
+    <tbody>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </tbody>
+
+  </table>
+</div>
+  <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons>
+  </mat-paginator>
+
+  <ng-template #noProducts>
+    <p>No hay productos disponibles.</p>
+  </ng-template>
+</ng-container>
 
 <div class="total-container" *ngIf="isSelected">
   <h4>Total de descuento: {{ getTotalDiscount() | currency:'COP' }}</h4>

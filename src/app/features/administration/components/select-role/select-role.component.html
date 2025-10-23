@@ -1,1 +1,51 @@
-<p>select-role works!</p>
+<div class="button-container">
+<button mat-fab extended (click)="addRole()">
+  <mat-icon>group_add</mat-icon>
+  Agregar role usuario
+</button>
+</div>
+<br>
+
+<mat-accordion>
+  <mat-expansion-panel *ngFor="let role of rolesWithCategories">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+
+        <mat-icon>label_important</mat-icon>
+        <span style="padding-left: 5px;"> {{ role.name }}</span>
+      </mat-panel-title>
+      <button mat-icon-button (click)="openDialog($event,role)" aria-label="Acción del ícono" *ngIf="role.name !== 'admin'">
+        <mat-icon>edit_note</mat-icon>
+        Agregar sección
+      </button>
+      <button mat-icon-button (click)="openDialogDeleteRole($event,role)" aria-label="Acción del ícono"  *ngIf="role.name !== 'admin'">
+        <mat-icon>delete_forever</mat-icon>
+        Eliminar role
+      </button>
+      <mat-panel-description>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <ng-container *ngIf="role.categories && role.categories.length > 0; else noPerms">
+
+      <section *ngFor="let cat of role.categories;">
+        <header class="category-header">
+          <span class="category-name">{{ cat.name | titlecase }}
+          </span>
+        </header>
+
+        <div class="chip-container">
+          <mat-chip-set class="chip-set">
+            <mat-chip *ngFor="let perm of cat.permissions; ">
+              {{ perm.name }}
+            </mat-chip>
+          </mat-chip-set>
+        </div>
+      </section>
+    </ng-container>
+
+    <ng-template #noPerms>
+      <p class="text-muted">Sin permisos asignados</p>
+    </ng-template>
+  </mat-expansion-panel>
+</mat-accordion>

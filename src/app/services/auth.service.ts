@@ -147,10 +147,14 @@ export class AuthService {
     return nowSec >= payload.exp;
   }
 
-  getUserName(): string | null {
+  getUserName():  any | null {
     const payload = this.getTokenPayload();
+
+    const email = payload['email'];
+    const name = payload['name'];
+
     if (payload && payload['email']) {
-      return payload['email'];
+      return {email, name};
     }
     return null;
   }
@@ -238,5 +242,11 @@ export class AuthService {
   emailVerifiedConfirm(token: string): Observable<any> {
     const url = `${this.authBaseUrl}auth/email-verification/confirm`;
     return this.http.post<any>(url, { token });
+  }
+
+  hasPermission(permission: string): boolean {
+    const payload = this.getTokenPayload();
+
+    return payload && payload['permissions'] && payload['permissions'].includes(permission);
   }
 }

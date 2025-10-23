@@ -25,6 +25,10 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core'; // Import this if you use datepicker
 import {MatMenuModule} from '@angular/material/menu';
 import {MatDividerModule} from '@angular/material/divider';
+import {MatExpansionModule} from '@angular/material/expansion';
+import { MatTreeModule } from '@angular/material/tree';
+
+
 
 
 
@@ -66,6 +70,9 @@ import {MatDividerModule} from '@angular/material/divider';
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
+    MatExpansionModule,
+    MatTreeModule,
+
   ],
   exports: [
     MatButtonModule,
@@ -90,7 +97,9 @@ import {MatDividerModule} from '@angular/material/divider';
     MatDatepickerModule,
     MatNativeDateModule,
     MatMenuModule,
-    MatDividerModule
+    MatDividerModule,
+    MatExpansionModule,
+    MatTreeModule
   ]
 })
 export class MaterialModule { }

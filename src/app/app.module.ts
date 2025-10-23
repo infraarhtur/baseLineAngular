@@ -22,6 +22,7 @@ import { TokenValidateComponent } from './shared/components/token-validate/token
 import { PasswordResetConfirmComponent } from './shared/components/password-reset-confirm/password-reset-confirm.component';
 import { AuthInterceptor } from './shared/interceptors';
 import { EmailValidateComponent } from './shared/components/email-validate/email-validate.component';
+import { SharedModule } from './shared/shared.module';
 
 
 
@@ -46,7 +47,9 @@ import { EmailValidateComponent } from './shared/components/email-validate/email
     MaterialModule,
     SalesModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SharedModule,
+
   ],
   exports:[],
   providers: [

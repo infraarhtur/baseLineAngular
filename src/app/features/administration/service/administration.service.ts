@@ -17,18 +17,11 @@ export class AdministrationService {
     return this.http.get<any>(`${this.authBaseUrl}companies/${company_id}/users`);
   }
 
-  getRoles(company_id: string): Observable<any> {
-let params = new HttpParams()
-    .set('skip', 0)
-    .set('limit', 100)
-    .set('company_id', company_id);
-
-    return this.http.get<any>(`${this.authBaseUrl}roles/`, { params });
+  deleteUser(id: string): Observable<any> {
+    return this.http.delete<any>(`${this.authBaseUrl}users/${id}`);
   }
-
-  getUserById(id: string): Observable<any> {
-    const company_name= localStorage.getItem('selected_company_id');
-    return this.http.get<any>(`${this.authBaseUrl}users/${id}/${company_name}`);
+  activateUser(id: string): Observable<any> {
+    return this.http.put<any>(`${this.authBaseUrl}users/${id}/activate_user`, {});
   }
 
   createUser(userData: any): Observable<any> {
@@ -40,10 +33,31 @@ let params = new HttpParams()
     return this.http.put<any>(`${this.authBaseUrl}users/${id}`, userData);
   }
 
-  deleteUser(id: string): Observable<any> {
-    return this.http.delete<any>(`${this.authBaseUrl}users/${id}`);
+//roles
+  getRoles(): Observable<any> {
+    let params = new HttpParams()
+     .set('skip', 0)
+     .set('limit', 100)
+     return this.http.get<any>(`${this.authBaseUrl}roles/`, { params });
+   }
+
+   getUserById(id: string): Observable<any> {
+     return this.http.get<any>(`${this.authBaseUrl}users/${id}`);
+   }
+
+   getAllSectionsWithPermissions(): Observable<any> {
+     return this.http.get<any>(`${this.authBaseUrl}roles/all_sections_with_permissions`);
+   }
+
+   updateRoleByIdRole(id: string, roleData: any): Observable<any> {
+     return this.http.put<any>(`${this.authBaseUrl}roles/${id}`, roleData);
+   }
+
+   deleteRoleByIdRole(id: string): Observable<any> {
+    return this.http.delete<any>(`${this.authBaseUrl}roles/${id}`);
   }
-  activateUser(id: string): Observable<any> {
-    return this.http.put<any>(`${this.authBaseUrl}users/${id}/activate_user`, {});
+
+  createRole(roleData: any): Observable<any> {
+    return this.http.post<any>(`${this.authBaseUrl}roles/`, roleData);
   }
 }

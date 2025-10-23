@@ -8,9 +8,12 @@ import { CreateRoleComponent } from './components/create-role/create-role.compon
 import { SelectUserComponent } from './components/select-user/select-user.component';
 import { SelectRoleComponent } from './components/select-role/select-role.component';
 import { MaterialModule } from '../../shared/material/material.module';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { FromUserComponent } from './components/from-user/from-user.component';
 import { UpdateUserComponent } from './components/update-user/update-user.component';
+import { RoleCheckBoxComponent } from './components/role-check-box/role-check-box.component';
+import { SharedModule } from '../../shared/shared.module';
+
 
 
 @NgModule({
@@ -21,13 +24,16 @@ import { UpdateUserComponent } from './components/update-user/update-user.compon
     SelectUserComponent,
     SelectRoleComponent,
     FromUserComponent,
-    UpdateUserComponent
+    UpdateUserComponent,
+    RoleCheckBoxComponent,
   ],
   imports: [
     CommonModule,
     AdministrationRoutingModule,
     MaterialModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule,
+    SharedModule
   ]
 })
 export class AdministrationModule { }

@@ -4,11 +4,11 @@
   <label>Reporte de resumen de venta por producto</label>
 </p>
 
-<mat-toolbar color="primary">
+<h4 class="sub-title-text">
   <span>Reporte de resumen de venta por periodo</span>
-</mat-toolbar>
+</h4>
 <!-- filtro -->
-<div class="filter-container">
+<div class="filter-container" >
 
  <!-- filter dates start an end  dates -->
   <mat-form-field appearance="outline">
@@ -25,35 +25,35 @@
     <mat-datepicker #pickerEnd></mat-datepicker>
   </mat-form-field>
 
+<div class="filter-actions">
   <button mat-raised-button color="primary" (click)="applyDateFilter()">
-  <mat-icon>search</mat-icon>
-  Buscar
-</button>
+    <mat-icon>search</mat-icon>
+    Buscar
+  </button>
 </div>
 
 
 
+</div>
+
+<div class="table-container">
+  <!-- tabla de productos -->
 <table mat-table [dataSource]="this.dataSource" matSort class="mat-elevation-z8" *ngIf="this.dataSource.data.length > 0; else noSales">
-
-
     <!-- payment_method_label Column -->
     <ng-container matColumnDef="product_name">
       <th mat-header-cell *matHeaderCellDef  mat-sort-header> Nombre del producto</th>
       <td mat-cell *matCellDef="let report"> {{ report.product_name }} </td>
     </ng-container>
-
         <!-- payment_method_label Column -->
     <ng-container matColumnDef="total_units_sold">
       <th mat-header-cell *matHeaderCellDef  mat-sort-header>  Unidades vendidas </th>
       <td mat-cell *matCellDef="let report"> {{ report.total_units_sold }} </td>
     </ng-container>
-
   <!-- status Column -->
   <ng-container matColumnDef="purchase_price">
     <th mat-header-cell *matHeaderCellDef> Precio compra del producto </th>
     <td mat-cell *matCellDef="let report"> {{ report.purchase_price }} </td>
   </ng-container>
-
     <!-- status Column -->
   <ng-container matColumnDef="sale_price">
     <th mat-header-cell *matHeaderCellDef  mat-sort-header> precio de venta prodcuto </th>
@@ -72,7 +72,6 @@
     <td mat-cell *matCellDef="let report"> {{ report.total_discount | currency:'COP':'symbol':'1.0-0':'es-CO' }} </td>
   </ng-container>
 
-
   <!-- Encabezados y Filas -->
   <thead>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -82,6 +81,7 @@
   </tbody>
 
 </table>
+</div>
 
 <!-- <mat-paginator
   [pageSize]="5"
@@ -93,10 +93,10 @@
   <p>No hay ventas disponibles.</p>
 </ng-template>
 
-<mat-toolbar color="primary">
+<h4 class="sub-title-text">
   <span>Reporte de resumen de venta por periodo en estado pendiente</span>
-</mat-toolbar>
-
+</h4>
+<div class="table-container">
 <table mat-table [dataSource]="this.dataSourcePending" matSort class="mat-elevation-z8" *ngIf="this.dataSourcePending.data.length > 0; else noSales">
 
 
@@ -146,6 +146,6 @@
 </tbody>
 
 </table>
-
+</div>
 
 

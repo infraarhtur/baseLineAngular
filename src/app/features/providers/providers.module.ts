@@ -11,6 +11,7 @@ import { FormProvidersComponent } from './components/form-providers/form-provide
 
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../../shared/material/material.module';
+import { SharedModule } from '../../shared/shared.module';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { MaterialModule } from '../../shared/material/material.module';
     CommonModule,
     ProvidersRoutingModule,
     ReactiveFormsModule,
-    MaterialModule
+    MaterialModule,
+    SharedModule
   ]
 })
 export class ProvidersModule { }

@@ -1,17 +1,18 @@
 <h2>Lista de Clientes</h2>
 
-<div class="button-container">
-<!-- botón para agregar cliente -->
-<button mat-fab extended [routerLink]="['/clients/create']" *ngIf="!isSelected">
-  <mat-icon>person_add_alt</mat-icon>
-  Agregar Cliente
-</button>
+<div class="button-container" *ngIf="!isSelected">
+  <!-- botón para agregar cliente -->
+  <button mat-fab extended [routerLink]="['/clients/create']" *appHasPermission="'client:create'" >
+    <mat-icon>person_add_alt</mat-icon>
+    Agregar Cliente
+  </button>
 </div>
 <br>
 
+<ng-container *appHasPermission="'client:read'">
 
 <!-- filtro -->
-<mat-form-field appearance="outline" class="full-width" >
+<mat-form-field appearance="outline" class="full-width">
   <mat-label>Buscar clientes</mat-label>
   <input matInput (keyup)="applyFilter($event)" placeholder="Filtrar nombre, email.">
 </mat-form-field>
@@ -20,26 +21,40 @@
 
 
 
-<table mat-table [dataSource]="this.dataSource" class="mat-elevation-z8" *ngIf="this.dataSource.data.length > 0; else noClients">
+<div class="table-container">
+<table mat-table [dataSource]="this.dataSource" class="mat-elevation-z8"
+  *ngIf="this.dataSource.data.length > 0; else noClients">
 
-<!-- Selección única por radio -->
-<ng-container matColumnDef="select" *ngIf="isSelected">
-  <th mat-header-cell *matHeaderCellDef></th>
-  <td mat-cell *matCellDef="let client">
-    <mat-radio-button
-      [value]="client.id"
-      [checked]="selectedClientId === client.id"
-      (change)="selectClient(client.id)">
-    </mat-radio-button>
-  </td>
-</ng-container>
+  <!-- Selección única por radio -->
+  <ng-container matColumnDef="select" *ngIf="isSelected">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let client">
+      <mat-radio-button [value]="client.id" [checked]="selectedClientId === client.id"
+        (change)="selectClient(client.id)">
+      </mat-radio-button>
+    </td>
+  </ng-container>
 
   <!-- Acciones Column -->
-  <ng-container matColumnDef="actions" >
+  <ng-container matColumnDef="actions"  class="mat-column-actions" sticky="right">
     <th mat-header-cell *matHeaderCellDef> Acciones </th>
     <td mat-cell *matCellDef="let client">
-      <button mat-button color="warn" (click)="deleteClient(client.id,client.name,client.email)">Eliminar</button>
-      <button mat-button color="warn" (click)="updateClient(client.id)">Actualizar</button>
+      <button mat-button [matMenuTriggerFor]="adminMenu" aria-label="Menú de administración">
+        <mat-icon>more_vert</mat-icon>
+        <span></span>
+      </button>
+      <mat-menu #adminMenu="matMenu">
+
+        <button mat-menu-item (click)="deleteClient(client.id,client.name,client.email)" *appHasPermission="'client:delete'" >
+          <mat-icon>clear</mat-icon>
+          <span>Eliminar</span>
+        </button>
+        <button mat-menu-item (click)="updateClient(client.id)" *appHasPermission="'client:update'">
+          <mat-icon>edit</mat-icon>
+          <span>Actualizar</span>
+        </button>
+        </mat-menu>
+
     </td>
   </ng-container>
 
@@ -52,28 +67,26 @@
   <!-- Teléfono Column -->
   <ng-container matColumnDef="phone">
     <th mat-header-cell *matHeaderCellDef> Teléfono </th>
-    <td mat-cell *matCellDef="let client"> 📞 {{ client.phone }} </td>
+    <td mat-cell *matCellDef="let client">  {{ client.phone }} </td>
   </ng-container>
 
   <!-- Email Column -->
   <ng-container matColumnDef="email">
     <th mat-header-cell *matHeaderCellDef> Email </th>
-    <td mat-cell *matCellDef="let client"> ✉️ {{ client.email }} </td>
+    <td mat-cell *matCellDef="let client">  {{ client.email }} </td>
   </ng-container>
 
   <!-- direccion Column -->
-  <ng-container matColumnDef="address">
+  <ng-container matColumnDef="address" >
     <th mat-header-cell *matHeaderCellDef> Direccion </th>
     <td mat-cell *matCellDef="let client"> {{ client.address }} </td>
   </ng-container>
 
   <!-- comentario Column -->
-  <ng-container matColumnDef="comment">
+  <ng-container matColumnDef="comment" >
     <th mat-header-cell *matHeaderCellDef> Comentario </th>
     <td mat-cell *matCellDef="let client"> {{ client.comment }} </td>
   </ng-container>
-
-
 
   <!-- Encabezados y Filas -->
   <thead>
@@ -84,13 +97,11 @@
   </tbody>
 
 </table>
-
-<mat-paginator
-  [pageSize]="5"
-  [pageSizeOptions]="[5, 10, 25, 100]"
-  showFirstLastButtons>
+</div>
+<mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons>
 </mat-paginator>
 
 <ng-template #noClients>
   <p>No hay clientes disponibles.</p>
 </ng-template>
+</ng-container>

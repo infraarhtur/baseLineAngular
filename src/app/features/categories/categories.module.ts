@@ -10,6 +10,7 @@ import { ReactiveFormsModule, } from '@angular/forms';
 import { CreateCategoriesComponent } from './components/create-categories/create-categories.component';
 import { HomeCategoriesComponent } from './components/home-categories/home-categories.component';
 import { FormCategoriesComponent } from './components/form-categories/form-categories.component';
+import { SharedModule } from '../../shared/shared.module';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { FormCategoriesComponent } from './components/form-categories/form-categ
     CategoriesRoutingModule,
     FormsModule,
     MaterialModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SharedModule
   ]
 })
 export class CategoriesModule { }

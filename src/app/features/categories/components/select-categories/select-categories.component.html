@@ -1,7 +1,7 @@
 <mat-toolbar color="primary">
   <span>Lista de Categorias</span>
 </mat-toolbar>
-<div class="button-container">
+<div class="button-container" *appHasPermission="'category:create'">
   <!-- botón para agregar producto -->
   <button mat-fab extended [routerLink]="['/category/create']" >
     <mat-icon> new_label</mat-icon>
@@ -12,15 +12,15 @@
 <br>
 
 <!-- filtro -->
+<ng-container *appHasPermission="'category:read'">
 <mat-form-field appearance="outline" class="full-width">
   <mat-label>Buscar categorias</mat-label>
   <input matInput (keyup)="applyFilter($event)" placeholder="Filtrar por nombre, descripción, etc.">
 </mat-form-field>
 
 
+<div class="table-container">
 <table mat-table [dataSource]="this.dataSource" class="mat-elevation-z8" *ngIf="this.dataSource.data.length > 0; else noCategories">
-
-
   <!-- Nombre Column -->
   <ng-container matColumnDef="name">
     <th mat-header-cell *matHeaderCellDef> Nombre </th>
@@ -33,13 +33,29 @@
       <td mat-cell *matCellDef="let category"> {{ category.description }} </td>
     </ng-container>
 
-
   <!-- Acciones Column -->
-  <ng-container matColumnDef="actions">
+  <ng-container matColumnDef="actions" class="mat-column-actions" sticky="right">
     <th mat-header-cell *matHeaderCellDef> Acciones </th>
     <td mat-cell *matCellDef="let category">
-      <button mat-button color="warn" (click)="deleteCategory(category.id,category.name)">Eliminar</button>
-      <button mat-button color="warn" (click)="updateCategory(category.id)">Actualizar</button>
+
+  <!-- Acciones con menú desplegable -->
+  <button mat-button [matMenuTriggerFor]="adminMenu" aria-label="Menú de administración">
+    <mat-icon>more_vert</mat-icon>
+    <span></span>
+  </button>
+  <!--  opciones del Menú  -->
+  <mat-menu #adminMenu="matMenu">
+    <button mat-menu-item (click)="deleteCategory(category.id,category.name)" *appHasPermission="'category:delete'">
+      <mat-icon>clear</mat-icon>
+      <span>Eliminar</span>
+    </button>
+    <button mat-menu-item (click)="updateCategory(category.id)" *appHasPermission="'category:update'">
+      <mat-icon>edit</mat-icon>
+      <span>Actualizar</span>
+    </button>
+  </mat-menu>
+
+
     </td>
   </ng-container>
 
@@ -52,7 +68,7 @@
   </tbody>
 
 </table>
-
+</div>
 <mat-paginator
   [pageSize]="5"
   [pageSizeOptions]="[5, 10, 25, 100]"
@@ -62,3 +78,4 @@
 <ng-template #noCategories>
   <p>No hay categorias disponibles.</p>
 </ng-template>
+</ng-container>

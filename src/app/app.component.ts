@@ -1,8 +1,10 @@
-import { AfterContentInit, Component, OnInit, } from '@angular/core';
+import { AfterContentInit, Component, OnInit, OnDestroy} from '@angular/core';
 import { AuthService } from './services/auth.service';
 import { TokenRefreshService } from './services/token-refresh.service';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-root',
@@ -10,26 +12,48 @@ import { filter } from 'rxjs/operators';
   standalone: false,
   styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit, AfterContentInit {
+export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
   title = 'baseLineAngular';
-  opened = false;  //cambiar esto a `false` si quieres que el menú inicie cerrado
+  isExpanded = true;      // rail expandido por defecto en desktop
+  isHandset = false;      // móvil/tablet => drawer real
+  opened = true;  //cambiar esto a `false` si quieres que el menú inicie cerrado
   isLoggedIn = false;
   userName: string | null = null;
   userCompany_id: string | null = null;
   userCompanyName: string | null = null;
+
   constructor(
     private router: Router,
     public authService: AuthService,
     private tokenRefreshService: TokenRefreshService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private bp: BreakpointObserver
   ) {
 
+    this.sub = this.bp.observe(['(max-width: 768px)'])
+    .subscribe(state => {
+      this.isHandset = state.matches;
+      // En móvil no usamos rail; en desktop lo dejamos como esté
+    });
   }
+ private sub: Subscription;
+  menuItems = [
+    { label: 'Inicio', icon: 'home_outline', route: '/home',permission: ''},
+    { label: 'Clientes', icon: 'people', route: '/clients', permission: 'client:view' },
+    { label: 'Productos', icon: 'inventory_2', route: '/products', permission: '' },
+    { label: 'Proveedores', icon: 'local_shipping', route: '/providers', permission: ''},
+    { label: 'Ventas', icon: 'point_of_sale', route: '/sales', permission: '' },
+    { label: 'Categorías', icon: 'category', route: '/category', permission: '' },
+    { label: 'Dashboard', icon: 'dashboard', route: '/dashboard', permission:  '' },
+    { label: 'Contacto', icon: 'contact_support', route: '/contact', permission: '' }
+  ];
+
   ngOnInit(): void {
     /*let route = this.activatedRoute.snapshot;
     while (route.firstChild) {
       route = route.firstChild;
     } */
+
 
     const currentUrl =window.location.toString().split('/')[3];
     console.log('AppComponent ngOnInit - Current URL:', currentUrl);
@@ -66,6 +90,10 @@ export class AppComponent implements OnInit, AfterContentInit {
       this.tokenRefreshService.startAutoRefresh();
     }
   }
+
+  toggleSidenav() {
+    this.opened = !this.opened;
+  }
   ngAfterContentInit(): void {
     // Solo cargar info si no estamos en una ruta pública
     const currentUrl = window.location.href.split('/')[3];
@@ -88,7 +116,7 @@ export class AppComponent implements OnInit, AfterContentInit {
 
   loadInfo() {
     this.isLoggedIn = this.authService.isAuthenticated();
-    this.userName = this.authService.getUserName();
+    this.userName = this.authService.getUserName().name;
     this.userCompany_id = this.authService.getUserCompany_id();
     this.userCompanyName = this.authService.getUserCompanyName();
   }
@@ -101,7 +129,6 @@ export class AppComponent implements OnInit, AfterContentInit {
 
   openUserProfile() {
     // TODO: Implementar navegación al perfil de usuario
-    console.log('Abrir perfil de usuario');
     this.router.navigate(['administration/select-user']);
   }
 
@@ -122,5 +149,20 @@ export class AppComponent implements OnInit, AfterContentInit {
     console.log('Abrir respaldo y restauración');
     // this.router.navigate(['/backup-restore']);
   }
+
+  openRolesSettings() {
+    // TODO: Implementar navegación a configuración de roles
+    console.log('Abrir configuración de roles');
+    this.router.navigate(['administration/select-role']);
+  }
+
+  toggleRail() {
+    this.isExpanded = !this.isExpanded; // solo cambia ancho, no cierra
+  }
+
+  ngOnDestroy() {
+    this.sub?.unsubscribe();
+  }
+
 }
 

@@ -1,18 +1,162 @@
-
-// @import '@angular/material/prebuilt-themes/azure-blue.css';
-
 @use '@angular/material/prebuilt-themes/purple-green.css';
 
-$spacing: 16px;
+$rail-expanded: 230px;
+$rail-collapsed: 74px;
 
-.spacer {
-  flex: 1;
-}
+.spacer { flex: 1; }
 
 .container {
   height: 100vh;
+  background: #fafafa;
 }
 
-.content {
-  padding: $spacing;
+/* ===== SIDENAV (rail) ===== */
+.sidenav {
+  width: $rail-expanded;
+  transition: width .3s ease;
+  overflow-x: hidden;
+  background: #fff;
+  border-right: 1px solid #e0e0e0;
+
+  &.collapsed { width: $rail-collapsed !important; }
+
+  .sidenav-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    background-color: #fafafa;
+    border-bottom: 1px solid #e0e0e0;
+    cursor: pointer;
+
+    .toggle-icon {
+      color: #555;
+      font-size: 24px;
+    }
+  }
+
+  mat-nav-list {
+    padding: 0;
+
+    a[mat-list-item] {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 18px;
+      color: #555;
+      font-size: 14px;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: #f3f3f3;
+      }
+
+      .item-icon {
+        flex: 0 0 28px;
+        min-width: 28px;
+        text-align: center;
+        font-size: 22px;
+        color: #555;
+        transition: all 0.3s ease;
+        margin-left: 10px;
+        vertical-align: bottom;
+      }
+
+      .item-label {
+        white-space: nowrap;
+      }
+    }
+  }
+
+  /* ===== Cuando el sidenav está colapsado ===== */
+  &.collapsed {
+    mat-nav-list a[mat-list-item] {
+      justify-content: center;
+      gap: 0;
+      padding: 10px 0;
+
+      /* Oculta texto */
+      .item-label { display: none; }
+
+      /* 🎨 Estilos especiales para íconos colapsados */
+      .item-icon {
+
+        text-align: center;
+        border-radius: 8px;               /* bordes redondeados */
+        padding: 6px;
+        transition: all 0.3s ease;
+
+        &:hover {
+          transform: scale(1.1);
+        }
+      }
+    }
+  }
 }
+
+/* ===== DESPLAZAR CONTENIDO ===== */
+mat-sidenav-content {
+  --content-offset: #{$rail-expanded};
+  padding-left: var(--content-offset);
+  transition: padding-left .3s ease;
+  box-sizing: border-box;
+}
+
+.sidenav.collapsed ~ mat-sidenav-content {
+  --content-offset: #{$rail-collapsed};
+}
+
+/* ===== TOOLBAR ===== */
+.toolbar {
+  display: flex;
+  align-items: center;
+  background: #69f0ae !important;
+  color: #000;
+  height: auto;
+  box-shadow: 0 2px 4px rgba(0,0,0,.1);
+}
+
+.content { padding: 24px; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .sidenav { position: fixed; z-index: 1000; }
+  mat-sidenav-content { padding-left: 0 !important; }
+}
+
+
+/* ============================
+   ESTILO PARA EL ENLACE ACTIVO
+=============================== */
+
+a[mat-list-item].active-link {
+  background: #e0f7f4 !important;  /* Verde suave tipo techcorp */
+  color: #00897b !important;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: all 0.25s ease;
+
+  .item-icon {
+    color: #00897b !important;
+  }
+
+  &:hover {
+    background: #c8f5ec !important;
+  }
+}
+
+/* ===== En modo colapsado ===== */
+.sidenav.collapsed a[mat-list-item].active-link {
+  background: transparent !important;
+
+  .item-icon {
+    background-color: #e0f7f4 !important;
+    color:  #00897b  !important;
+    border-radius: 8px;
+    padding: 6px;
+    transition: all 0.3s ease;
+  }
+}
+
+
+

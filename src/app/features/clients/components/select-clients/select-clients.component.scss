@@ -31,3 +31,50 @@ button {
 .col-basic {
   width: 10vw;
 }
+
+
+
+
+table {
+  width: 800px;
+}
+
+td.mat-column-star {
+  width: 20px;
+  padding-right: 8px;
+}
+
+th.mat-column-position, td.mat-column-position {
+  padding-left: 8px;
+}
+
+.mat-mdc-table-sticky-border-elem-right {
+  border-left: 1px solid #e0e0e0;
+}
+
+.mat-mdc-table-sticky-border-elem-left {
+  border-right: 1px solid #e0e0e0;
+}
+
+.table-container {
+  width: 100%;
+  height: auto;
+  min-width: 350px;
+  overflow: auto;
+}
+
+
+
+.mat-mdc-row:hover .mat-mdc-cell {
+
+  cursor: pointer;
+  background-color: #e4f4f2  ;
+}
+
+.mat-column-actions {
+  width: 20px;
+  text-align: center;
+  padding: 0 0px !important;
+}
+
+

@@ -14,6 +14,8 @@ import { ClientFormComponent } from './components/client-form/client-form.compon
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
+import { SharedModule } from '../../shared/shared.module';
+
 
 
 @NgModule({
@@ -32,7 +34,8 @@ import { MatInputModule } from '@angular/material/input';
     FormsModule,
     MatFormFieldModule,
     MatAutocompleteModule,
-    MatInputModule
+    MatInputModule,
+    SharedModule
 
   ],
   exports: [

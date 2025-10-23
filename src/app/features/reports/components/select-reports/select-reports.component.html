@@ -2,7 +2,7 @@
   <span>Lista de reportes </span>
 </mat-toolbar>
 
-
+<ng-container *appHasPermission="'reports:read'">
 
 <p>
   <mat-icon style="vertical-align: middle;">insert_chart</mat-icon>
@@ -17,6 +17,7 @@
   <mat-icon style="vertical-align: middle;">bar_chart</mat-icon>
  <label for="">ventas por producto</label> </a>
 </p>
+</ng-container>
 
 
 

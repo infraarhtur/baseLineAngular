@@ -1,0 +1,38 @@
+<h3 mat-dialog-title>Permisos del rol {{ dataPrent?.role.name }}</h3>
+<mat-dialog-content>
+  <p><strong>NOTA:</strong> {{ dataPrent?.message }}</p>
+
+<div *ngFor="let section of sections" class="section-container">
+  <!-- Padre -->
+  <mat-checkbox
+    [checked]="isAllSelected(section)"
+    [indeterminate]="isIndeterminate(section)"
+    (change)="toggleAll(section, $event.checked)"
+    class="parent-checkbox"
+  >
+    {{ section.name | titlecase }}
+  </mat-checkbox>
+
+  <!-- Hijos -->
+  <div class="permissions-container">
+    <mat-checkbox
+      *ngFor="let perm of section.permissions"
+      [(ngModel)]="perm.checked"
+      (change)="onChildChange(section)"
+    >
+      {{ perm.name }}
+    </mat-checkbox>
+  </div>
+
+  <mat-divider></mat-divider>
+</div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button (click)="closeDialog()">Cerrar</button>
+  <button mat-flat-button color="primary" (click)="onSubmit()">
+    Guardar
+  </button>
+</mat-dialog-actions>
+<!-- Botón para mostrar seleccionados -->
+

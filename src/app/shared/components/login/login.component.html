@@ -21,13 +21,30 @@
              matInput
              [matAutocomplete]="autoCompany"
              formControlName="companyQuery" />
-      <mat-autocomplete #autoCompany="matAutocomplete" [displayWith]="displayCompany" (optionSelected)="onCompanySelected($event.option.value)">
-        <ng-container *ngIf="filteredCompanies$ | async as options">
-          <mat-option *ngIf="companySearchLoading" disabled>Cargando...</mat-option>
-          <mat-option *ngFor="let company of options" [value]="company">{{ company.name }}</mat-option>
-          <mat-option *ngIf="!companySearchLoading && options.length === 0" disabled>Sin resultados</mat-option>
-        </ng-container>
-      </mat-autocomplete>
+
+     <!-- Autocompletado de empresas -->
+     <mat-autocomplete
+     #autoCompany="matAutocomplete"
+     [displayWith]="displayCompany"
+     (optionSelected)="onCompanySelected($event.option.value)"
+   >
+     <ng-container *ngIf="filteredCompanies$ | async as options">
+       <mat-option *ngIf="companySearchLoading" disabled>Cargando...</mat-option>
+
+       <mat-option *ngFor="let company of options" [value]="company">
+         {{ company.name }}
+       </mat-option>
+
+       <mat-option *ngIf="!companySearchLoading && options.length === 0 && showSearchResults" disabled>
+         Sin resultados
+       </mat-option>
+
+       <mat-option *ngIf="!companySearchLoading && !showSearchResults" disabled>
+         Digite al menos 2 letras para buscar
+       </mat-option>
+     </ng-container>
+   </mat-autocomplete>
+
 
       <mat-error *ngIf="loginForm.get('companyId')?.hasError('required')">Seleccione una empresa</mat-error>
     </mat-form-field>
