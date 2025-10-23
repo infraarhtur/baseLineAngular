@@ -62,3 +62,19 @@ th.mat-column-position, td.mat-column-position {
   min-width: 350px;
   overflow: auto;
 }
+
+
+
+.mat-mdc-row:hover .mat-mdc-cell {
+
+  cursor: pointer;
+  background-color: #e4f4f2  ;
+}
+
+.mat-column-actions {
+  width: 20px;
+  text-align: center;
+  padding: 0 0px !important;
+}
+
+
