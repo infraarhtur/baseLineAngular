@@ -14,11 +14,13 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  loginForm: FormGroup;
+  loginForm!: FormGroup;
   companies: Array<{ id: string; name: string } > = [];
   filteredCompanies$: Observable<CompanyDto[]> = of([]);
   companySearchLoading = false;
   loadingCompanies = false;
+  showSearchResults = false;
+
   submitting = false;
   loginError = '';
 
@@ -29,16 +31,11 @@ export class LoginComponent implements OnInit {
     private router: Router,
     @Inject(CompaniesService) private companiesService: CompaniesService
   ) {
-    this.loginForm = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required]],
-      company_name: ['', [Validators.required]],
-      companyQuery: [''],
-      rememberMe: [false]
-    });
+
   }
 
   ngOnInit(): void {
+    this.initForm();
     this.fetchCompanies();
     this.setupCompanyAutocomplete();
   }
@@ -63,11 +60,13 @@ export class LoginComponent implements OnInit {
       debounceTime(300),
       map(value => (typeof value === 'string' ? value : value?.name ?? '')),
       distinctUntilChanged(),
+      tap(query => {
+        this.showSearchResults = query.length >= 2;
+      }),
       switchMap(query => {
-        // no side effects here; side effects can close the panel in some setups
         if (!query || query.length < 2) {
           this.companySearchLoading = false;
-          return of(this.companies);
+          return of([]); // 🔹 no devuelve resultados si hay menos de 2 letras
         }
         this.companySearchLoading = true;
         return this.companiesService.searchCompanies(query).pipe(
@@ -123,6 +122,16 @@ export class LoginComponent implements OnInit {
 
         this.loginError = 'Por favor verifique su usuario y contraseña';
       }
+    });
+  }
+
+  initForm(): void {
+    this.loginForm = this.formBuilder.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required]],
+      company_name: ['', [Validators.required]],
+      companyQuery: [''],
+      rememberMe: [false]
     });
   }
 }

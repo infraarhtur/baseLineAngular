@@ -24,11 +24,12 @@
     <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
     <mat-datepicker #pickerEnd></mat-datepicker>
   </mat-form-field>
-
+  <div class="filter-actions">
   <button mat-raised-button color="primary" (click)="applyDateFilter()">
     <mat-icon>search</mat-icon>
     Buscar
   </button>
+  </div>
 </div>
 
 <div class="table-container">

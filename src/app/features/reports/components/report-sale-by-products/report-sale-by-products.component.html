@@ -8,7 +8,7 @@
   <span>Reporte de resumen de venta por periodo</span>
 </h4>
 <!-- filtro -->
-<div class="filter-container">
+<div class="filter-container" >
 
  <!-- filter dates start an end  dates -->
   <mat-form-field appearance="outline">
@@ -25,10 +25,15 @@
     <mat-datepicker #pickerEnd></mat-datepicker>
   </mat-form-field>
 
+<div class="filter-actions">
   <button mat-raised-button color="primary" (click)="applyDateFilter()">
-  <mat-icon>search</mat-icon>
-  Buscar
-</button>
+    <mat-icon>search</mat-icon>
+    Buscar
+  </button>
+</div>
+
+
+
 </div>
 
 <div class="table-container">

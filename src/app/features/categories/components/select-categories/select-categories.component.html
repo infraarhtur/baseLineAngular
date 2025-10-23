@@ -34,11 +34,28 @@
     </ng-container>
 
   <!-- Acciones Column -->
-  <ng-container matColumnDef="actions">
+  <ng-container matColumnDef="actions" class="mat-column-actions" sticky="right">
     <th mat-header-cell *matHeaderCellDef> Acciones </th>
     <td mat-cell *matCellDef="let category">
-      <button mat-button color="warn" (click)="deleteCategory(category.id,category.name)" *appHasPermission="'category:delete'">Eliminar</button>
-      <button mat-button color="warn" (click)="updateCategory(category.id)" *appHasPermission="'category:update'">Actualizar</button>
+
+  <!-- Acciones con menú desplegable -->
+  <button mat-button [matMenuTriggerFor]="adminMenu" aria-label="Menú de administración">
+    <mat-icon>more_vert</mat-icon>
+    <span></span>
+  </button>
+  <!--  opciones del Menú  -->
+  <mat-menu #adminMenu="matMenu">
+    <button mat-menu-item (click)="deleteCategory(category.id,category.name)" *appHasPermission="'category:delete'">
+      <mat-icon>clear</mat-icon>
+      <span>Eliminar</span>
+    </button>
+    <button mat-menu-item (click)="updateCategory(category.id)" *appHasPermission="'category:update'">
+      <mat-icon>edit</mat-icon>
+      <span>Actualizar</span>
+    </button>
+  </mat-menu>
+
+
     </td>
   </ng-container>
 

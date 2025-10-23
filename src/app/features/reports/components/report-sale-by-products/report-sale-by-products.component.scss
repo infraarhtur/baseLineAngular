@@ -11,3 +11,33 @@
   font-weight: bold;
   margin-bottom: 20px;
 }
+
+.filter-container {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.filter-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+/* 📱 Solo para pantallas pequeñas (por ejemplo, móviles) */
+@media (max-width: 600px) {
+  .filter-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-actions {
+    justify-content: flex-start;
+  }
+
+  .filter-actions button {
+    width: 100%;
+  }
+}

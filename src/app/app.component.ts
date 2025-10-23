@@ -45,7 +45,7 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
     { label: 'Ventas', icon: 'point_of_sale', route: '/sales', permission: '' },
     { label: 'Categorías', icon: 'category', route: '/category', permission: '' },
     { label: 'Dashboard', icon: 'dashboard', route: '/dashboard', permission:  '' },
-    { label: 'Contacto', icon: 'contact_mail', route: '/contact', permission: '' }
+    { label: 'Contacto', icon: 'contact_support', route: '/contact', permission: '' }
   ];
 
   ngOnInit(): void {
