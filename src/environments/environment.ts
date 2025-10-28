@@ -11,7 +11,7 @@ export const environment = {
   // Token endpoints
   tokenEndpoints: {
     login: 'auth/login',
-    refresh: 'auth/refresh-token',
+    refresh: 'auth/refresh',
     logout: 'auth/logout',
     validate: 'auth/validate'
   },
@@ -21,6 +21,7 @@ export const environment = {
     maxRetryAttempts: 3, // Máximo número de intentos de refresh
     retryDelayMs: 1000, // Delay entre reintentos en ms
     logoutOnRefreshFailure: true, // Logout automático si falla el refresh
-    showRefreshNotifications: true // Mostrar notificaciones de refresh
+    showRefreshNotifications: true, // Mostrar notificaciones de refresh
+    tokenWarningMinutesBeforeExpiry: 10, // Avisar 2 minutos antes de expirar
   }
 };

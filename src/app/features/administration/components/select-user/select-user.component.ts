@@ -59,7 +59,6 @@ export class SelectUserComponent implements OnInit, AfterViewInit {
   }
 
   getUsersByCompany() {
-    console.log('Obteniendo usuarios para companyId:', this.companyId);
     this.administrationService.getUsersByCompany(this.companyId).subscribe({
       next: (data) => {
         console.log('Datos recibidos:', data.users);

@@ -178,11 +178,11 @@ export class TokenRefreshService {
     if (this.shouldLogoutOnError(error)) {
       console.warn('Refresh token expired or failed, logging out user');
       this.tokenNotificationService.showLogoutNotification();
-      this.authService.logout();
+      this.authService.logoutForceRedirect();
     } else {
       // Para otros errores, también hacer logout para asegurar consistencia
       console.warn('Token refresh failed, logging out user');
-      this.authService.logout();
+      this.authService.logoutForceRedirect();
     }
   }
 

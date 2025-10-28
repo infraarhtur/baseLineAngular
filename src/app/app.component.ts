@@ -81,7 +81,7 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
     if (!token || this.authService.isTokenExpired(token)) {
       console.log('AppComponent ngOnInit - No valid token, redirecting to login');
       // Si no hay token o está expirado, redirigir al login
-      this.authService.logout();
+      this.authService.logoutForceRedirect();
       return;
     } else {
       this.loadInfo();

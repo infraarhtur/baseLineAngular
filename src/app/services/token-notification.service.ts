@@ -189,6 +189,7 @@ export class TokenNotificationService {
       snackBarRef.onAction().subscribe(() => {
         // Aquí podrías llamar al servicio de refresh si es necesario
         console.log('Usuario solicitó refresh manual');
+        this.authService.refreshToken();
       });
     }
 
