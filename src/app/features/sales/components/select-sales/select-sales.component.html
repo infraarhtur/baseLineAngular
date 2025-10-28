@@ -69,7 +69,7 @@
             </button>
             @if (sale.status !== 'canceled') {
             <button mat-menu-item (click)="updateSale(sale.id)" *appHasPermission="'sale:update'">
-              <mat-icon>edit</mat-icon>
+               <mat-icon>edit_square</mat-icon>
               <span>Actualizar</span>
             </button>
             }
