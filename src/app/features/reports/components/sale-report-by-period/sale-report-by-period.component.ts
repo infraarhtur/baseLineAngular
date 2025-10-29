@@ -85,7 +85,6 @@ export class SaleReportByPeriodComponent implements OnInit, AfterViewInit {
         this.dataSource.data = translatedData;
         this.salesDataTotal = translatedData[translatedData.length - 1];
         this.updateChartData(translatedData);
-        console.log(translatedData);
         this.snackbar.success('Ventas cargados');
       },
       error: (err) => {

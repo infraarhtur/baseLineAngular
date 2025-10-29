@@ -14,34 +14,12 @@ export class HomeComponent implements OnInit {
 
   public salesData: any[] = [];
 
-  // Datos del gráfico (se asignan dinámicamente)
-  public barChartData: ChartConfiguration<'bar'>['data'] = {
-    labels: [],
-    datasets: []
-  };
 
-  public barChartOptions: ChartOptions<'bar'> = {
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-      x: { stacked: true },
-      y: {
-        stacked: true,
-        beginAtZero: true,
-        ticks: { stepSize: 100000 }
-      }
-    },
-    plugins: {
-      legend: { display: true, position: 'top' },
-      tooltip: { mode: 'index', intersect: false }
-    }
-  };
 
-  public barChartType: 'bar' = 'bar';
 
   ngOnInit(): void {
     this.salesData = this.getSalesData();
-    this.updateChartData();
+
   }
 
   // Simulación de datos (como si vinieran del backend)
@@ -68,27 +46,4 @@ export class HomeComponent implements OnInit {
     ];
   }
 
-  // Construye los datos para el gráfico
-  updateChartData(): void {
-    this.barChartData = {
-      labels: this.salesData.map(item => item.payment_method_label),
-      datasets: [
-        {
-          label: 'Ventas Totales',
-          data: this.salesData.map(item => item.total_sales),
-          backgroundColor: '#1e40af'
-        },
-        {
-          label: 'Monto Total ($)',
-          data: this.salesData.map(item => item.total_amount),
-          backgroundColor: '#ea580c'
-        },
-        {
-          label: 'Descuento Total ($)',
-          data: this.salesData.map(item => item.total_discount),
-          backgroundColor: '#0891b2'
-        }
-      ]
-    };
-  }
 }
