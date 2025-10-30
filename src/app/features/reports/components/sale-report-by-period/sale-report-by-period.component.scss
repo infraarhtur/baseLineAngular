@@ -30,6 +30,11 @@
   margin-bottom: 20px;
 }
 
+.mat-mdc-row:hover .mat-mdc-cell {
+  cursor: pointer;
+  background-color: #e4f4f2  ;
+}
+
 .chart-container {
   width: 95%;
   padding: 20px;
@@ -85,7 +90,7 @@
   padding: 1rem;
   width: 95% !important;
   text-align: center;
- 
+
 
   h3 {
     color: #0f172a;

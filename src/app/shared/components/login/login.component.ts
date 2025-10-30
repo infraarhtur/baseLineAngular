@@ -98,7 +98,9 @@ export class LoginComponent implements OnInit {
   }
 
   submit(): void {
+
     if (this.loginForm.invalid) {
+
       this.loginForm.markAllAsTouched();
       return;
     }
@@ -111,12 +113,14 @@ export class LoginComponent implements OnInit {
     this.submitting = true;
     this.authService.login(email, password, company_name, rememberMe).subscribe({
       next: (data) => {
+
         console.log(data);
         this.submitting = false;
-        //this.router.navigate(['/home']);
-        window.location.href = '/home';
+        this.router.navigate(['/home']);
+        //window.location.href = '/home';
       },
       error: (error) => {
+
         console.log(error);
         this.submitting = false;
 

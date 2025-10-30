@@ -9,6 +9,7 @@ import { SelectReportsComponent } from './components/select-reports/select-repor
 import { ReportSaleByProductsComponent } from './components/report-sale-by-products/report-sale-by-products.component';
 import { MaterialModule } from '../../shared/material/material.module';
 import { SharedModule } from '../../shared/shared.module';
+import { BaseChartDirective } from 'ng2-charts';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { SharedModule } from '../../shared/shared.module';
     FormsModule,
     MaterialModule,
     SharedModule,
-    SaleReportByPeriodComponent
+    SaleReportByPeriodComponent,
+    BaseChartDirective
   ]
 })
 export class ReportsModule { }

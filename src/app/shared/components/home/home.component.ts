@@ -1,49 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ChartConfiguration, ChartOptions } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
+import { SharedModule } from '../../shared.module';
+import { MaterialModule } from '../../material/material.module';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, BaseChartDirective],
+  imports: [CommonModule, BaseChartDirective,SharedModule,MaterialModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit {
-
-  public salesData: any[] = [];
-
-
-
-
+  cards = [
+    { title: 'Borrowed', amount: 62076, color: 'green', icon: 'table_chart', progress: '48%' },
+    { title: 'Annual Profit', amount: 1958104, color: 'red', icon: 'attach_money', progress: '55%' },
+    { title: 'Lead Conversion', amount: 234769, color: 'purple', icon: 'show_chart', progress: '87%' },
+    { title: 'Average Income', amount: 1200, color: 'blue', icon: 'credit_card', progress: '48%' },
+  ];
   ngOnInit(): void {
-    this.salesData = this.getSalesData();
-
+    // Load initial data or perform any setup needed for the component
   }
-
-  // Simulación de datos (como si vinieran del backend)
-  getSalesData(): any[] {
-    return [
-      {
-        payment_method_label: 'Efectivo',
-        total_sales: 7,
-        total_amount: 800500,
-        total_discount: 64000
-      },
-      {
-        payment_method_label: 'Tarjeta de crédito',
-        total_sales: 1,
-        total_amount: 150000,
-        total_discount: 0
-      },
-      {
-        payment_method_label: 'other',
-        total_sales: 1,
-        total_amount: 4050,
-        total_discount: 450
-      }
-    ];
-  }
-
 }

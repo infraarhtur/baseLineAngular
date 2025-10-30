@@ -36,6 +36,16 @@
 
 </div>
 
+
+  <!-- Gráfico de dona -->
+  <div class="chart-box" *ngIf="this.dataPaid.length > 0">
+    <canvas baseChart
+      [data]="doughnutChartData"
+      [options]="doughnutChartOptions"
+      [type]="'doughnut'">
+    </canvas>
+  </div>
+
 <div class="table-container">
   <!-- tabla de productos -->
 <table mat-table [dataSource]="this.dataSource" matSort class="mat-elevation-z8" *ngIf="this.dataSource.data.length > 0; else noSales">

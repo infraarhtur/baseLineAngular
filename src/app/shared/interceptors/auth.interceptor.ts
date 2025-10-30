@@ -20,7 +20,7 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(
     private authService: AuthService,
     private tokenRefreshService: TokenRefreshService
-  ) {}
+  ) { }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     // Verificar si es una ruta de autenticación (no necesita token)
@@ -28,6 +28,11 @@ export class AuthInterceptor implements HttpInterceptor {
 
     // Obtener el token del AuthService
     const token = this.authService.getToken();
+//identifica si la ruta es publica
+    const currentUrl = window.location.toString().split('/')[3];
+    console.log('AppComponent ngOnInit - Current URL:', currentUrl);
+    const publicRoutes = ['login', 'token-validate', 'reset-password', 'reset-password-confirm', 'email-validate'];
+    const isPublicRoute = publicRoutes.some(route => currentUrl.startsWith(route));
 
     // Si hay token, verificar si necesita refrescarse antes de enviar la petición
     if (!isAuthRoute && token && this.authService.isAuthenticated()) {
@@ -56,7 +61,7 @@ export class AuthInterceptor implements HttpInterceptor {
       // Excluir rutas de autenticación que no necesitan company_id
 
       if (request.method === 'POST' && request.body && companyId && !isAuthRoute) {
-          const bodyWithCompanyId = {
+        const bodyWithCompanyId = {
           ...request.body as any,
           company_id: companyId
         };
@@ -73,8 +78,12 @@ export class AuthInterceptor implements HttpInterceptor {
         if (error.status === 401 && this.authService.isAuthenticated()) {
           return this.handle401Error(request, next);
         }
-        if( !this.authService.isAuthenticated()) {
-          this.authService.logoutForceRedirect();
+        if (!this.authService.isAuthenticated()) {
+          if (isPublicRoute) {
+            this.authService.logout();
+          } else {
+            this.authService.logoutForceRedirect();
+          }
         }
         return throwError(() => error);
       })

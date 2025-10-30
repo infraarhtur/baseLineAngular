@@ -1,0 +1,14 @@
+<h2>Nuevo dashboard</h2>
+
+<div class="stats-container">
+  <mat-card *ngFor="let card of cards" class="stat-card">
+    <div class="icon-floating" [ngClass]="card.color">
+      <mat-icon>{{ card.icon }}</mat-icon>
+    </div>
+    <div class="info">
+      <h4>{{ card.title }}</h4>
+      <h2>US$ {{ card.amount | number:'1.0-0' }}</h2>
+      <p>{{ card.progress }} target reached</p>
+    </div>
+  </mat-card>
+</div>

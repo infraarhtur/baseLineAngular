@@ -4,6 +4,13 @@
   min-width: 350px;
   overflow: auto;
 }
+
+
+.mat-mdc-row:hover .mat-mdc-cell {
+  cursor: pointer;
+  background-color: #e4f4f2  ;
+}
+
 .sub-title-text {
   text-align: center;
   color: #000;
