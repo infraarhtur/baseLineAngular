@@ -79,9 +79,12 @@ export class AuthInterceptor implements HttpInterceptor {
           return this.handle401Error(request, next);
         }
         if (!this.authService.isAuthenticated()) {
+          console.log('isPublicRoute', isPublicRoute);
           if (isPublicRoute) {
+            console.log('isPublicRoute',' this.authService.logout()');
             this.authService.logout();
           } else {
+            console.log( 'no una ruta isPublicRoute', ' this.authService.logoutForceRedirect();');
             this.authService.logoutForceRedirect();
           }
         }
@@ -103,10 +106,12 @@ export class AuthInterceptor implements HttpInterceptor {
     // Iniciar el refresh
     this.isRefreshing = true;
     this.refreshTokenSubject.next(null);
-
+debugger
     return this.tokenRefreshService.refreshToken().pipe(
+
       switchMap((success: boolean) => {
         this.isRefreshing = false;
+
         if (success) {
           this.refreshTokenSubject.next(success);
           return this.retryRequest(request, next);
@@ -118,6 +123,7 @@ export class AuthInterceptor implements HttpInterceptor {
         }
       }),
       catchError((error) => {
+        debugger;
         this.isRefreshing = false;
         this.refreshTokenSubject.next(null);
         // Limpiar tokens y redirigir al login
@@ -146,7 +152,7 @@ export class AuthInterceptor implements HttpInterceptor {
     // Iniciar el proceso de refresh
     this.isRefreshing = true;
     this.refreshTokenSubject.next(null);
-
+debugger
     return this.tokenRefreshService.refreshToken().pipe(
       switchMap((success: boolean) => {
         this.isRefreshing = false;
@@ -161,6 +167,7 @@ export class AuthInterceptor implements HttpInterceptor {
         }
       }),
       catchError((error) => {
+        debugger;
         this.isRefreshing = false;
         this.refreshTokenSubject.next(null);
         // Si hay error, hacer logout

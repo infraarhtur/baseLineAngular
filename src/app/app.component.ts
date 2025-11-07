@@ -80,8 +80,12 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
     const token = this.authService.getToken();
     if (!token || this.authService.isTokenExpired(token)) {
       console.log('AppComponent ngOnInit - No valid token, redirecting to login');
-      // Si no hay token o está expirado, redirigir al login
-      this.authService.logoutForceRedirect();
+      if(isPublicRoute) {
+        this.authService.logout();
+      } else {
+        this.authService.logoutForceRedirect();
+      }
+
       return;
     } else {
       this.loadInfo();
@@ -100,6 +104,7 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
     const publicRoutes = ['login', 'token-validate', 'reset-password', 'reset-password-confirm', 'email-validate'];
     const isPublicRoute = publicRoutes.some(route => currentUrl.startsWith(route));
     console.log('AppComponent ngAfterContentInit - Is public route:', isPublicRoute);
+    console.log('AppComponent ngAfterContentInit - Current URL:', currentUrl);
 
     if (!isPublicRoute) {
       this.loadInfo();
