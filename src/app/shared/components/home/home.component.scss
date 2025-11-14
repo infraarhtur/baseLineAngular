@@ -1,0 +1,147 @@
+.stats-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2.5rem; /* aumenta espacio horizontal y vertical */
+  margin: 2rem auto;
+  padding: 0 2rem; /* margen lateral extra en pantallas grandes */
+}
+
+.stat-card {
+  position: relative;
+  width: 270px; /* un poco más ancho en desktop */
+  padding: 1.5rem;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.25s ease-in-out;
+  overflow: visible;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  }
+
+  .icon-floating {
+    position: absolute;
+    top: 50%;
+    left: -25px;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 26px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.12);
+    z-index: 2;
+  }
+
+  .info {
+    margin-left: 1.5rem;
+    h4 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin: 0;
+      color: #333;
+    }
+
+    h2 {
+      margin: 4px 0;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #000;
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.8rem;
+      color: #888;
+    }
+  }
+
+  /* === Colores con brillo difuso === */
+  .green {
+    background: #4caf50;
+    box-shadow: 0 0 20px rgba(76, 175, 80, 0.55);
+  }
+
+  .red {
+    background: #f44336;
+    box-shadow: 0 0 20px rgba(244, 67, 54, 0.55);
+  }
+
+  .purple {
+    background: #673ab7;
+    box-shadow: 0 0 20px rgba(103, 58, 183, 0.55);
+  }
+
+  .blue {
+    background: #2196f3;
+    box-shadow: 0 0 20px rgba(33, 150, 243, 0.55);
+  }
+}
+
+/* === Ajustes responsivos === */
+@media (max-width: 1200px) {
+  .stats-container {
+    gap: 2rem;
+  }
+
+  .stat-card {
+    width: 240px;
+  }
+}
+
+@media (max-width: 768px) {
+  .stats-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .stat-card {
+    width: 90%;
+    max-width: 320px;
+  }
+}
+.dashboard-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-between;
+}
+
+.chart-card {
+  flex: 1 1 calc(50% - 10px);
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  background-color: #fff;
+
+  h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+  }
+
+  p {
+    font-size: 13px;
+    color: #777;
+    margin-bottom: 15px;
+  }
+
+  canvas {
+    width: 100% !important;
+    height: 300px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .chart-card {
+    flex: 1 1 100%;
+  }
+}

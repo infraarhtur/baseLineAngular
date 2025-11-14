@@ -1,1 +1,37 @@
-<p>home works!</p>
+<h2>Nuevo dashboard</h2>
+
+<div class="stats-container">
+  <mat-card *ngFor="let card of cards" class="stat-card">
+    <div class="icon-floating" [ngClass]="card.color">
+      <mat-icon>{{ card.icon }}</mat-icon>
+    </div>
+    <div class="info">
+      <h4>{{ card.title }}</h4>
+      <h2>US$ {{ card.amount | number:'1.0-0' }}</h2>
+      <p>{{ card.progress }} target reached</p>
+    </div>
+  </mat-card>
+</div>
+
+
+<div class="dashboard-container">
+  <mat-card class="chart-card">
+    <h3>Sales Overview</h3>
+    <p>Ample Admin vs Material Admin</p>
+    <canvas baseChart
+      [data]="barChartData"
+      [options]="barChartOptions"
+      chartType="bar">
+    </canvas>
+  </mat-card>
+
+  <mat-card class="chart-card">
+    <h3>Our Visitors</h3>
+    <p>Different Devices Used to Visit</p>
+    <canvas baseChart
+      [data]="doughnutChartData"
+      [options]="doughnutChartOptions"
+      chartType="doughnut">
+    </canvas>
+  </mat-card>
+</div>

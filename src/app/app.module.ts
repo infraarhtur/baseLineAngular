@@ -23,13 +23,13 @@ import { PasswordResetConfirmComponent } from './shared/components/password-rese
 import { AuthInterceptor } from './shared/interceptors';
 import { EmailValidateComponent } from './shared/components/email-validate/email-validate.component';
 import { SharedModule } from './shared/shared.module';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
     ConfirmDialogComponent,
     AlertDialogComponent,
     LoginComponent,
@@ -49,6 +49,7 @@ import { SharedModule } from './shared/shared.module';
     HttpClientModule,
     ReactiveFormsModule,
     SharedModule,
+    HomeComponent,
 
   ],
   exports:[],
@@ -59,7 +60,8 @@ import { SharedModule } from './shared/shared.module';
        useClass: AuthInterceptor,
        multi: true
      },
-    provideAnimationsAsync()
+    provideAnimationsAsync(),
+    provideCharts(withDefaultRegisterables())
   ],
   bootstrap: [AppComponent]
 })
