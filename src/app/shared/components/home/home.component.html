@@ -1,4 +1,4 @@
-<h2>Nuevo dashboard</h2>
+<h2>Home dashboard</h2>
 
 <div class="stats-container">
   <mat-card *ngFor="let card of cards" class="stat-card">
@@ -7,14 +7,16 @@
     </div>
     <div class="info">
       <h4>{{ card.title }}</h4>
-      <h2>US$ {{ card.amount | number:'1.0-0' }}</h2>
-      <p>{{ card.progress }} target reached</p>
+      <h2>{{ card.amount | number:'1.0-0' }}</h2>
+      <p> Información de ventas pagadas</p>
     </div>
   </mat-card>
 </div>
 
+<!-- Gráficos de ventas -->
 
 <div class="dashboard-container">
+  <!-- Gráfico de barras de ventas
   <mat-card class="chart-card">
     <h3>Sales Overview</h3>
     <p>Ample Admin vs Material Admin</p>
@@ -33,5 +35,5 @@
       [options]="doughnutChartOptions"
       chartType="doughnut">
     </canvas>
-  </mat-card>
+  </mat-card>-->
 </div>
