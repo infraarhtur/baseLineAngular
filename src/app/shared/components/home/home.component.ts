@@ -16,32 +16,7 @@ import { MatTableDataSource } from '@angular/material/table';
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit {
-  cards = [
-    { title: 'unidades vendidas', amount: 62076, color: 'green', icon: 'table_chart', progress: '48%' },
-    { title: 'total vendido', amount: 1958104, color: 'red', icon: 'attach_money', progress: '55%' },
-    { title: 'Lead Conversion', amount: 234769, color: 'purple', icon: 'show_chart', progress: '87%' },
-    { title: 'Average Income', amount: 1200, color: 'blue', icon: 'credit_card', progress: '48%' },
-  ];
-   // --- Gráfico de barras ---
-   barChartOptions: ChartOptions = {
-    responsive: true,
-    plugins: {
-      legend: { display: true, position: 'bottom' },
-      tooltip: { enabled: true }
-    },
-    scales: {
-      x: {},
-      y: { beginAtZero: true }
-    }
-  };
-
-  barChartData: ChartConfiguration<'bar'>['data'] = {
-    labels: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
-    datasets: [
-      { data: [90, 95, 100, 95, 85, 110], label: 'Ample', backgroundColor: '#42A5F5' },
-      { data: [70, 75, 80, 70, 65, 78], label: 'Pixel', backgroundColor: '#26C6DA' }
-    ]
-  };
+  cards: any[] = [];
 
   // --- Gráfico de dona ---
   doughnutChartOptions: ChartOptions = {
