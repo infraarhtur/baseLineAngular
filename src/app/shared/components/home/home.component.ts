@@ -18,29 +18,43 @@ import { MatTableDataSource } from '@angular/material/table';
 export class HomeComponent implements OnInit {
   cards: any[] = [];
 
-  // --- Gráfico de dona ---
-  doughnutChartOptions: ChartOptions = {
-    responsive: true,
-    plugins: {
-      legend: { position: 'bottom' },
-      tooltip: { enabled: true }
-    }
-  };
-
-  doughnutChartData: ChartConfiguration<'doughnut'>['data'] = {
-    labels: ['Mobile', 'Desktop', 'Tablet'],
-    datasets: [
-      {
-        data: [45, 35, 20],
-        backgroundColor: ['#42A5F5', '#7E57C2', '#26C6DA'],
-        hoverBackgroundColor: ['#64B5F6', '#9575CD', '#4DD0E1']
-      }
-    ]
-  };
-//variables del reporte de ventas por periodo
+  //variables del reporte de ventas por periodo
 public salesData: any[] = [];
 public salesDataTotal: any;
 public dataSourcePeriod = new MatTableDataSource<any>();
+
+
+  // --- Gráfico de dona ---
+  public dataDoughnut: any[] = [];
+  public doughnutChartData!: ChartConfiguration<'doughnut'>['data'];
+  public doughnutChartOptions: ChartOptions<'doughnut'> = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'left', labels: { color: '#333', font: { size: 14 } } },
+      title: {
+        display: true,
+        text: 'Unidades Vendidas por Producto'
+      },
+      tooltip: {
+        callbacks: {
+          label: (context) => {
+            const index = context.dataIndex;
+            const item = this.dataSourcePeriod.data[index];
+            const units = item.total_sales;
+            const total_amount = item.total_amount;
+            const discount = item.total_discount;
+            return [
+              `Total de ventas: ${units.toLocaleString('es-CO')}`,
+              `Monto de ventas: $${total_amount.toLocaleString('es-CO')}`,
+              `Descuento total: $${discount.toLocaleString('es-CO')}`
+            ];
+          }
+        }
+      }
+    }
+  };
+  @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
 
 
   constructor(
@@ -64,9 +78,11 @@ public dataSourcePeriod = new MatTableDataSource<any>();
         const translatedData = this.translatePaymentMethods(data);
         console.log(translatedData);
         this.dataSourcePeriod.data = translatedData;
+        this.dataDoughnut = translatedData.filter(item => item.payment_method_label !== 'Total General');
         this.salesDataTotal = translatedData[translatedData.length - 1];
         //this.updateChartData(translatedData);
         this.loadCardsReporPeriodData();
+        this.loadDoughnutChart();
         this.snackbar.success('Ventas cargados');
       },
       error: (err) => {
@@ -99,6 +115,67 @@ public dataSourcePeriod = new MatTableDataSource<any>();
 
     ];
 
+  }
+  loadDoughnutChart(): void {
+    const labels = this.dataDoughnut .map(item => item.payment_method_label);
+    const units = this.dataDoughnut  .map(item => item.total_amount);
+
+    // Paleta de colores por defecto de Chart.js
+    const defaultColors = [
+      'rgba(54, 162, 235, 0.8)',  // Azul
+      'rgba(255, 99, 132, 0.8)',  // Rojo/Rosa
+      'rgba(255, 206, 86, 0.8)',  // Amarillo
+      'rgba(75, 192, 192, 0.8)',  // Turquesa
+      'rgba(153, 102, 255, 0.8)', // Púrpura
+      'rgba(255, 159, 64, 0.8)',  // Naranja
+      'rgba(199, 199, 199, 0.8)', // Gris
+      'rgba(83, 102, 255, 0.8)',  // Azul índigo
+      'rgba(255, 99, 255, 0.8)',  // Magenta
+      'rgba(99, 255, 132, 0.8)',  // Verde
+    ];
+
+    const backgroundColors = units.map((_, index) =>
+      defaultColors[index % defaultColors.length]
+    );
+
+    this.doughnutChartData = {
+      labels,
+      datasets: [
+        {
+          data: units,
+          backgroundColor: backgroundColors,
+          borderColor: '#fff',
+          borderWidth: 2
+        }
+      ]
+    };
+
+    this.doughnutChartOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'left' },
+        title: {
+          display: true,
+          text: 'Metodo de pago de ventas'
+        },
+        tooltip: {
+          callbacks: {
+            label: (context) => {
+              const index = context.dataIndex;
+              const item = this.dataSourcePeriod.data[index];
+              return [
+                `Metodo de pago: ${item.payment_method_label}`,
+                ` # de ventas: ${item.total_sales}`,
+                `Monto de ventas: $${item.total_amount.toLocaleString('es-CO')}`,
+                `Descuento: $${item.total_discount.toLocaleString('es-CO')}`
+              ];
+            }
+          }
+        }
+      }
+    };
+    this.chart?.update();
   }
 
 }

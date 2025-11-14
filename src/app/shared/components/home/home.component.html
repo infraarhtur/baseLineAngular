@@ -14,6 +14,14 @@
 </div>
 
 <!-- Gráficos de ventas -->
+  <!-- Gráfico de dona -->
+  <div class="chart-box" *ngIf="this.dataDoughnut .length > 0">
+    <canvas baseChart
+      [data]="doughnutChartData"
+      [options]="doughnutChartOptions"
+      [type]="'doughnut'">
+    </canvas>
+  </div>
 
 <div class="dashboard-container">
   <!-- Gráfico de barras de ventas
