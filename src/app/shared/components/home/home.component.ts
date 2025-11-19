@@ -70,6 +70,7 @@ export class HomeComponent implements OnInit {
   public barChartOptions: ChartOptions<'bar'> = {
     responsive: true,
     maintainAspectRatio: false,
+    indexAxis: 'y',
     plugins: {
       legend: {
         display: true,
@@ -81,7 +82,7 @@ export class HomeComponent implements OnInit {
       }
     },
     scales: {
-      y: {
+      x: {
         beginAtZero: true,
         ticks: {
           color: '#333'
@@ -90,7 +91,7 @@ export class HomeComponent implements OnInit {
           color: 'rgba(0,0,0,0.1)'
         }
       },
-      x: {
+      y: {
         ticks: {
           color: '#333'
         },

@@ -110,16 +110,30 @@
 .dashboard-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 10px;
   justify-content: space-between;
 }
 
 .chart-card {
-  flex: 1 1 calc(50% - 10px);
+  flex: 1 1 calc(50% - 5px);
+  min-width: calc(50% - 5px);
   padding: 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   border-radius: 16px;
   background-color: #fff;
+
+  // Cuando hay número impar de cards, la última ocupa todo el ancho
+  // ya que se baja a una nueva fila
+  &:nth-last-child(1):nth-child(odd) {
+    flex: 1 1 100%;
+    min-width: 100%;
+  }
+
+  // Cuando es la única card, ocupa todo el espacio
+  &:only-child {
+    flex: 1 1 100%;
+    min-width: 100%;
+  }
 
   h3 {
     margin: 0;
@@ -143,5 +157,7 @@
 @media (max-width: 768px) {
   .chart-card {
     flex: 1 1 100%;
+    min-width: 100%;
+    max-width: 100%;
   }
 }
