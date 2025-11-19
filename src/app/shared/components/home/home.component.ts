@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { ChartConfiguration, ChartOptions } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { SharedModule } from '../../shared.module';
@@ -8,10 +8,11 @@ import { ReportService } from '../../../features/reports/services/reports.servic
 import { MatDialog } from '@angular/material/dialog';
 import { SnackbarService } from '../../services/snackbar.service';
 import { MatTableDataSource } from '@angular/material/table';
+
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, BaseChartDirective,SharedModule,MaterialModule],
+  imports: [CommonModule, BaseChartDirective, SharedModule, MaterialModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
@@ -19,9 +20,9 @@ export class HomeComponent implements OnInit {
   cards: any[] = [];
 
   //variables del reporte de ventas por periodo
-public salesData: any[] = [];
-public salesDataTotal: any;
-public dataSourcePeriod = new MatTableDataSource<any>();
+  public salesData: any[] = [];
+  public salesDataTotal: any;
+  public dataSourcePeriod = new MatTableDataSource<any>();
 
 
   // --- Gráfico de dona ---
@@ -54,7 +55,52 @@ public dataSourcePeriod = new MatTableDataSource<any>();
       }
     }
   };
+
+
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
+
+    // --- Gráfico de barras  top 5 productos---
+    top5Products: any[] = [];
+  @ViewChild('chartBarTop5') chartBarTop5?: BaseChartDirective;
+  public barChartData: ChartConfiguration<'bar'>['data'] = {
+    labels: [],
+    datasets: []
+  };
+
+  public barChartOptions: ChartOptions<'bar'> = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: true,
+        position: 'top',
+        labels: { color: '#333', font: { size: 14 } }
+      },
+      title: {
+        display: false
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          color: '#333'
+        },
+        grid: {
+          color: 'rgba(0,0,0,0.1)'
+        }
+      },
+      x: {
+        ticks: {
+          color: '#333'
+        },
+        grid: {
+          display: false
+        }
+      }
+    }
+  };
+
 
 
   constructor(
@@ -67,6 +113,8 @@ public dataSourcePeriod = new MatTableDataSource<any>();
     // Load initial data or perform any setup needed for the component
 
     this.loadReportData('2025-08-01', '2025-11-15');
+    this.loadReportDataByStatusPending('2025-08-01', '2025-11-15', 'pending');
+    this.loadTop5Products('2025-08-01', '2025-11-15');
   }
 
 
@@ -86,8 +134,25 @@ public dataSourcePeriod = new MatTableDataSource<any>();
         this.snackbar.success('Ventas cargados');
       },
       error: (err) => {
-        this.snackbar.error('Error al obtener clientes');
-        console.error('Error al obtener clientes', err);
+        this.snackbar.error('Error al obtener ventas por periodo');
+        console.error('Error al obtener ventas por periodo', err);
+      }
+    });
+  }
+
+  loadReportDataByStatusPending(start_date: string, end_date: string, status: string): void {
+    this.reportService.report_sale_summary_payment(start_date, end_date, status).subscribe({
+      next: (data) => {
+        console.log(data);
+        this.logicCardPending(data);
+
+        console.log(this.cards, 'cards');
+
+        this.snackbar.success('Ventas pendientes cargados');
+      },
+      error: (err) => {
+        this.snackbar.error('Error al obtener ventas pendientes por periodo');
+        console.error('Error al obtener ventas pendientes por periodo', err);
       }
     });
   }
@@ -109,16 +174,21 @@ public dataSourcePeriod = new MatTableDataSource<any>();
   loadCardsReporPeriodData(): void {
 
     this.cards = [
-      { title: 'Total vendido', amount: this.salesDataTotal.total_amount, color: 'green', icon: 'attach_money', progress: '48%' },
-      { title: 'Descuento Total', amount:  this.salesDataTotal.total_discount, color: 'red', icon: 'attach_money', progress: '55%' },
-      { title: '# Compras totales', amount: this.salesDataTotal.total_sales, color: 'purple', icon: 'receipt_long', progress: '87%' },
-
-    ];
+      {
+        title: 'Total vendido',
+        amount: this.salesDataTotal.total_amount
+        , color: 'green', icon: 'attach_money', icon2: 'sell_outline', info: `Descuento Total $ ${this.salesDataTotal.total_discount.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`
+      },
+      {
+        title: '# Compras totales pagas',
+        amount: this.salesDataTotal.total_sales,
+        color: 'purple', icon: 'receipt_long', icon2: 'receipt_long', info: `# Compras totales pagas`
+      },];
 
   }
   loadDoughnutChart(): void {
-    const labels = this.dataDoughnut .map(item => item.payment_method_label);
-    const units = this.dataDoughnut  .map(item => item.total_amount);
+    const labels = this.dataDoughnut.map(item => item.payment_method_label);
+    const units = this.dataDoughnut.map(item => item.total_amount);
 
     // Paleta de colores por defecto de Chart.js
     const defaultColors = [
@@ -156,7 +226,7 @@ public dataSourcePeriod = new MatTableDataSource<any>();
       plugins: {
         legend: { position: 'left' },
         title: {
-          display: true,
+          display: false,
           text: 'Metodo de pago de ventas'
         },
         tooltip: {
@@ -177,5 +247,73 @@ public dataSourcePeriod = new MatTableDataSource<any>();
     };
     this.chart?.update();
   }
+  logicCardPending(data: any[]): void {
+    const translatedData = this.translatePaymentMethods(data);
+    let total_sales_pending = translatedData[translatedData.length - 1].total_sales + 1;
+    let total_amount_pending = translatedData[translatedData.length - 1].total_amount;
+    let total_discount_pending = translatedData[translatedData.length - 1].total_discount;
 
+
+    let objCard_total_sales_pending = {
+      title: ' # Compras totales sin pagar',
+      amount: total_sales_pending, color: 'red', icon: 'receipt_long', icon2: 'receipt_long', info: `# Compras totales sin pagar`
+    }
+
+
+    let objCard_total_amount_pending = {
+      title: ' Monto total sin pagar',
+      amount: total_amount_pending, color: 'red', icon: 'attach_money', icon2: 'sell_outline', info: `Monto decuento $
+            ${total_discount_pending.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`
+    }
+
+    this.cards.push(objCard_total_amount_pending);
+    this.cards.push(objCard_total_sales_pending);
+  }
+
+  loadTop5Products(start_date: string, end_date: string): void {
+    this.reportService.report_sale_by_products(start_date, end_date, 'paid').subscribe({
+      next: (data: any[]) => {
+
+        const sortedData = [...data].sort((a, b) => b.total_units_sold - a.total_units_sold);
+        this.top5Products = sortedData.slice(0, 5);
+
+        console.log('top 5 productos mas vendidos',  this.top5Products);
+
+        // Actualizar el gráfico después de cargar los datos
+        this.updateBarChartTop5Products();
+
+      },
+      error: (err) => {
+        this.snackbar.error('Error al obtener top 5 productos mas vendidos');
+        console.error('Error al obtener top 5 productos mas vendidos', err);
+      }
+    });
+  }
+  updateBarChartTop5Products(): void {
+    const labels = this.top5Products.map(item => item.product_name);
+    const data = this.top5Products.map(item => item.total_units_sold);
+
+    // Paleta de colores para el gráfico de barras
+    const barColors = [
+      'rgba(54, 162, 235, 0.8)',  // Azul
+      'rgba(255, 99, 132, 0.8)',  // Rojo/Rosa
+      'rgba(255, 206, 86, 0.8)',  // Amarillo
+      'rgba(75, 192, 192, 0.8)',  // Turquesa
+      'rgba(153, 102, 255, 0.8)', // Púrpura
+    ];
+
+    this.barChartData = {
+      labels: labels,
+      datasets: [
+        {
+          data: data,
+          label: 'Unidades vendidas',
+          backgroundColor: barColors.slice(0, labels.length),
+          borderColor: barColors.map(color => color.replace('0.8', '1')),
+          borderWidth: 2
+        }
+      ]
+    };
+    this.chartBarTop5?.update();
+  }
 }

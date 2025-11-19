@@ -9,7 +9,7 @@
 
 .stat-card {
   position: relative;
-  width: 270px; /* un poco más ancho en desktop */
+  width: 240px; /* un poco más ancho en desktop */
   padding: 1.5rem;
   background: #fff;
   border-radius: 10px;
@@ -103,8 +103,8 @@
   }
 
   .stat-card {
-    width: 90%;
-    max-width: 320px;
+    width: 95%;
+    max-width: 300px;
   }
 }
 .dashboard-container {

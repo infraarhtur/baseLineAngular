@@ -17,12 +17,13 @@ export class ReportService {
    * @returns Observable con el resumen de ventas
    * Esta función realiza una solicitud GET al backend para obtener un resumen de ventas por periodo y
    */
-  report_sale_summary_payment(start_date: string, end_date: string): Observable<any> {
+  report_sale_summary_payment(start_date: string, end_date: string, status_sale: string = 'paid'): Observable<any> {
 
     return this.http.get<any>(`${this.apiUrl}/report_sale_summary_payment`, {
       params: {
         start_date,
-        end_date
+        end_date,
+        status_sale
       }
     });
   }
