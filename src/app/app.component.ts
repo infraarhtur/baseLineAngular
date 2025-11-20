@@ -71,14 +71,13 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
 
 
     const currentUrl =window.location.toString().split('/')[3];
-    console.log('AppComponent ngOnInit - Current URL:', currentUrl);
 
     const publicRoutes = ['login', 'token-validate', 'reset-password', 'reset-password-confirm', 'email-validate'];
     const isPublicRoute = publicRoutes.some(route => currentUrl.startsWith(route));
-    console.log('AppComponent ngOnInit - Is public route:', isPublicRoute);
+
 
     if (isPublicRoute) {
-      console.log('AppComponent ngOnInit - Processing public route');
+
       // Si estamos en una ruta pública, solo cargar la info si hay token válido
       const token = this.authService.getToken();
       if (token && !this.authService.isTokenExpired(token)) {
@@ -90,11 +89,11 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
       return;
     }
 
-    console.log('AppComponent ngOnInit - Processing protected route');
+
     // Para rutas protegidas, verificar autenticación
     const token = this.authService.getToken();
     if (!token || this.authService.isTokenExpired(token)) {
-      console.log('AppComponent ngOnInit - No valid token, redirecting to login');
+
       if(isPublicRoute) {
         this.authService.logout();
       } else {
@@ -118,8 +117,7 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
     const currentUrl = window.location.href.split('/')[3];
     const publicRoutes = ['login', 'token-validate', 'reset-password', 'reset-password-confirm', 'email-validate'];
     const isPublicRoute = publicRoutes.some(route => currentUrl.startsWith(route));
-    console.log('AppComponent ngAfterContentInit - Is public route:', isPublicRoute);
-    console.log('AppComponent ngAfterContentInit - Current URL:', currentUrl);
+
 
     if (!isPublicRoute) {
       this.loadInfo();
