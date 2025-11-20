@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { ChartConfiguration, ChartOptions } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
@@ -16,7 +16,7 @@ import { MatTableDataSource } from '@angular/material/table';
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, AfterViewInit {
   cards: any[] = [];
 
   //variables del reporte de ventas por periodo
@@ -112,10 +112,14 @@ export class HomeComponent implements OnInit {
   }
   ngOnInit(): void {
     // Load initial data or perform any setup needed for the component
+  }
+  ngAfterViewInit(): void {
 
-    this.loadReportData('2025-08-01', '2025-11-15');
-    this.loadReportDataByStatusPending('2025-08-01', '2025-11-15', 'pending');
-    this.loadTop5Products('2025-08-01', '2025-11-15');
+    setTimeout(() => {
+      this.loadReportData('2025-08-01', '2025-11-15');
+      this.loadReportDataByStatusPending('2025-08-01', '2025-11-15', 'pending');
+      this.loadTop5Products('2025-08-01', '2025-11-15');
+    }, 500);
   }
 
 

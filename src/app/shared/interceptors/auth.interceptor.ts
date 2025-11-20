@@ -106,7 +106,7 @@ export class AuthInterceptor implements HttpInterceptor {
     // Iniciar el refresh
     this.isRefreshing = true;
     this.refreshTokenSubject.next(null);
-debugger
+
     return this.tokenRefreshService.refreshToken().pipe(
 
       switchMap((success: boolean) => {
@@ -123,7 +123,7 @@ debugger
         }
       }),
       catchError((error) => {
-        debugger;
+        ;
         this.isRefreshing = false;
         this.refreshTokenSubject.next(null);
         // Limpiar tokens y redirigir al login
@@ -152,7 +152,7 @@ debugger
     // Iniciar el proceso de refresh
     this.isRefreshing = true;
     this.refreshTokenSubject.next(null);
-debugger
+
     return this.tokenRefreshService.refreshToken().pipe(
       switchMap((success: boolean) => {
         this.isRefreshing = false;
@@ -167,7 +167,7 @@ debugger
         }
       }),
       catchError((error) => {
-        debugger;
+        
         this.isRefreshing = false;
         this.refreshTokenSubject.next(null);
         // Si hay error, hacer logout
