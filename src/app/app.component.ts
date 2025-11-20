@@ -1,10 +1,11 @@
-import { AfterContentInit, Component, OnInit, OnDestroy} from '@angular/core';
+import { AfterContentInit, Component, OnInit, OnDestroy, effect} from '@angular/core';
 import { AuthService } from './services/auth.service';
 import { TokenRefreshService } from './services/token-refresh.service';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { UserSignalService } from './shared/services/user-signal.service';
 
 @Component({
   selector: 'app-root',
@@ -27,13 +28,27 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
     public authService: AuthService,
     private tokenRefreshService: TokenRefreshService,
     private activatedRoute: ActivatedRoute,
-    private bp: BreakpointObserver
+    private bp: BreakpointObserver,
+    private userSignalService: UserSignalService
   ) {
 
     this.sub = this.bp.observe(['(max-width: 768px)'])
     .subscribe(state => {
       this.isHandset = state.matches;
       // En móvil no usamos rail; en desktop lo dejamos como esté
+    });
+
+    // Effect para actualizar userName y userCompanyName cuando cambien los signals
+    effect(() => {
+      const userNameFromSignal = this.userSignalService.userName();
+      if (userNameFromSignal) {
+        this.userName = userNameFromSignal;
+      }
+
+      const userCompanyNameFromSignal = this.userSignalService.userCompanyName();
+      if (userCompanyNameFromSignal) {
+        this.userCompanyName = userCompanyNameFromSignal;
+      }
     });
   }
  private sub: Subscription;

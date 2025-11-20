@@ -8,6 +8,8 @@ import { ReportService } from '../../../features/reports/services/reports.servic
 import { MatDialog } from '@angular/material/dialog';
 import { SnackbarService } from '../../services/snackbar.service';
 import { MatTableDataSource } from '@angular/material/table';
+import { UserSignalService } from '../../services/user-signal.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -107,13 +109,26 @@ export class HomeComponent implements OnInit, AfterViewInit {
   constructor(
     private reportService: ReportService,
     private dialog: MatDialog,
-    private snackbar: SnackbarService) {
+    private snackbar: SnackbarService,
+    private userSignalService: UserSignalService,
+    private authService: AuthService) {
 
   }
   ngOnInit(): void {
     // Load initial data or perform any setup needed for the component
   }
   ngAfterViewInit(): void {
+    // Actualizar el signal con el userName cuando se carga el componente
+    const userInfo = this.authService.getUserName();
+    if (userInfo && userInfo.name) {
+      this.userSignalService.updateUserName(userInfo.name);
+    }
+
+    // Actualizar el signal con el userCompanyName cuando se carga el componente
+    const companyName = this.authService.getUserCompanyName();
+    if (companyName) {
+      this.userSignalService.updateUserCompanyName(companyName);
+    }
 
     setTimeout(() => {
       this.loadReportData('2025-08-01', '2025-11-15');
