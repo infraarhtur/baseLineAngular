@@ -61,8 +61,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
 
-    // --- Gráfico de barras  top 5 productos---
-    top5Products: any[] = [];
+  // --- Gráfico de barras  top 5 productos---
+  top5Products: any[] = [];
   @ViewChild('chartBarTop5') chartBarTop5?: BaseChartDirective;
   public barChartData: ChartConfiguration<'bar'>['data'] = {
     labels: [],
@@ -132,7 +132,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     setTimeout(() => {
       this.loadReportData('2025-08-01', '2025-11-15');
-      this.loadReportDataByStatusPending('2025-08-01', '2025-11-15', 'pending');
       this.loadTop5Products('2025-08-01', '2025-11-15');
     }, 500);
   }
@@ -144,13 +143,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.reportService.report_sale_summary_payment(start_date, end_date).subscribe({
       next: (data) => {
         const translatedData = this.translatePaymentMethods(data);
-        console.log(translatedData);
         this.dataSourcePeriod.data = translatedData;
         this.dataDoughnut = translatedData.filter(item => item.payment_method_label !== 'Total General');
         this.salesDataTotal = translatedData[translatedData.length - 1];
         //this.updateChartData(translatedData);
         this.loadCardsReporPeriodData();
         this.loadDoughnutChart();
+        this.loadReportDataByStatusPending('2025-08-01', '2025-11-15', 'pending');
         this.snackbar.success('Ventas cargados');
       },
       error: (err) => {
@@ -163,11 +162,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   loadReportDataByStatusPending(start_date: string, end_date: string, status: string): void {
     this.reportService.report_sale_summary_payment(start_date, end_date, status).subscribe({
       next: (data) => {
-        console.log(data);
         this.logicCardPending(data);
-
-        console.log(this.cards, 'cards');
-
         this.snackbar.success('Ventas pendientes cargados');
       },
       error: (err) => {
@@ -296,8 +291,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
         const sortedData = [...data].sort((a, b) => b.total_units_sold - a.total_units_sold);
         this.top5Products = sortedData.slice(0, 5);
-
-        console.log('top 5 productos mas vendidos',  this.top5Products);
 
         // Actualizar el gráfico después de cargar los datos
         this.updateBarChartTop5Products();
