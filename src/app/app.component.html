@@ -13,7 +13,7 @@
         (click)="isHandset ? sidenav.toggle() : toggleRail()" style="justify-content: space-between">
 
         <span style="margin-left: 10px;" *ngIf="isExpanded">
-         {{ userName }}</span>
+         {{ userSignalService.userName() }}</span>
 
           <mat-icon class="toggle-icon"  >
             {{ !isHandset && isExpanded ? 'chevron_left' : 'chevron_right' }}
@@ -43,7 +43,7 @@
            (click)="isHandset ? sidenav.toggle() : toggleRail()" color="primary">
             <mat-icon>{{ isHandset ? 'menu' : (isExpanded ? 'menu_open' : 'menu') }}</mat-icon>
            </button>
-           <div *ngIf="authService.isAuthenticated()" style="margin-right: 12px;"> {{userCompanyName}}</div>
+           <div *ngIf="authService.isAuthenticated()" style="margin-right: 12px;"> {{userSignalService.userCompanyName()}}</div>
 
            <span class="spacer"></span>
  <!-- Menu de Administración -->

@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, OnInit, OnDestroy, effect} from '@angular/core';
+import { AfterContentInit, Component, OnInit, OnDestroy} from '@angular/core';
 import { AuthService } from './services/auth.service';
 import { TokenRefreshService } from './services/token-refresh.service';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
@@ -19,9 +19,7 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
   isHandset = false;      // móvil/tablet => drawer real
   opened = true;  //cambiar esto a `false` si quieres que el menú inicie cerrado
   isLoggedIn = false;
-  userName: string | null = null;
   userCompany_id: string | null = null;
-  userCompanyName: string | null = null;
 
   constructor(
     private router: Router,
@@ -29,26 +27,13 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
     private tokenRefreshService: TokenRefreshService,
     private activatedRoute: ActivatedRoute,
     private bp: BreakpointObserver,
-    private userSignalService: UserSignalService
+    public userSignalService: UserSignalService
   ) {
 
     this.sub = this.bp.observe(['(max-width: 768px)'])
     .subscribe(state => {
       this.isHandset = state.matches;
       // En móvil no usamos rail; en desktop lo dejamos como esté
-    });
-
-    // Effect para actualizar userName y userCompanyName cuando cambien los signals
-    effect(() => {
-      const userNameFromSignal = this.userSignalService.userName();
-      if (userNameFromSignal) {
-        this.userName = userNameFromSignal;
-      }
-
-      const userCompanyNameFromSignal = this.userSignalService.userCompanyName();
-      if (userCompanyNameFromSignal) {
-        this.userCompanyName = userCompanyNameFromSignal;
-      }
     });
   }
  private sub: Subscription;
@@ -126,6 +111,9 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
   logout() {
     // Detener el servicio de refresh automático
     this.tokenRefreshService.stopAutoRefresh();
+    // Limpiar los signals de usuario
+    this.userSignalService.updateUserName(null);
+    this.userSignalService.updateUserCompanyName(null);
     this.authService.logout();
   }
   redirectToCreateProduct() {
@@ -134,9 +122,15 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
 
   loadInfo() {
     this.isLoggedIn = this.authService.isAuthenticated();
-    this.userName = this.authService.getUserName().name;
+    const userInfo = this.authService.getUserName();
+    if (userInfo && userInfo.name) {
+      this.userSignalService.updateUserName(userInfo.name);
+    }
     this.userCompany_id = this.authService.getUserCompany_id();
-    this.userCompanyName = this.authService.getUserCompanyName();
+    const companyName = this.authService.getUserCompanyName();
+    if (companyName) {
+      this.userSignalService.updateUserCompanyName(companyName);
+    }
   }
 
   // Funciones del menú de administración

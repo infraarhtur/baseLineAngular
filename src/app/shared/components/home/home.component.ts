@@ -123,17 +123,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // Load initial data or perform any setup needed for the component
   }
   ngAfterViewInit(): void {
-    // Actualizar el signal con el userName cuando se carga el componente
-    const userInfo = this.authService.getUserName();
-    if (userInfo && userInfo.name) {
-      this.userSignalService.updateUserName(userInfo.name);
-    }
-
-    // Actualizar el signal con el userCompanyName cuando se carga el componente
-    const companyName = this.authService.getUserCompanyName();
-    if (companyName) {
-      this.userSignalService.updateUserCompanyName(companyName);
-    }
+    // Los signals ya están actualizados en AppComponent.loadInfo() antes del render
+    // No es necesario actualizarlos aquí
 
     setTimeout(() => {
       this.loadReportData('2025-08-01', '2025-12-15');
