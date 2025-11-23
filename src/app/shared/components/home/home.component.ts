@@ -10,6 +10,8 @@ import { SnackbarService } from '../../services/snackbar.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { UserSignalService } from '../../services/user-signal.service';
 import { AuthService } from '../../../services/auth.service';
+import { ClientsService } from '../../../features/clients/services/clients.service';
+import { ProductsService } from '../../../features/products/services/products.service';
 
 @Component({
   selector: 'app-home',
@@ -20,7 +22,8 @@ import { AuthService } from '../../../services/auth.service';
 })
 export class HomeComponent implements OnInit, AfterViewInit {
   cards: any[] = [];
-
+  clientsByPurchases: any[] = [];
+  productsLowStock: any[] = [];
   //variables del reporte de ventas por periodo
   public salesData: any[] = [];
   public salesDataTotal: any;
@@ -111,7 +114,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     private dialog: MatDialog,
     private snackbar: SnackbarService,
     private userSignalService: UserSignalService,
-    private authService: AuthService) {
+    private authService: AuthService,
+    private clientsService: ClientsService,
+    private productsService: ProductsService) {
 
   }
   ngOnInit(): void {
@@ -131,8 +136,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
 
     setTimeout(() => {
-      this.loadReportData('2025-08-01', '2025-11-15');
-      this.loadTop5Products('2025-08-01', '2025-11-15');
+      this.loadReportData('2025-08-01', '2025-12-15');
+      this.loadTop5Products('2025-08-01', '2025-12-15');
+      this.loadTop3ClientsByPurchases();
+      this.loadProductsLowStock();
     }, 500);
   }
 
@@ -149,7 +156,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         //this.updateChartData(translatedData);
         this.loadCardsReporPeriodData();
         this.loadDoughnutChart();
-        this.loadReportDataByStatusPending('2025-08-01', '2025-11-15', 'pending');
+        this.loadReportDataByStatusPending('2025-08-01', '2025-12-15', 'pending');
         this.snackbar.success('Ventas cargados');
       },
       error: (err) => {
@@ -328,5 +335,32 @@ export class HomeComponent implements OnInit, AfterViewInit {
       ]
     };
     this.chartBarTop5?.update();
+  }
+
+  // Obtener top 3 clientes por compras
+  loadTop3ClientsByPurchases(): void {
+    this.clientsService.top_3_clients_by_purchases.subscribe({
+      next: (data) => {
+        this.clientsByPurchases = data;
+
+      },
+      error: (err) => {
+        this.snackbar.error('Error al obtener top 3 clientes por compras');
+        console.error('Error al obtener top 3 clientes por compras', err);
+      }
+    });
+  }
+// Obtener productos con stock bajo
+
+  loadProductsLowStock(): void {
+    this.productsService.getProductsLowStock().subscribe({
+      next: (data) => {
+        this.productsLowStock = [...data].sort((a, b) => a.stock - b.stock);
+        this.productsLowStock = this.productsLowStock.slice(0, 3);
+      },
+      error: (err) => {
+        console.error('Error al obtener productos con stock bajo', err);
+      }
+    });
   }
 }

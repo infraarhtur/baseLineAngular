@@ -52,24 +52,46 @@
 
     </mat-card-content>
   </mat-card>
-  <!-- Gráfico de barras de ventas
+</div>
+
+<div class="dashboard-container">
   <mat-card class="chart-card">
-    <h3>Sales Overview</h3>
-    <p>Ample Admin vs Material Admin</p>
-    <canvas baseChart
-      [data]="barChartData"
-      [options]="barChartOptions"
-      chartType="bar">
-    </canvas>
+    <mat-card-header>
+      <mat-card-title>Top 3 productos con stock bajo</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+
+      <mat-list>
+        @for(product of productsLowStock; track product.id) {
+          <mat-list-item>
+            <mat-icon matListItemIcon>layers</mat-icon>
+            <h4 matListItemTitle>{{ product.name }}</h4>
+            <p matListItemLine>{{ product.stock }} unidades</p>
+           </mat-list-item>
+        }
+       </mat-list>
+
+
+    </mat-card-content>
   </mat-card>
 
+
   <mat-card class="chart-card">
-    <h3>Our Visitors</h3>
-    <p>Different Devices Used to Visit</p>
-    <canvas baseChart
-      [data]="doughnutChartData"
-      [options]="doughnutChartOptions"
-      chartType="doughnut">
-    </canvas>
-  </mat-card>-->
+    <mat-card-header>
+      <mat-card-title>Top 3 clientes por compras</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+
+      <mat-list>
+      @for(client of clientsByPurchases; track client.id) {
+        <mat-list-item>
+          <mat-icon matListItemIcon>person</mat-icon>
+          <h4 matListItemTitle>{{ client.name }}</h4>
+          <p matListItemLine> # de compras: {{ client.total_sales }}  valor total: ${{ client.total_amount_spent | number:'1.0-0' }} </p>
+
+         </mat-list-item>
+      }
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
 </div>

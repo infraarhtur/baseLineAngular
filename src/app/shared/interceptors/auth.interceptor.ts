@@ -30,7 +30,6 @@ export class AuthInterceptor implements HttpInterceptor {
     const token = this.authService.getToken();
 //identifica si la ruta es publica
     const currentUrl = window.location.toString().split('/')[3];
-    console.log('interceptor- Current URL:', currentUrl);
     const publicRoutes = ['login', 'token-validate', 'reset-password', 'reset-password-confirm', 'email-validate'];
     const isPublicRoute = publicRoutes.some(route => currentUrl.startsWith(route));
 

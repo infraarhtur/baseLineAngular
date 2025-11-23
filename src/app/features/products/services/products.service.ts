@@ -39,4 +39,9 @@ export class ProductsService {
   updateProductStock(id: string, stock: number): Observable<any> {
     return this.http.patch<any>(`${this.baseUrl}/${id}`, { stock });
   }
+
+  // Obtener productos con stock bajo
+  getProductsLowStock(): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/low_stock`);
+  }
 }
