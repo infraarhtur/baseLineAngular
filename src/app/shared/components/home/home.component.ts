@@ -56,9 +56,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
           label: (context) => {
             const index = context.dataIndex;
             const item = this.dataSourcePeriod.data[index];
-            const units = item.total_sales;
-            const total_amount = item.total_amount;
-            const discount = item.total_discount;
+            // Validar que el item exista
+            if (!item) {
+              return ['No hay datos disponibles'];
+            }
+            const units = item.total_sales || 0;
+            const total_amount = item.total_amount || 0;
+            const discount = item.total_discount || 0;
             return [
               `Total de ventas: ${units.toLocaleString('es-CO')}`,
               `Monto de ventas: $${total_amount.toLocaleString('es-CO')}`,
@@ -163,8 +167,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // No es necesario actualizarlos aquí
 
     setTimeout(() => {
-      this.loadReportData('2025-08-01', '2025-12-15');
-      this.loadTop5Products('2025-08-01', '2025-12-15');
+      this.loadReportData('2025-06-01', '2025-12-15');
+      this.loadTop5Products('2025-06-01', '2025-12-15');
       this.loadTop3ClientsByPurchases();
       this.loadProductsLowStock();
     }, 500);
@@ -173,13 +177,25 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   loadReportData(start_date: string, end_date: string): void {
     console.log(start_date, end_date);
+
     // Logic to load report data, e.g., calling a service method
     this.reportService.report_sale_summary_payment(start_date, end_date).subscribe({
       next: (data) => {
+
+        // Validar que data exista y sea un array
+        if (!data || !Array.isArray(data) || data.length === 0) {
+          this.salesDataTotal = null;
+          this.dataSourcePeriod.data = [];
+          this.dataDoughnut = [];
+          this.cards = [];
+          this.snackbar.warning('No se encontraron datos de ventas para el período seleccionado');
+          return;
+        }
+
         const translatedData = this.translatePaymentMethods(data);
         this.dataSourcePeriod.data = translatedData;
         this.dataDoughnut = translatedData.filter(item => item.payment_method_label !== 'Total General');
-        this.salesDataTotal = translatedData[translatedData.length - 1];
+        this.salesDataTotal = translatedData.length > 0 ? translatedData[translatedData.length - 1] : null;
         //this.updateChartData(translatedData);
         this.loadCardsReporPeriodData();
         this.loadDoughnutChart();
@@ -221,21 +237,47 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   loadCardsReporPeriodData(): void {
+    // Validar que salesDataTotal exista antes de acceder a sus propiedades
+    if (!this.salesDataTotal) {
+      this.cards = [];
+      return;
+    }
 
     this.cards = [
       {
         title: 'Total vendido',
-        amount: this.salesDataTotal.total_amount
-        , color: 'green', icon: 'attach_money', icon2: 'sell_outline', info: `Descuento Total $ ${this.salesDataTotal.total_discount.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`
+        amount: this.salesDataTotal.total_amount || 0,
+        color: 'green',
+        icon: 'attach_money',
+        icon2: 'sell_outline',
+        info: `Descuento Total $ ${(this.salesDataTotal.total_discount || 0).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`
       },
       {
         title: '# Compras totales pagas',
-        amount: this.salesDataTotal.total_sales,
-        color: 'purple', icon: 'receipt_long', icon2: 'receipt_long', info: `# Compras totales pagas`
-      },];
-
+        amount: this.salesDataTotal.total_sales || 0,
+        color: 'purple',
+        icon: 'receipt_long',
+        icon2: 'receipt_long',
+        info: `# Compras totales pagas`
+      },
+    ];
   }
   loadDoughnutChart(): void {
+    // Validar que dataDoughnut tenga datos
+    if (!this.dataDoughnut || this.dataDoughnut.length === 0) {
+      this.doughnutChartData = {
+        labels: [],
+        datasets: [{
+          data: [],
+          backgroundColor: [],
+          borderColor: '#fff',
+          borderWidth: 2
+        }]
+      };
+      this.chart?.update();
+      return;
+    }
+
     const labels = this.dataDoughnut.map(item => item.payment_method_label);
     const units = this.dataDoughnut.map(item => item.total_amount);
 
@@ -283,11 +325,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
             label: (context) => {
               const index = context.dataIndex;
               const item = this.dataSourcePeriod.data[index];
+              // Validar que el item exista
+              if (!item) {
+                return ['No hay datos disponibles'];
+              }
               return [
-                `Metodo de pago: ${item.payment_method_label}`,
-                ` # de ventas: ${item.total_sales}`,
-                `Monto de ventas: $${item.total_amount.toLocaleString('es-CO')}`,
-                `Descuento: $${item.total_discount.toLocaleString('es-CO')}`
+                `Metodo de pago: ${item.payment_method_label || 'N/A'}`,
+                ` # de ventas: ${item.total_sales || 0}`,
+                `Monto de ventas: $${(item.total_amount || 0).toLocaleString('es-CO')}`,
+                `Descuento: $${(item.total_discount || 0).toLocaleString('es-CO')}`
               ];
             }
           }
@@ -297,22 +343,39 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.chart?.update();
   }
   logicCardPending(data: any[]): void {
-    const translatedData = this.translatePaymentMethods(data);
-    let total_sales_pending = translatedData[translatedData.length - 1].total_sales + 1;
-    let total_amount_pending = translatedData[translatedData.length - 1].total_amount;
-    let total_discount_pending = translatedData[translatedData.length - 1].total_discount;
+    // Validar que data exista y sea un array con elementos
+    if (!data || !Array.isArray(data) || data.length === 0) {
+      return;
+    }
 
+    const translatedData = this.translatePaymentMethods(data);
+    const lastItem = translatedData[translatedData.length - 1];
+
+    // Validar que el último elemento exista
+    if (!lastItem) {
+      return;
+    }
+
+    let total_sales_pending = (lastItem.total_sales || 0) + 1;
+    let total_amount_pending = lastItem.total_amount || 0;
+    let total_discount_pending = lastItem.total_discount || 0;
 
     let objCard_total_sales_pending = {
       title: ' # Compras totales sin pagar',
-      amount: total_sales_pending, color: 'red', icon: 'receipt_long', icon2: 'receipt_long', info: `# Compras totales sin pagar`
+      amount: total_sales_pending,
+      color: 'red',
+      icon: 'receipt_long',
+      icon2: 'receipt_long',
+      info: `# Compras totales sin pagar`
     }
-
 
     let objCard_total_amount_pending = {
       title: ' Monto total sin pagar',
-      amount: total_amount_pending, color: 'red', icon: 'attach_money', icon2: 'sell_outline', info: `Monto decuento $
-            ${total_discount_pending.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`
+      amount: total_amount_pending,
+      color: 'red',
+      icon: 'attach_money',
+      icon2: 'sell_outline',
+      info: `Monto decuento $ ${total_discount_pending.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`
     }
 
     this.cards.push(objCard_total_amount_pending);
