@@ -29,6 +29,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
   public salesDataTotal: any;
   public dataSourcePeriod = new MatTableDataSource<any>();
 
+  // Getters para acceder a los signals de usuario y empresa
+  get userName() {
+    return this.userSignalService.userName;
+  }
+
+  get userCompanyName() {
+    return this.userSignalService.userCompanyName;
+  }
+
 
   // --- Gráfico de dona ---
   public dataDoughnut: any[] = [];
@@ -120,7 +129,34 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   }
   ngOnInit(): void {
-    // Load initial data or perform any setup needed for the component
+    // Verificar que los signals de usuario y empresa estén cargados
+    this.verifyUserSignals();
+  }
+
+  /**
+   * Verifica que los signals de nombre de usuario y nombre de empresa estén cargados
+   * Si no están cargados, intenta cargarlos desde el AuthService
+   */
+  private verifyUserSignals(): void {
+    const currentUserName = this.userSignalService.userName();
+    const currentCompanyName = this.userSignalService.userCompanyName();
+
+    // Si los signals no están cargados, intentar cargarlos desde AuthService
+    if (!currentUserName || !currentCompanyName) {
+      const userInfo = this.authService.getUserName();
+      if (userInfo && userInfo.name) {
+        this.userSignalService.updateUserName(userInfo.name);
+      }
+
+      const companyName = this.authService.getUserCompanyName();
+      if (companyName) {
+        this.userSignalService.updateUserCompanyName(companyName);
+      }
+    }
+
+    // Log para verificación (puedes remover esto en producción)
+    console.log('Usuario:', this.userSignalService.userName());
+    console.log('Empresa:', this.userSignalService.userCompanyName());
   }
   ngAfterViewInit(): void {
     // Los signals ya están actualizados en AppComponent.loadInfo() antes del render
