@@ -69,10 +69,7 @@ export class SelectSalesComponent implements OnInit, AfterViewInit {
       next: (data) => {
         this.originalSales = data;
         this.dataSource.data = data;
-
         this.sortConfigurations(); // Configura el sort y paginator después de cargar los datos
-
-        console.log('Ventass cargadas:', this.dataSource.data);
         this.snackbar.success('Ventas cargados');
       },
       error: (err) => {

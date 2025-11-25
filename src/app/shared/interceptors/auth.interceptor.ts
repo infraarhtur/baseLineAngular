@@ -30,7 +30,6 @@ export class AuthInterceptor implements HttpInterceptor {
     const token = this.authService.getToken();
 //identifica si la ruta es publica
     const currentUrl = window.location.toString().split('/')[3];
-    console.log('AppComponent ngOnInit - Current URL:', currentUrl);
     const publicRoutes = ['login', 'token-validate', 'reset-password', 'reset-password-confirm', 'email-validate'];
     const isPublicRoute = publicRoutes.some(route => currentUrl.startsWith(route));
 
@@ -106,7 +105,7 @@ export class AuthInterceptor implements HttpInterceptor {
     // Iniciar el refresh
     this.isRefreshing = true;
     this.refreshTokenSubject.next(null);
-debugger
+
     return this.tokenRefreshService.refreshToken().pipe(
 
       switchMap((success: boolean) => {
@@ -123,7 +122,7 @@ debugger
         }
       }),
       catchError((error) => {
-        debugger;
+        ;
         this.isRefreshing = false;
         this.refreshTokenSubject.next(null);
         // Limpiar tokens y redirigir al login
@@ -152,7 +151,7 @@ debugger
     // Iniciar el proceso de refresh
     this.isRefreshing = true;
     this.refreshTokenSubject.next(null);
-debugger
+
     return this.tokenRefreshService.refreshToken().pipe(
       switchMap((success: boolean) => {
         this.isRefreshing = false;
@@ -167,7 +166,7 @@ debugger
         }
       }),
       catchError((error) => {
-        debugger;
+
         this.isRefreshing = false;
         this.refreshTokenSubject.next(null);
         // Si hay error, hacer logout

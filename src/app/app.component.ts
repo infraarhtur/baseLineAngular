@@ -5,6 +5,7 @@ import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { UserSignalService } from './shared/services/user-signal.service';
 
 @Component({
   selector: 'app-root',
@@ -18,16 +19,15 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
   isHandset = false;      // móvil/tablet => drawer real
   opened = true;  //cambiar esto a `false` si quieres que el menú inicie cerrado
   isLoggedIn = false;
-  userName: string | null = null;
   userCompany_id: string | null = null;
-  userCompanyName: string | null = null;
 
   constructor(
     private router: Router,
     public authService: AuthService,
     private tokenRefreshService: TokenRefreshService,
     private activatedRoute: ActivatedRoute,
-    private bp: BreakpointObserver
+    private bp: BreakpointObserver,
+    public userSignalService: UserSignalService
   ) {
 
     this.sub = this.bp.observe(['(max-width: 768px)'])
@@ -56,14 +56,13 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
 
 
     const currentUrl =window.location.toString().split('/')[3];
-    console.log('AppComponent ngOnInit - Current URL:', currentUrl);
 
     const publicRoutes = ['login', 'token-validate', 'reset-password', 'reset-password-confirm', 'email-validate'];
     const isPublicRoute = publicRoutes.some(route => currentUrl.startsWith(route));
-    console.log('AppComponent ngOnInit - Is public route:', isPublicRoute);
+
 
     if (isPublicRoute) {
-      console.log('AppComponent ngOnInit - Processing public route');
+
       // Si estamos en una ruta pública, solo cargar la info si hay token válido
       const token = this.authService.getToken();
       if (token && !this.authService.isTokenExpired(token)) {
@@ -75,11 +74,11 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
       return;
     }
 
-    console.log('AppComponent ngOnInit - Processing protected route');
+
     // Para rutas protegidas, verificar autenticación
     const token = this.authService.getToken();
     if (!token || this.authService.isTokenExpired(token)) {
-      console.log('AppComponent ngOnInit - No valid token, redirecting to login');
+
       if(isPublicRoute) {
         this.authService.logout();
       } else {
@@ -103,8 +102,7 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
     const currentUrl = window.location.href.split('/')[3];
     const publicRoutes = ['login', 'token-validate', 'reset-password', 'reset-password-confirm', 'email-validate'];
     const isPublicRoute = publicRoutes.some(route => currentUrl.startsWith(route));
-    console.log('AppComponent ngAfterContentInit - Is public route:', isPublicRoute);
-    console.log('AppComponent ngAfterContentInit - Current URL:', currentUrl);
+
 
     if (!isPublicRoute) {
       this.loadInfo();
@@ -113,6 +111,9 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
   logout() {
     // Detener el servicio de refresh automático
     this.tokenRefreshService.stopAutoRefresh();
+    // Limpiar los signals de usuario
+    this.userSignalService.updateUserName(null);
+    this.userSignalService.updateUserCompanyName(null);
     this.authService.logout();
   }
   redirectToCreateProduct() {
@@ -121,9 +122,15 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
 
   loadInfo() {
     this.isLoggedIn = this.authService.isAuthenticated();
-    this.userName = this.authService.getUserName().name;
+    const userInfo = this.authService.getUserName();
+    if (userInfo && userInfo.name) {
+      this.userSignalService.updateUserName(userInfo.name);
+    }
     this.userCompany_id = this.authService.getUserCompany_id();
-    this.userCompanyName = this.authService.getUserCompanyName();
+    const companyName = this.authService.getUserCompanyName();
+    if (companyName) {
+      this.userSignalService.updateUserCompanyName(companyName);
+    }
   }
 
   // Funciones del menú de administración

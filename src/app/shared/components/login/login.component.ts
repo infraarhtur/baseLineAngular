@@ -35,6 +35,12 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // Verificar si hay una sesión activa
+    if (this.authService.isAuthenticated()) {
+      this.router.navigate(['/home']);
+      return;
+    }
+
     this.initForm();
     this.fetchCompanies();
     this.setupCompanyAutocomplete();

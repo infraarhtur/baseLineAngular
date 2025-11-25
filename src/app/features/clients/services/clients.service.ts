@@ -43,4 +43,8 @@ export class ClientsService {
       }
     });
   }
+
+  get top_3_clients_by_purchases(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/top_3_clients_by_purchases/`);
+  }
 }

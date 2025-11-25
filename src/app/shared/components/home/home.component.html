@@ -1,4 +1,4 @@
-<h2>Nuevo dashboard</h2>
+<h2>Home dashboard</h2>
 
 <div class="stats-container">
   <mat-card *ngFor="let card of cards" class="stat-card">
@@ -7,31 +7,91 @@
     </div>
     <div class="info">
       <h4>{{ card.title }}</h4>
-      <h2>US$ {{ card.amount | number:'1.0-0' }}</h2>
-      <p>{{ card.progress }} target reached</p>
+      <h2>{{ card.amount | number:'1.0-0' }}</h2>
+      <p> <mat-icon style="vertical-align: middle;">
+        {{  card.icon2 }}
+      </mat-icon> {{ card.info }}
+      </p>
     </div>
   </mat-card>
 </div>
 
+<!-- Gráficos de ventas -->
+
 
 <div class="dashboard-container">
   <mat-card class="chart-card">
-    <h3>Sales Overview</h3>
-    <p>Ample Admin vs Material Admin</p>
-    <canvas baseChart
-      [data]="barChartData"
-      [options]="barChartOptions"
-      chartType="bar">
-    </canvas>
+    <mat-card-header>
+      <mat-card-title>Ventas por metodo de pago por periodo</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+<!-- Gráfico de dona -->
+<div class="chart-box" *ngIf="this.dataDoughnut .length > 0">
+  <canvas baseChart
+    [data]="doughnutChartData"
+    [options]="doughnutChartOptions"
+    [type]="'doughnut'">
+  </canvas>
+</div>
+</mat-card-content>
   </mat-card>
 
+
   <mat-card class="chart-card">
-    <h3>Our Visitors</h3>
-    <p>Different Devices Used to Visit</p>
-    <canvas baseChart
-      [data]="doughnutChartData"
-      [options]="doughnutChartOptions"
-      chartType="doughnut">
-    </canvas>
+    <mat-card-header>
+      <mat-card-title>Top 5 productos mas vendidos</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="chart-box" *ngIf="this.top5Products.length > 0">
+      <canvas #chartBarTop5 baseChart
+        [data]="barChartData"
+        [options]="barChartOptions"
+        [type]="'bar'">
+      </canvas>
+      </div>
+
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<div class="dashboard-container">
+  <mat-card class="chart-card">
+    <mat-card-header>
+      <mat-card-title>Top 3 productos con stock bajo</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+
+      <mat-list>
+        @for(product of productsLowStock; track product.id) {
+          <mat-list-item>
+            <mat-icon matListItemIcon>layers</mat-icon>
+            <h4 matListItemTitle>{{ product.name }}</h4>
+            <p matListItemLine>{{ product.stock }} unidades</p>
+           </mat-list-item>
+        }
+       </mat-list>
+
+
+    </mat-card-content>
+  </mat-card>
+
+
+  <mat-card class="chart-card">
+    <mat-card-header>
+      <mat-card-title>Top 3 clientes por compras</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+
+      <mat-list>
+      @for(client of clientsByPurchases; track client.id) {
+        <mat-list-item>
+          <mat-icon matListItemIcon>person</mat-icon>
+          <h4 matListItemTitle>{{ client.name }}</h4>
+          <p matListItemLine> # de compras: {{ client.total_sales }}  valor total: ${{ client.total_amount_spent | number:'1.0-0' }} </p>
+
+         </mat-list-item>
+      }
+      </mat-list>
+    </mat-card-content>
   </mat-card>
 </div>
