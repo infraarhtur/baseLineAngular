@@ -147,7 +147,7 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
   openCompanySettings() {
     // TODO: Implementar navegación a configuración de empresa
     console.log('Abrir configuración de empresa');
-    // this.router.navigate(['/company-settings']);
+    this.router.navigate(['administration/select-companies']);
   }
 
   openSystemSettings() {

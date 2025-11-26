@@ -13,6 +13,8 @@ import { FromUserComponent } from './components/from-user/from-user.component';
 import { UpdateUserComponent } from './components/update-user/update-user.component';
 import { RoleCheckBoxComponent } from './components/role-check-box/role-check-box.component';
 import { SharedModule } from '../../shared/shared.module';
+import { CreateCompaniesComponent } from './components/create-companies/create-companies.component';
+import { SelectCompaniesComponent } from './components/select-companies/select-companies.component';
 
 
 
@@ -26,6 +28,8 @@ import { SharedModule } from '../../shared/shared.module';
     FromUserComponent,
     UpdateUserComponent,
     RoleCheckBoxComponent,
+    CreateCompaniesComponent,
+    SelectCompaniesComponent,
   ],
   imports: [
     CommonModule,
