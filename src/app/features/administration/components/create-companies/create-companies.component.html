@@ -1,1 +1,60 @@
-<p>create-companies works!</p>
+<p>
+  <a [routerLink]="['/administration/select-companies']">Gestión de empresas</a>
+  <mat-icon style="vertical-align: middle;">navigate_next</mat-icon>
+  <label>Crear empresa</label>
+</p>
+
+<form [formGroup]="companyForm" (ngSubmit)="onSubmit()" class="company-form">
+  <mat-form-field appearance="outline">
+    <mat-label>Nombre de la empresa</mat-label>
+    <input matInput formControlName="company_name" required />
+    <mat-error *ngIf="companyForm.get('company_name')?.hasError('required')">
+      El nombre de la empresa es obligatorio.
+    </mat-error>
+    <mat-error *ngIf="companyForm.get('company_name')?.hasError('minlength')">
+      El nombre debe tener al menos 3 caracteres.
+    </mat-error>
+    <mat-error *ngIf="companyForm.get('company_name')?.hasError('maxlength')">
+      El nombre no puede tener más de 100 caracteres.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Nombre del usuario</mat-label>
+    <input matInput formControlName="user_name" required />
+    <mat-error *ngIf="companyForm.get('user_name')?.hasError('required')">
+      El nombre del usuario es obligatorio.
+    </mat-error>
+    <mat-error *ngIf="companyForm.get('user_name')?.hasError('minlength')">
+      El nombre debe tener al menos 3 caracteres.
+    </mat-error>
+    <mat-error *ngIf="companyForm.get('user_name')?.hasError('maxlength')">
+      El nombre no puede tener más de 100 caracteres.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Email del usuario</mat-label>
+    <input matInput formControlName="user_email" type="email" required />
+    <mat-error *ngIf="companyForm.get('user_email')?.hasError('required')">
+      El email es obligatorio.
+    </mat-error>
+    <mat-error *ngIf="companyForm.get('user_email')?.hasError('email')">
+      Ingrese un email válido (Ej: usuario&#64;example.com).
+    </mat-error>
+    <mat-error *ngIf="companyForm.get('user_email')?.hasError('pattern')">
+      Formato inválido. Ejemplo válido: usuario&#64;dominio.com.
+    </mat-error>
+  </mat-form-field>
+
+  <div class="text-end">
+    <button mat-raised-button color="warn" type="button" (click)="goBack()">
+      <mat-icon>cancel</mat-icon>
+      Cancelar
+    </button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="companyForm.invalid">
+      <mat-icon>save</mat-icon>
+      Crear Empresa
+    </button>
+  </div>
+</form>
