@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AdministrationService } from '../../service/administration.service';
 import { SnackbarService } from '../../../../shared/services/snackbar.service';
 import { Router } from '@angular/router';
+import { ClientsService } from '../../../clients/services/clients.service';
 
 @Component({
   selector: 'app-create-companies',
@@ -17,7 +18,8 @@ export class CreateCompaniesComponent implements OnInit {
     private fb: FormBuilder,
     private adminService: AdministrationService,
     private snackbar: SnackbarService,
-    private router: Router
+    private router: Router,
+    private clientService: ClientsService
   ) {}
 
   ngOnInit(): void {
@@ -39,6 +41,10 @@ export class CreateCompaniesComponent implements OnInit {
       this.adminService.createCompany(formData).subscribe({
         next: (data) => {
           console.log('Empresa creada con éxito', data);
+          debugger;
+          //crear  cliente UNKNOWN
+          this.addInitialClient(data.company_id);
+
           this.snackbar.success('✅ Empresa creada con éxito');
           setTimeout(() => {
             this.router.navigate(['/administration/select-companies']);
@@ -47,10 +53,10 @@ export class CreateCompaniesComponent implements OnInit {
         error: (error) => {
           console.error('Error al crear empresa:', error);
           console.error('Error completo:', JSON.stringify(error, null, 2));
-          
+
           // Mostrar mensajes de error más detallados
           let errorMessage = 'Ocurrió un error al crear la empresa';
-          
+
           if (error.error) {
             // Si hay errores de validación del backend
             if (error.error.detail) {
@@ -71,7 +77,7 @@ export class CreateCompaniesComponent implements OnInit {
               errorMessage = error.error;
             }
           }
-          
+
           this.snackbar.error('❌ ' + errorMessage);
         }
       });
@@ -83,4 +89,27 @@ export class CreateCompaniesComponent implements OnInit {
   goBack(): void {
     this.router.navigate(['/administration/select-companies']);
   }
+  addInitialClient( company_id: string ): void {
+    this.clientService.createClient({
+      name: 'Unknown',
+      email: 'unknown@example.com',
+      phone: '0000000000',
+      address: 'Unknown',
+      comment: 'Unknown es un cliente inicial anonimo creado en la creacion de la empresa',
+      company_id: company_id,
+      is_active: true,
+      created_by: company_id,
+      created_at: new Date().toISOString()
+
+
+    }).subscribe({
+      next: () => {
+        console.log('Cliente creado con éxito');
+      },
+      error: (error) => {
+        console.error('Error al crear cliente:', error);
+      }
+    });
+  }
+
 }

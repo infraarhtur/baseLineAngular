@@ -58,7 +58,8 @@ export class AuthInterceptor implements HttpInterceptor {
 
       // Si es una petición POST y tiene body, añadir company_id
       // Excluir rutas de autenticación que no necesitan company_id
-
+      // FUNCIONALIDAD COMENTADA - Ya no se agrega company_id automáticamente en POST
+      /*
       if (request.method === 'POST' && request.body && companyId && !isAuthRoute) {
         const bodyWithCompanyId = {
           ...request.body as any,
@@ -69,6 +70,7 @@ export class AuthInterceptor implements HttpInterceptor {
           body: bodyWithCompanyId
         });
       }
+      */
     }
 
     // Continuar con la petición y manejar errores 401
@@ -192,6 +194,8 @@ export class AuthInterceptor implements HttpInterceptor {
 
       // Si es una petición POST y tiene body, añadir company_id
       // Excluir rutas de autenticación que no necesitan company_id
+      // FUNCIONALIDAD COMENTADA - Ya no se agrega company_id automáticamente en POST
+      /*
       const isAuthRoute = request.url.includes('/auth/');
       if (request.method === 'POST' && request.body && companyId && !isAuthRoute) {
         const bodyWithCompanyId = {
@@ -203,6 +207,7 @@ export class AuthInterceptor implements HttpInterceptor {
           body: bodyWithCompanyId
         }));
       }
+      */
 
       return next.handle(modifiedRequest);
     }
