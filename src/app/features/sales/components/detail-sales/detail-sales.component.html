@@ -4,7 +4,7 @@
   <label *ngIf="isUpdate">Actualizar detalle de la Venta</label>
 </p>
 
-<div id="content" class="content">
+<div id="content" class="content" *ngIf="saleData">
   <div class="header">
     <!-- <h2>Venta #{{ saleData?.id }}</h2> -->
 
@@ -20,21 +20,21 @@
       </div>
 
       <div class="grid-item">
-        <p><strong>Nombre:</strong> {{ saleData.client?.name }}</p>
+        <p><strong>Nombre:</strong> {{ saleData?.client?.name }}</p>
       </div>
       <div class="grid-item">
-        <p><strong>Email:</strong> {{ saleData.client?.email }}</p>
+        <p><strong>Email:</strong> {{ saleData?.client?.email }}</p>
       </div>
 
       <div class="grid-item">
-        <p><strong>Teléfono:</strong> {{ saleData.client?.phone }}</p>
+        <p><strong>Teléfono:</strong> {{ saleData?.client?.phone }}</p>
       </div>
       <div class="grid-item">
-        <p><strong>Dirección:</strong> {{ saleData.client?.address }}</p>
+        <p><strong>Dirección:</strong> {{ saleData?.client?.address }}</p>
       </div>
 
       <div class="full-width comentario">
-        <p><strong>Comentario:</strong> {{ saleData.client?.comment }}</p>
+        <p><strong>Comentario:</strong> {{ saleData?.client?.comment }}</p>
       </div>
 
     </div>
@@ -104,21 +104,21 @@
 
 
       <div class="sale-info-item" class="grid-item">
-        <p><strong>Estado de la venta:</strong> {{ saleData.status }}</p>
+        <p><strong>Estado de la venta:</strong> {{ saleData?.status }}</p>
       </div>
 
       <div class="sale-info-item">
-        <p><strong>Método de Pago:</strong> {{ saleData.payment_method }}</p>
+        <p><strong>Método de Pago:</strong> {{ saleData?.payment_method }}</p>
       </div>
 
       <div class="sale-info-item comentario" style="grid-column: span 4;">
-        <p><strong>Comentario:</strong> {{ saleData.comment }}</p>
+        <p><strong>Comentario:</strong> {{ saleData?.comment }}</p>
       </div>
 
       <div class="full-width center" style="grid-column: span 4;">
         <p>
-          Valor total del descuento: <strong>{{ saleData.total_discount | currency:'COP' }}</strong><br>
-          <strong>Monto Total:</strong> {{ saleData.total_amount | currency:'COP' }}</p>
+          Valor total del descuento: <strong>{{ saleData?.total_discount | currency:'COP' }}</strong><br>
+          <strong>Monto Total:</strong> {{ saleData?.total_amount | currency:'COP' }}</p>
       </div>
 
     </div>
@@ -136,8 +136,8 @@
     <form [formGroup]="saleForm" (ngSubmit)="onSubmit()" class="sale-form">
       <div class="full-width center">
         <p><strong>Información de la venta</strong></p>
-        Valor total del descuento: <strong>{{ saleData.total_discount | currency:'COP' }}</strong> <br>
-        total de la venta: <strong>{{ saleData.total_amount | currency:'COP' }}</strong>
+        Valor total del descuento: <strong>{{ saleData?.total_discount | currency:'COP' }}</strong> <br>
+        total de la venta: <strong>{{ saleData?.total_amount | currency:'COP' }}</strong>
         <br><br>
       </div>
       <!-- Método de Pago -->

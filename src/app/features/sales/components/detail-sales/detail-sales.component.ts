@@ -37,7 +37,7 @@ export class DetailSalesComponent implements OnInit, AfterViewInit {
     private dialog: MatDialog,
   ) { }
 
-  saleData: any; // aquí se guardarán los datos completos de la venta
+  saleData: any = null; // aquí se guardarán los datos completos de la venta
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       this.saleId = String(params.get('id')); // ✅ Obtener el ID de la URL
@@ -51,8 +51,8 @@ export class DetailSalesComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
-    this.loadData(this.saleData);
-    if (this.isUpdate  && this.saleData.status === 'canceled') {
+    // loadData se llamará después de que saleData esté disponible en loadSale
+    if (this.isUpdate && this.saleData?.status === 'canceled') {
        this.isUpdate = false; // Deshabilitar la edición si el estado es 'canceled'
        this.snackbar.info('La venta está cancelada, no se puede editar');
     }
@@ -72,8 +72,17 @@ export class DetailSalesComponent implements OnInit, AfterViewInit {
     this.salesService.getSaletById(this.saleId).subscribe({
       next: (data) => {
         this.saleData = data;
-        this.dataSource.data = this.saleData.details; // Asignar los detalles de la venta a la fuente de datos
+        this.dataSource.data = this.saleData?.details || []; // Asignar los detalles de la venta a la fuente de datos
         console.log('Detalle de la venta cargado:', data);
+        // Cargar datos del formulario después de que saleData esté disponible
+        if (this.saleData) {
+          this.loadData(this.saleData);
+        }
+        // Verificar si la venta está cancelada después de cargar los datos
+        if (this.isUpdate && this.saleData?.status === 'canceled') {
+          this.isUpdate = false; // Deshabilitar la edición si el estado es 'canceled'
+          this.snackbar.info('La venta está cancelada, no se puede editar');
+        }
       },
       error: (err) => {
         console.error('Error al cargar la venta:', err);
@@ -102,6 +111,7 @@ export class DetailSalesComponent implements OnInit, AfterViewInit {
     });
   }
   loadData(data: any): void {
+    if (!data) return; // Verificar que data existe antes de procesarlo
 
     switch (data.payment_method) {
       case 'cash':
