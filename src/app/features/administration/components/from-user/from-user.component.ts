@@ -45,7 +45,7 @@ export class FromUserComponent  implements OnInit,OnChanges {
     this.userForm = this.fb.group({
       name: [this.userData?.name || '', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
       email: [this.userData?.email || '', [Validators.required, Validators.email, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$')]], // Mejor validación,
-      password: ['pwd1234'],
+      password: ['Inventario.123'],
       role: [this.userData?.role || '', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
       company_id: [this.companyId || '']
     });

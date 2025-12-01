@@ -38,14 +38,14 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
   }
  private sub: Subscription;
   menuItems = [
-    { label: 'Inicio', icon: 'home_outline', route: '/home',permission: ''},
-    { label: 'Clientes', icon: 'people', route: '/clients', permission: 'client:view' },
-    { label: 'Productos', icon: 'inventory_2', route: '/products', permission: '' },
-    { label: 'Proveedores', icon: 'local_shipping', route: '/providers', permission: ''},
-    { label: 'Ventas', icon: 'point_of_sale', route: '/sales', permission: '' },
-    { label: 'Categorías', icon: 'category', route: '/category', permission: '' },
-    { label: 'Dashboard', icon: 'dashboard', route: '/dashboard', permission:  '' },
-    { label: 'Contacto', icon: 'contact_support', route: '/contact', permission: '' }
+    { label: 'Inicio', icon: 'home_outline', route: '/home',permission: 'dashboard:read'},
+    { label: 'Clientes', icon: 'people', route: '/clients', permission: 'client:read' },
+    { label: 'Productos', icon: 'inventory_2', route: '/products', permission: 'product:read' },
+    { label: 'Proveedores', icon: 'local_shipping', route: '/providers', permission: 'provider:read' },
+    { label: 'Ventas', icon: 'point_of_sale', route: '/sales', permission: 'sale:read' },
+    { label: 'Categorías', icon: 'category', route: '/category', permission: 'category:read' },
+    { label: 'Dashboard', icon: 'dashboard', route: '/dashboard', permission:  'dashboard:read' },
+    { label: 'Contacto', icon: 'contact_support', route: '/contact', permission: 'contact:read' }
   ];
 
   ngOnInit(): void {
@@ -106,6 +106,7 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
 
     if (!isPublicRoute) {
       this.loadInfo();
+      this.verifyMenuPermission();
     }
   }
   logout() {
@@ -125,6 +126,7 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
     const userInfo = this.authService.getUserName();
     if (userInfo && userInfo.name) {
       this.userSignalService.updateUserName(userInfo.name);
+     
     }
     this.userCompany_id = this.authService.getUserCompany_id();
     const companyName = this.authService.getUserCompanyName();
@@ -174,6 +176,13 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
 
   ngOnDestroy() {
     this.sub?.unsubscribe();
+  }
+
+  verifyMenuPermission(): void {
+    const permissions = this.authService.getAllPermissions().filter(permission => permission.includes(":read"));
+    console.log(permissions);
+    this.menuItems = this.menuItems.filter(item => permissions.includes(item.permission));
+    console.log(this.menuItems);
   }
 
 }
