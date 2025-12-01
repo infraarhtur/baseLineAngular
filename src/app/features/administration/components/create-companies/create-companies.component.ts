@@ -41,7 +41,6 @@ export class CreateCompaniesComponent implements OnInit {
       this.adminService.createCompany(formData).subscribe({
         next: (data) => {
           console.log('Empresa creada con éxito', data);
-          debugger;
           //crear  cliente UNKNOWN
           this.addInitialClient(data.company_id);
 

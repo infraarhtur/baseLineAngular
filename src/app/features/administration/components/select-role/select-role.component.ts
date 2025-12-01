@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { RoleCheckBoxComponent } from '../role-check-box/role-check-box.component';
 import { CreateRoleComponent } from '../create-role/create-role.component';
+import { AuthService } from '../../../../services/auth.service';
 
 
 
@@ -63,6 +64,7 @@ export class SelectRoleComponent implements OnInit {
     private snackbar: SnackbarService,
     private router: Router,
     private dialog: MatDialog,
+    private authService: AuthService
   ) {
   }
 
@@ -215,8 +217,7 @@ addRole() {
   });
   dialogRef.afterClosed().subscribe(result => {
     if (result) {
-
-      const company_id = localStorage.getItem('selected_company_id');
+      const company_id = this.authService.getUserCompany_id();
       const roleData = {
         name: result.name,
         company_id: company_id,
