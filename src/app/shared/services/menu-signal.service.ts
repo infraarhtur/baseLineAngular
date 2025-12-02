@@ -13,13 +13,13 @@ export interface MenuItem {
 export class MenuSignalService {
   // Definición completa de todos los items del menú
   private readonly allMenuItems: MenuItem[] = [
-    { label: 'Inicio', icon: 'home_outline', route: '/home', permission: '' },
+    { label: 'Dashboard', icon: 'dashboard', route: '/home', permission: '' },
     { label: 'Clientes', icon: 'people', route: '/clients', permission: 'client:read' },
     { label: 'Productos', icon: 'inventory_2', route: '/products', permission: 'product:read' },
     { label: 'Proveedores', icon: 'local_shipping', route: '/providers', permission: 'provider:read' },
     { label: 'Ventas', icon: 'point_of_sale', route: '/sales', permission: 'sale:read' },
     { label: 'Categorías', icon: 'category', route: '/category', permission: 'category:read' },
-    { label: 'Dashboard', icon: 'dashboard', route: '/dashboard', permission: 'dashboard:read' },
+    { label: 'Reportes', icon: 'insert_chart', route: '/reports', permission: 'reports:read' },
     { label: 'Contacto', icon: 'contact_support', route: '/contact', permission: 'contact:read' }
   ];
 
@@ -29,7 +29,7 @@ export class MenuSignalService {
   // Signal computado para los items del menú filtrados por permisos
   public readonly menuItems = computed(() => {
     const permissions = this._userPermissions();
-    
+
     return this.allMenuItems.filter(item => {
       // Si no tiene permiso requerido, siempre mostrar (ej: Inicio)
       if (!item.permission) {
