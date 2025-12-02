@@ -6,6 +6,7 @@ import { filter } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { UserSignalService } from './shared/services/user-signal.service';
+import { MenuSignalService } from './shared/services/menu-signal.service';
 
 @Component({
   selector: 'app-root',
@@ -27,7 +28,8 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
     private tokenRefreshService: TokenRefreshService,
     private activatedRoute: ActivatedRoute,
     private bp: BreakpointObserver,
-    public userSignalService: UserSignalService
+    public userSignalService: UserSignalService,
+    public menuSignalService: MenuSignalService
   ) {
 
     this.sub = this.bp.observe(['(max-width: 768px)'])
@@ -37,16 +39,11 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
     });
   }
  private sub: Subscription;
-  menuItems = [
-    { label: 'Inicio', icon: 'home_outline', route: '/home',permission: 'dashboard:read'},
-    { label: 'Clientes', icon: 'people', route: '/clients', permission: 'client:read' },
-    { label: 'Productos', icon: 'inventory_2', route: '/products', permission: 'product:read' },
-    { label: 'Proveedores', icon: 'local_shipping', route: '/providers', permission: 'provider:read' },
-    { label: 'Ventas', icon: 'point_of_sale', route: '/sales', permission: 'sale:read' },
-    { label: 'Categorías', icon: 'category', route: '/category', permission: 'category:read' },
-    { label: 'Dashboard', icon: 'dashboard', route: '/dashboard', permission:  'dashboard:read' },
-    { label: 'Contacto', icon: 'contact_support', route: '/contact', permission: 'contact:read' }
-  ];
+  
+  // Usar el signal del servicio de menú en lugar del array estático
+  get menuItems() {
+    return this.menuSignalService.menuItems();
+  }
 
   ngOnInit(): void {
     /*let route = this.activatedRoute.snapshot;
@@ -179,10 +176,12 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   verifyMenuPermission(): void {
+    // Esta función ya no es necesaria ya que el filtrado se hace automáticamente
+    // mediante el signal computado en MenuSignalService
+    // Se mantiene por compatibilidad pero el filtrado se hace en home.component.ts
     const permissions = this.authService.getAllPermissions().filter(permission => permission.includes(":read"));
-    console.log(permissions);
-    this.menuItems = this.menuItems.filter(item => permissions.includes(item.permission));
-    console.log(this.menuItems);
+    this.menuSignalService.updatePermissions(permissions);
+    console.log('Permisos del usuario:', permissions);
   }
 
 }

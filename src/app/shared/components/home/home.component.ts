@@ -12,6 +12,7 @@ import { UserSignalService } from '../../services/user-signal.service';
 import { AuthService } from '../../../services/auth.service';
 import { ClientsService } from '../../../features/clients/services/clients.service';
 import { ProductsService } from '../../../features/products/services/products.service';
+import { MenuSignalService } from '../../services/menu-signal.service';
 
 @Component({
   selector: 'app-home',
@@ -129,12 +130,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
     private userSignalService: UserSignalService,
     private authService: AuthService,
     private clientsService: ClientsService,
-    private productsService: ProductsService) {
+    private productsService: ProductsService,
+    private menuSignalService: MenuSignalService) {
 
   }
   ngOnInit(): void {
     // Verificar que los signals de usuario y empresa estén cargados
     this.verifyUserSignals();
+    // Cargar dinámicamente los items del menú basándose en permisos
+    this.loadMenuItemsByPermissions();
   }
 
   /**
@@ -161,6 +165,29 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // Log para verificación (puedes remover esto en producción)
     console.log('Usuario:', this.userSignalService.userName());
     console.log('Empresa:', this.userSignalService.userCompanyName());
+  }
+
+  /**
+   * Carga dinámicamente los items del menú basándose en los permisos del usuario
+   * Filtra los items que requieren permisos específicos, especialmente 'product:read'
+   */
+  private loadMenuItemsByPermissions(): void {
+    // Obtener todos los permisos del usuario desde el token
+    const allPermissions = this.authService.getAllPermissions();
+    
+    // Filtrar solo los permisos de lectura (que terminan en :read)
+    const readPermissions = allPermissions.filter(permission => permission.includes(':read'));
+    
+    // Actualizar el signal del menú con los permisos del usuario
+    this.menuSignalService.updatePermissions(readPermissions);
+    
+    // Log para verificación (puedes remover esto en producción)
+    console.log('Permisos del usuario:', readPermissions);
+    console.log('Items del menú filtrados:', this.menuSignalService.menuItems());
+    
+    // Verificar específicamente si tiene el permiso 'product:read'
+    const hasProductReadPermission = readPermissions.includes('product:read');
+    console.log('Tiene permiso product:read:', hasProductReadPermission);
   }
   ngAfterViewInit(): void {
     // Los signals ya están actualizados en AppComponent.loadInfo() antes del render
