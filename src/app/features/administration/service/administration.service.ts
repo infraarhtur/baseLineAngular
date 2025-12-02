@@ -60,4 +60,8 @@ export class AdministrationService {
   createRole(roleData: any): Observable<any> {
     return this.http.post<any>(`${this.authBaseUrl}roles/`, roleData);
   }
+
+  createCompany(companyData: any): Observable<any> {
+    return this.http.post<any>(`${this.authBaseUrl}companies/with-user`, companyData);
+  }
 }

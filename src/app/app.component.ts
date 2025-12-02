@@ -6,6 +6,7 @@ import { filter } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { UserSignalService } from './shared/services/user-signal.service';
+import { MenuSignalService } from './shared/services/menu-signal.service';
 
 @Component({
   selector: 'app-root',
@@ -27,7 +28,8 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
     private tokenRefreshService: TokenRefreshService,
     private activatedRoute: ActivatedRoute,
     private bp: BreakpointObserver,
-    public userSignalService: UserSignalService
+    public userSignalService: UserSignalService,
+    public menuSignalService: MenuSignalService
   ) {
 
     this.sub = this.bp.observe(['(max-width: 768px)'])
@@ -37,16 +39,11 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
     });
   }
  private sub: Subscription;
-  menuItems = [
-    { label: 'Inicio', icon: 'home_outline', route: '/home',permission: ''},
-    { label: 'Clientes', icon: 'people', route: '/clients', permission: 'client:view' },
-    { label: 'Productos', icon: 'inventory_2', route: '/products', permission: '' },
-    { label: 'Proveedores', icon: 'local_shipping', route: '/providers', permission: ''},
-    { label: 'Ventas', icon: 'point_of_sale', route: '/sales', permission: '' },
-    { label: 'Categorías', icon: 'category', route: '/category', permission: '' },
-    { label: 'Dashboard', icon: 'dashboard', route: '/dashboard', permission:  '' },
-    { label: 'Contacto', icon: 'contact_support', route: '/contact', permission: '' }
-  ];
+  
+  // Usar el signal del servicio de menú en lugar del array estático
+  get menuItems() {
+    return this.menuSignalService.menuItems();
+  }
 
   ngOnInit(): void {
     /*let route = this.activatedRoute.snapshot;
@@ -106,6 +103,7 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
 
     if (!isPublicRoute) {
       this.loadInfo();
+      this.verifyMenuPermission();
     }
   }
   logout() {
@@ -125,6 +123,7 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
     const userInfo = this.authService.getUserName();
     if (userInfo && userInfo.name) {
       this.userSignalService.updateUserName(userInfo.name);
+     
     }
     this.userCompany_id = this.authService.getUserCompany_id();
     const companyName = this.authService.getUserCompanyName();
@@ -147,7 +146,7 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
   openCompanySettings() {
     // TODO: Implementar navegación a configuración de empresa
     console.log('Abrir configuración de empresa');
-    // this.router.navigate(['/company-settings']);
+    this.router.navigate(['administration/select-companies']);
   }
 
   openSystemSettings() {
@@ -174,6 +173,15 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
 
   ngOnDestroy() {
     this.sub?.unsubscribe();
+  }
+
+  verifyMenuPermission(): void {
+    // Esta función ya no es necesaria ya que el filtrado se hace automáticamente
+    // mediante el signal computado en MenuSignalService
+    // Se mantiene por compatibilidad pero el filtrado se hace en home.component.ts
+    const permissions = this.authService.getAllPermissions().filter(permission => permission.includes(":read"));
+    this.menuSignalService.updatePermissions(permissions);
+    console.log('Permisos del usuario:', permissions);
   }
 
 }

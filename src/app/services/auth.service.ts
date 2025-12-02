@@ -417,4 +417,9 @@ export class AuthService {
 
     return payload && payload['permissions'] && payload['permissions'].includes(permission);
   }
+
+  getAllPermissions(): any[] {
+    const payload = this.getTokenPayload();
+    return payload && payload['permissions'] ? payload['permissions'] : [];
+  }
 }

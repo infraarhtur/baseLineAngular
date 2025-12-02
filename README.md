@@ -63,3 +63,4 @@ ng g c features/products/components/update-products
 ng g c features/clients/components/select-clients
 ng g module features/clients --routing  
 ng generate service features/providers/services/providers
+ng g c features/administration/components/create-companies

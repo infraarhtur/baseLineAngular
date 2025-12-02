@@ -48,7 +48,7 @@
            <span class="spacer"></span>
  <!-- Menu de Administración -->
            <button mat-button [matMenuTriggerFor]="adminMenu" aria-label="Menú de administración">
-            <mat-icon>admin_panel_settings</mat-icon>
+            <mat-icon>security</mat-icon>
             <span>Administración</span>
           </button>
           <mat-menu #adminMenu="matMenu">
@@ -58,13 +58,14 @@
               <span>Administrar Usuarios</span>
             </button>
             <button mat-menu-item (click)="openRolesSettings()">
-              <mat-icon>business</mat-icon>
+              <mat-icon>admin_panel_settings</mat-icon>
               <span>Configuración de roles</span>
             </button>
             <button mat-menu-item (click)="openCompanySettings()">
-              <mat-icon>business</mat-icon>
+              <mat-icon>account_balance</mat-icon>
               <span>Configuración de Empresa</span>
             </button>
+          <!--  
             <mat-divider></mat-divider>
             <button mat-menu-item (click)="openSystemSettings()">
               <mat-icon>settings</mat-icon>
@@ -74,6 +75,7 @@
               <mat-icon>backup</mat-icon>
               <span>Respaldo y Restauración</span>
             </button>
+            -->
             <mat-divider></mat-divider>
             <button mat-menu-item (click)="logout()">
               <mat-icon>exit_to_app</mat-icon>

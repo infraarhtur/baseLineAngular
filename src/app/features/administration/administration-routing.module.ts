@@ -7,6 +7,8 @@ import { SelectUserComponent } from './components/select-user/select-user.compon
 import { UpdateUserComponent } from './components/update-user/update-user.component';
 import { SelectRoleComponent } from './components/select-role/select-role.component';
 import { RoleCheckBoxComponent } from './components/role-check-box/role-check-box.component';
+import{CreateCompaniesComponent} from './components/create-companies/create-companies.component';
+import{SelectCompaniesComponent} from './components/select-companies/select-companies.component';
 
 const routes: Routes = [
   {
@@ -19,7 +21,9 @@ const routes: Routes = [
       { path: 'select-user', component: SelectUserComponent },
       { path: 'select-role', component: SelectRoleComponent },
        { path: 'update-user/:id', component: UpdateUserComponent },
-       { path: 'role-check-box', component: RoleCheckBoxComponent }
+       { path: 'role-check-box', component: RoleCheckBoxComponent },
+       { path: 'create-companies', component: CreateCompaniesComponent },
+       { path: 'select-companies', component: SelectCompaniesComponent }
     ]
   }
 ];
