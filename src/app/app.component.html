@@ -1,101 +1,88 @@
+<ng-container *ngIf="authService.isAuthenticated(); else publicLayout">
+  <mat-sidenav-container class="container" [class.handset]="isHandset">
+    <!-- Sidebar -->
+    <mat-sidenav #sidenav [mode]="isHandset ? 'over' : 'side'" [opened]="!isHandset" class="sidenav"
+      [class.collapsed]="!isExpanded && !isHandset">
 
-   <ng-container *ngIf="authService.isAuthenticated(); else publicLayout">
-    <mat-sidenav-container class="container" [class.handset]="isHandset">
-      <!-- Sidebar -->
-      <mat-sidenav
-        #sidenav
-        [mode]="isHandset ? 'over' : 'side'"
-        [opened]="!isHandset"
-        class="sidenav"
-        [class.collapsed]="!isExpanded && !isHandset">
-
-        <div class="sidenav-header"
-        (click)="isHandset ? sidenav.toggle() : toggleRail()" style="justify-content: space-between">
+      <div class="sidenav-header" (click)="isHandset ? sidenav.toggle() : toggleRail()"
+        style="justify-content: space-between">
 
         <span style="margin-left: 10px;" *ngIf="isExpanded">
-         {{ userSignalService.userName() }}</span>
+          {{ userSignalService.userName() }}</span>
 
-          <mat-icon class="toggle-icon"  >
-            {{ !isHandset && isExpanded ? 'chevron_left' : 'chevron_right' }}
-          </mat-icon>
+        <mat-icon class="toggle-icon">
+          {{ !isHandset && isExpanded ? 'chevron_left' : 'chevron_right' }}
+        </mat-icon>
+      </div>
+
+      <mat-nav-list>
+        @for (item of menuItems; track item.route) {
+        <a mat-list-item routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: false }"
+          [routerLink]="item.route" (click)="isHandset ? sidenav.close() : null">
+          <mat-icon class="item-icon" style="">{{ item.icon }} </mat-icon>
+          <span class="item-label" *ngIf="isExpanded || isHandset" class="menu-label">{{ item.label }} </span>
+        </a>
+        }
+      </mat-nav-list>
+
+
+    </mat-sidenav>
+
+    <!-- Contenido principal -->
+    <mat-sidenav-content style="margin-left: 1px;">
+      <mat-toolbar color="accent" class="toolbar" autosize>
+        <button mat-icon-button (click)="isHandset ? sidenav.toggle() : toggleRail()" color="primary">
+          <mat-icon>{{ isHandset ? 'menu' : (isExpanded ? 'menu_open' : 'menu') }}</mat-icon>
+        </button>
+        <div *ngIf="authService.isAuthenticated()" style="margin-right: 12px;"> {{userSignalService.userCompanyName()}}
         </div>
 
-        <mat-nav-list>
-          @for (item of menuItems; track item.route) {
-          <a
-            mat-list-item
-            routerLinkActive="active-link"
-           [routerLinkActiveOptions]="{ exact: false }"
-            [routerLink]="item.route"
-            (click)="isHandset ? sidenav.close() : null"
-          >
-            <mat-icon class="item-icon" style="">{{ item.icon }} </mat-icon>
-            <span  class="item-label" *ngIf="isExpanded || isHandset" class="menu-label">{{ item.label }} </span>
-          </a>
-          }
-        </mat-nav-list>
-      </mat-sidenav>
+        <span class="spacer"></span>
+        <button mat-button (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Salir</span>
+        </button>
+        <!-- Menu de Administración -->
+        <button mat-button [matMenuTriggerFor]="adminMenu" aria-label="Menú de administración"
+          *appHasPermission="['user:read', 'role:read', 'company:read']">
+          <mat-icon>security</mat-icon>
+          <span>Administración</span>
+        </button>
+        <mat-menu #adminMenu="matMenu">
 
-       <!-- Contenido principal -->
-       <mat-sidenav-content style="margin-left: 1px;">
-         <mat-toolbar color="accent" class="toolbar" autosize>
-           <button mat-icon-button
-           (click)="isHandset ? sidenav.toggle() : toggleRail()" color="primary">
-            <mat-icon>{{ isHandset ? 'menu' : (isExpanded ? 'menu_open' : 'menu') }}</mat-icon>
-           </button>
-           <div *ngIf="authService.isAuthenticated()" style="margin-right: 12px;"> {{userSignalService.userCompanyName()}}</div>
-
-           <span class="spacer"></span>
- <!-- Menu de Administración -->
-           <button mat-button [matMenuTriggerFor]="adminMenu" aria-label="Menú de administración">
-            <mat-icon>security</mat-icon>
-            <span>Administración</span>
+          <button mat-menu-item (click)="openUserProfile()" *appHasPermission="'user:read'">
+            <mat-icon>manage_accounts</mat-icon>
+            <span>Administrar Usuarios</span>
           </button>
-          <mat-menu #adminMenu="matMenu">
+          <button mat-menu-item (click)="openRolesSettings()" *appHasPermission="'role:read'">
+            <mat-icon>admin_panel_settings</mat-icon>
+            <span>Configuración de roles</span>
+          </button>
+          <button mat-menu-item (click)="openCompanySettings()" *appHasPermission="'company:read'">
+            <mat-icon>account_balance</mat-icon>
+            <span>Administración de Empresas</span>
+          </button>
 
-            <button mat-menu-item (click)="openUserProfile()">
-              <mat-icon>manage_accounts</mat-icon>
-              <span>Administrar Usuarios</span>
-            </button>
-            <button mat-menu-item (click)="openRolesSettings()">
-              <mat-icon>admin_panel_settings</mat-icon>
-              <span>Configuración de roles</span>
-            </button>
-            <button mat-menu-item (click)="openCompanySettings()">
-              <mat-icon>account_balance</mat-icon>
-              <span>Configuración de Empresa</span>
-            </button>
-          <!--  
-            <mat-divider></mat-divider>
-            <button mat-menu-item (click)="openSystemSettings()">
-              <mat-icon>settings</mat-icon>
-              <span>Configuración del Sistema</span>
-            </button>
-            <button mat-menu-item (click)="openBackupRestore()">
-              <mat-icon>backup</mat-icon>
-              <span>Respaldo y Restauración</span>
-            </button>
-            -->
-            <mat-divider></mat-divider>
-            <button mat-menu-item (click)="logout()">
-              <mat-icon>exit_to_app</mat-icon>
-              <span>Salir</span>
-            </button>
-          </mat-menu>
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            <span>Salir</span>
+          </button>
+        </mat-menu>
 
- <!-- Menu fin -->
+        <!-- Menu fin -->
 
-         </mat-toolbar>
+      </mat-toolbar>
 
-         <div class="content">
+      <div class="content">
 
 
-           <router-outlet/>
-         </div>
-       </mat-sidenav-content>
-     </mat-sidenav-container>
-   </ng-container>
+        <router-outlet />
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</ng-container>
 
-   <ng-template #publicLayout>
-     <router-outlet></router-outlet>
-   </ng-template>
+<ng-template #publicLayout>
+  <router-outlet></router-outlet>
+</ng-template>
