@@ -12,7 +12,7 @@
 <br>
 
 <!-- filtro -->
-<ng-container *appHasPermission="'product:read'">
+<ng-container >
   <mat-form-field appearance="outline" class="full-width" >
     <mat-label>Buscar productos</mat-label>
     <input matInput (keyup)="applyFilter($event)" placeholder="Filtrar por nombre, descripción, etc.">
