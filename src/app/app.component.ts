@@ -5,6 +5,7 @@ import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { map } from 'rxjs/operators';
 import { UserSignalService } from './shared/services/user-signal.service';
 import { MenuSignalService } from './shared/services/menu-signal.service';
 
@@ -31,15 +32,21 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
     public userSignalService: UserSignalService,
     public menuSignalService: MenuSignalService
   ) {
-
-    this.sub = this.bp.observe(['(max-width: 768px)'])
-    .subscribe(state => {
-      this.isHandset = state.matches;
-      // En móvil no usamos rail; en desktop lo dejamos como esté
-    });
+    // Usar Breakpoints predefinidos de Angular Material para mejor mantenibilidad
+    this.sub = this.bp.observe([Breakpoints.Handset, Breakpoints.Tablet])
+      .pipe(
+        map(result => result.matches)
+      )
+      .subscribe(isHandset => {
+        this.isHandset = isHandset;
+      // En móvil, cerrar el sidenav por defecto si está abierto
+        if (isHandset && this.opened) {
+          this.opened = false;
+        }
+      });
   }
  private sub: Subscription;
-  
+
   // Usar el signal del servicio de menú en lugar del array estático
   get menuItems() {
     return this.menuSignalService.menuItems();
@@ -94,6 +101,20 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
   toggleSidenav() {
     this.opened = !this.opened;
   }
+
+  // Método para manejar el cierre del sidenav en modo móvil
+  onSidenavClose() {
+    if (this.isHandset) {
+      this.opened = false;
+    }
+  }
+
+  // Sincronizar el estado del sidenav cuando se cierra manualmente
+  onSidenavToggle(event: boolean) {
+    if (this.isHandset) {
+      this.opened = event;
+    }
+  }
   ngAfterContentInit(): void {
     // Solo cargar info si no estamos en una ruta pública
     const currentUrl = window.location.href.split('/')[3];
@@ -102,7 +123,7 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
 
 
     if (!isPublicRoute) {
-      this.loadInfo();
+ this.loadInfo();
       this.verifyMenuPermission();
     }
   }
@@ -123,7 +144,7 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
     const userInfo = this.authService.getUserName();
     if (userInfo && userInfo.name) {
       this.userSignalService.updateUserName(userInfo.name);
-     
+
     }
     this.userCompany_id = this.authService.getUserCompany_id();
     const companyName = this.authService.getUserCompanyName();

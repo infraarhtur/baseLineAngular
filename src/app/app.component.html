@@ -1,13 +1,16 @@
 <ng-container *ngIf="authService.isAuthenticated(); else publicLayout">
   <mat-sidenav-container class="container" [class.handset]="isHandset">
     <!-- Sidebar -->
-    <mat-sidenav #sidenav [mode]="isHandset ? 'over' : 'side'" [opened]="!isHandset" class="sidenav"
+    <mat-sidenav #sidenav
+      [mode]="isHandset ? 'over' : 'side'"
+      [opened]="isHandset ? opened : true"
+      (openedChange)="onSidenavToggle($event)"
+      class="sidenav"
       [class.collapsed]="!isExpanded && !isHandset">
 
-      <div class="sidenav-header" (click)="isHandset ? sidenav.toggle() : toggleRail()"
-        style="justify-content: space-between">
+      <div class="sidenav-header" (click)="isHandset ? toggleSidenav() : toggleRail()" role="button" tabindex="0" (keydown.enter)="isHandset ? toggleSidenav() : toggleRail()">
 
-        <span style="margin-left: 10px;" *ngIf="isExpanded">
+        <span class="user-name" *ngIf="isExpanded">
           {{ userSignalService.userName() }}</span>
 
         <mat-icon class="toggle-icon">
@@ -18,7 +21,7 @@
       <mat-nav-list>
         @for (item of menuItems; track item.route) {
         <a mat-list-item routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: false }"
-          [routerLink]="item.route" (click)="isHandset ? sidenav.close() : null">
+          [routerLink]="item.route" (click)="onSidenavClose()">
           <mat-icon class="item-icon">{{ item.icon }} </mat-icon>
           <span class="item-label" *ngIf="isExpanded || isHandset" class="menu-label">{{ item.label }} </span>
         </a>
@@ -31,10 +34,11 @@
     <!-- Contenido principal -->
     <mat-sidenav-content style="margin-left: 1px;">
       <mat-toolbar color="accent" class="toolbar" autosize>
-        <button mat-icon-button (click)="isHandset ? sidenav.toggle() : toggleRail()" color="primary">
+        <button mat-icon-button (click)="isHandset ? toggleSidenav() : toggleRail()" color="primary" aria-label="Toggle navigation menu">
           <mat-icon>{{ isHandset ? 'menu' : (isExpanded ? 'menu_open' : 'menu') }}</mat-icon>
         </button>
-        <div *ngIf="authService.isAuthenticated()" style="margin-right: 12px;"> {{userSignalService.userCompanyName()}}
+        <div class="company-name" *ngIf="authService.isAuthenticated()">
+          {{userSignalService.userCompanyName()}}
         </div>
 
         <span class="spacer"></span>
