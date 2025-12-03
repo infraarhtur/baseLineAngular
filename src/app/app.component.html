@@ -16,7 +16,7 @@
         </mat-icon>
       </div>
 
-      <mat-nav-list class="sidenav-menu-list">
+      <mat-nav-list class="sidenav-menu-list" style="height: 85%;">
         @for (item of menuItems; track trackByRoute($index, item)) {
         <a mat-list-item routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: false }"
           [routerLink]="item.route" (click)="onSidenavClose()" [attr.aria-label]="item.label">
