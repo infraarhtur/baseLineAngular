@@ -32,7 +32,7 @@
     </mat-sidenav>
 
     <!-- Contenido principal -->
-    <mat-sidenav-content style="margin-left: 1px;">
+    <mat-sidenav-content >
       <mat-toolbar color="accent" class="toolbar" autosize>
         <button mat-icon-button (click)="isHandset ? toggleSidenav() : toggleRail()" color="primary" aria-label="Toggle navigation menu">
           <mat-icon>{{ isHandset ? 'menu' : (isExpanded ? 'menu_open' : 'menu') }}</mat-icon>

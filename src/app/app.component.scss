@@ -116,6 +116,7 @@ mat-sidenav-content {
   transition: padding-left .3s ease;
   box-sizing: border-box;
   min-height: 100vh;
+  margin-left: 1px !important; 
 }
 
 .sidenav.collapsed ~ mat-sidenav-content {
