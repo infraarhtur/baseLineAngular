@@ -1,10 +1,9 @@
-import { AfterContentInit, Component, OnInit, OnDestroy} from '@angular/core';
+import { AfterContentInit, Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from './services/auth.service';
 import { TokenRefreshService } from './services/token-refresh.service';
-import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { map } from 'rxjs/operators';
 import { UserSignalService } from './shared/services/user-signal.service';
 import { MenuSignalService } from './shared/services/menu-signal.service';
@@ -17,11 +16,17 @@ import { MenuSignalService } from './shared/services/menu-signal.service';
 })
 export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
   title = 'baseLineAngular';
-  isExpanded = true;      // rail expandido por defecto en desktop
-  isHandset = false;      // móvil/tablet => drawer real
-  opened = true;  //cambiar esto a `false` si quieres que el menú inicie cerrado
+
+  // Estado de layout
+  isExpanded = true;     // rail expandido por defecto en desktop
+  isHandset = false;     // aquí será true solo si width <= 934px
+  opened = true;         // en desktop/tablet el sidenav va abierto
+
+  // Otros estados
   isLoggedIn = false;
   userCompany_id: string | null = null;
+
+  private sub!: Subscription;
 
   constructor(
     private router: Router,
@@ -32,78 +37,58 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
     public userSignalService: UserSignalService,
     public menuSignalService: MenuSignalService
   ) {
-    // Usar Breakpoints predefinidos de Angular Material para mejor mantenibilidad
-    this.sub = this.bp.observe([Breakpoints.Handset, Breakpoints.Tablet])
-      .pipe(
-        map(result => result.matches)
-      )
+    // 🔹 Opción 2: breakpoint custom => móvil si width <= 934px
+    this.sub = this.bp
+      .observe(['(max-width: 934px)'])
+      .pipe(map(result => result.matches))
       .subscribe(isHandset => {
         this.isHandset = isHandset;
-      // En móvil, cerrar el sidenav por defecto si está abierto
-        if (isHandset && this.opened) {
+
+        if (isHandset) {
+          // En móvil (<= 934px): drawer tipo "over", cerrado por defecto
           this.opened = false;
+          this.isExpanded = true;
+        } else {
+          // >= 935px => tablet / desktop: menú lateral siempre visible
+          this.opened = true;
+          this.isExpanded = true;
         }
       });
   }
- private sub: Subscription;
 
   // Usar el signal del servicio de menú en lugar del array estático
   get menuItems() {
     return this.menuSignalService.menuItems();
   }
 
-  /**
-   * Función trackBy para optimizar el rendimiento del @for
-   * @param index Índice del elemento en el array
-   * @param item Item del menú
-   * @returns Identificador único del item (route)
-   */
   trackByRoute(index: number, item: { route: string }): string {
     return item.route;
   }
 
   ngOnInit(): void {
-    /*let route = this.activatedRoute.snapshot;
-    while (route.firstChild) {
-      route = route.firstChild;
-    } */
-
-
-    const currentUrl =window.location.toString().split('/')[3];
+    const currentUrl = window.location.toString().split('/')[3];
 
     const publicRoutes = ['login', 'token-validate', 'reset-password', 'reset-password-confirm', 'email-validate'];
     const isPublicRoute = publicRoutes.some(route => currentUrl.startsWith(route));
 
-
     if (isPublicRoute) {
-
-      // Si estamos en una ruta pública, solo cargar la info si hay token válido
       const token = this.authService.getToken();
       if (token && !this.authService.isTokenExpired(token)) {
         this.loadInfo();
-        // No iniciar el servicio de refresh en rutas públicas
-        // this.tokenRefreshService.startAutoRefresh();
       }
-      // IMPORTANTE: No hacer logout en rutas públicas, solo retornar
       return;
     }
 
-
-    // Para rutas protegidas, verificar autenticación
     const token = this.authService.getToken();
     if (!token || this.authService.isTokenExpired(token)) {
-
-      if(isPublicRoute) {
+      if (isPublicRoute) {
         this.authService.logout();
       } else {
         this.authService.logoutForceRedirect();
       }
-
       return;
     } else {
       this.loadInfo();
-
-      // Iniciar el servicio de refresh automático de tokens
       this.tokenRefreshService.startAutoRefresh();
     }
   }
@@ -112,39 +97,36 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
     this.opened = !this.opened;
   }
 
-  // Método para manejar el cierre del sidenav en modo móvil
   onSidenavClose() {
     if (this.isHandset) {
       this.opened = false;
     }
   }
 
-  // Sincronizar el estado del sidenav cuando se cierra manualmente
   onSidenavToggle(event: boolean) {
     if (this.isHandset) {
       this.opened = event;
     }
   }
+
   ngAfterContentInit(): void {
-    // Solo cargar info si no estamos en una ruta pública
     const currentUrl = window.location.href.split('/')[3];
     const publicRoutes = ['login', 'token-validate', 'reset-password', 'reset-password-confirm', 'email-validate'];
     const isPublicRoute = publicRoutes.some(route => currentUrl.startsWith(route));
 
-
     if (!isPublicRoute) {
- this.loadInfo();
+      this.loadInfo();
       this.verifyMenuPermission();
     }
   }
+
   logout() {
-    // Detener el servicio de refresh automático
     this.tokenRefreshService.stopAutoRefresh();
-    // Limpiar los signals de usuario
     this.userSignalService.updateUserName(null);
     this.userSignalService.updateUserCompanyName(null);
     this.authService.logout();
   }
+
   redirectToCreateProduct() {
     this.router.navigate(['/products/create']);
   }
@@ -154,7 +136,6 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
     const userInfo = this.authService.getUserName();
     if (userInfo && userInfo.name) {
       this.userSignalService.updateUserName(userInfo.name);
-
     }
     this.userCompany_id = this.authService.getUserCompany_id();
     const companyName = this.authService.getUserCompanyName();
@@ -163,43 +144,31 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
     }
   }
 
-  // Funciones del menú de administración
-  closeMenu() {
-    // Esta función se puede usar para cerrar el menú si es necesario
-    // Por ahora no es necesaria ya que el menú se cierra automáticamente
-  }
+  closeMenu() { }
 
   openUserProfile() {
-    // TODO: Implementar navegación al perfil de usuario
     this.router.navigate(['administration/select-user']);
   }
 
   openCompanySettings() {
-    // TODO: Implementar navegación a configuración de empresa
-    console.log('Abrir configuración de empresa');
     this.router.navigate(['administration/select-companies']);
   }
 
   openSystemSettings() {
-    // TODO: Implementar navegación a configuración del sistema
     console.log('Abrir configuración del sistema');
-    // this.router.navigate(['/system-settings']);
   }
 
   openBackupRestore() {
-    // TODO: Implementar navegación a respaldo y restauración
     console.log('Abrir respaldo y restauración');
-    // this.router.navigate(['/backup-restore']);
   }
 
   openRolesSettings() {
-    // TODO: Implementar navegación a configuración de roles
     console.log('Abrir configuración de roles');
     this.router.navigate(['administration/select-role']);
   }
 
   toggleRail() {
-    this.isExpanded = !this.isExpanded; // solo cambia ancho, no cierra
+    this.isExpanded = !this.isExpanded;
   }
 
   ngOnDestroy() {
@@ -207,13 +176,10 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   verifyMenuPermission(): void {
-    // Esta función ya no es necesaria ya que el filtrado se hace automáticamente
-    // mediante el signal computado en MenuSignalService
-    // Se mantiene por compatibilidad pero el filtrado se hace en home.component.ts
-    const permissions = this.authService.getAllPermissions().filter(permission => permission.includes(":read"));
+    const permissions = this.authService
+      .getAllPermissions()
+      .filter(permission => permission.includes(':read'));
     this.menuSignalService.updatePermissions(permissions);
     console.log('Permisos del usuario:', permissions);
   }
-
 }
-
