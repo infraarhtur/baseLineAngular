@@ -52,6 +52,16 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
     return this.menuSignalService.menuItems();
   }
 
+  /**
+   * Función trackBy para optimizar el rendimiento del @for
+   * @param index Índice del elemento en el array
+   * @param item Item del menú
+   * @returns Identificador único del item (route)
+   */
+  trackByRoute(index: number, item: { route: string }): string {
+    return item.route;
+  }
+
   ngOnInit(): void {
     /*let route = this.activatedRoute.snapshot;
     while (route.firstChild) {

@@ -8,22 +8,31 @@
       class="sidenav"
       [class.collapsed]="!isExpanded && !isHandset">
 
-      <div class="sidenav-header" (click)="isHandset ? toggleSidenav() : toggleRail()" role="button" tabindex="0" (keydown.enter)="isHandset ? toggleSidenav() : toggleRail()">
+      <div class="sidenav-header" 
+           (click)="isHandset ? toggleSidenav() : toggleRail()" 
+           role="button" 
+           tabindex="0" 
+           [attr.aria-label]="isHandset ? 'Abrir o cerrar menú de navegación' : 'Expandir o colapsar menú lateral'"
+           (keydown.enter)="isHandset ? toggleSidenav() : toggleRail()">
 
         <span class="user-name" *ngIf="isExpanded">
           {{ userSignalService.userName() }}</span>
 
-        <mat-icon class="toggle-icon">
+        <mat-icon class="toggle-icon" [attr.aria-hidden]="true">
           {{ !isHandset && isExpanded ? 'chevron_left' : 'chevron_right' }}
         </mat-icon>
       </div>
 
       <mat-nav-list>
-        @for (item of menuItems; track item.route) {
-        <a mat-list-item routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: false }"
-          [routerLink]="item.route" (click)="onSidenavClose()">
-          <mat-icon class="item-icon">{{ item.icon }} </mat-icon>
-          <span class="item-label" *ngIf="isExpanded || isHandset" class="menu-label">{{ item.label }} </span>
+        @for (item of menuItems; track trackByRoute($index, item)) {
+        <a mat-list-item 
+           routerLinkActive="active-link" 
+           [routerLinkActiveOptions]="{ exact: false }"
+           [routerLink]="item.route" 
+           (click)="onSidenavClose()"
+           [attr.aria-label]="item.label">
+          <mat-icon class="item-icon" [attr.aria-hidden]="true">{{ item.icon }}</mat-icon>
+          <span class="item-label menu-label" *ngIf="isExpanded || isHandset">{{ item.label }}</span>
         </a>
         }
       </mat-nav-list>
@@ -34,42 +43,58 @@
     <!-- Contenido principal -->
     <mat-sidenav-content >
       <mat-toolbar color="accent" class="toolbar" autosize>
-        <button mat-icon-button (click)="isHandset ? toggleSidenav() : toggleRail()" color="primary" aria-label="Toggle navigation menu">
-          <mat-icon>{{ isHandset ? 'menu' : (isExpanded ? 'menu_open' : 'menu') }}</mat-icon>
+        <button mat-icon-button 
+                (click)="isHandset ? toggleSidenav() : toggleRail()" 
+                color="primary" 
+                [attr.aria-label]="isHandset ? 'Abrir o cerrar menú de navegación' : 'Expandir o colapsar menú lateral'"
+                [attr.aria-expanded]="isHandset ? opened : isExpanded">
+          <mat-icon [attr.aria-hidden]="true">{{ isHandset ? 'menu' : (isExpanded ? 'menu_open' : 'menu') }}</mat-icon>
         </button>
-        <div class="company-name" *ngIf="authService.isAuthenticated()">
+        <div class="company-name">
           {{userSignalService.userCompanyName()}}
         </div>
 
         <span class="spacer"></span>
-        <button mat-button (click)="logout()">
-          <mat-icon>logout</mat-icon>
+        <button mat-button (click)="logout()" aria-label="Cerrar sesión">
+          <mat-icon [attr.aria-hidden]="true">logout</mat-icon>
           <span>Salir</span>
         </button>
         <!-- Menu de Administración -->
-        <button mat-button [matMenuTriggerFor]="adminMenu" aria-label="Menú de administración"
-          *appHasPermission="['user:read', 'role:read', 'company:read']">
-          <mat-icon>security</mat-icon>
+        <button mat-button 
+                [matMenuTriggerFor]="adminMenu" 
+                aria-label="Menú de administración"
+                aria-haspopup="true"
+                *appHasPermission="['user:read', 'role:read', 'company:read']">
+          <mat-icon [attr.aria-hidden]="true">security</mat-icon>
           <span>Administración</span>
         </button>
         <mat-menu #adminMenu="matMenu">
 
-          <button mat-menu-item (click)="openUserProfile()" *appHasPermission="'user:read'">
-            <mat-icon>manage_accounts</mat-icon>
+          <button mat-menu-item 
+                  (click)="openUserProfile()" 
+                  *appHasPermission="'user:read'"
+                  aria-label="Administrar usuarios">
+            <mat-icon [attr.aria-hidden]="true">manage_accounts</mat-icon>
             <span>Administrar Usuarios</span>
           </button>
-          <button mat-menu-item (click)="openRolesSettings()" *appHasPermission="'role:read'">
-            <mat-icon>admin_panel_settings</mat-icon>
+          <button mat-menu-item 
+                  (click)="openRolesSettings()" 
+                  *appHasPermission="'role:read'"
+                  aria-label="Configuración de roles">
+            <mat-icon [attr.aria-hidden]="true">admin_panel_settings</mat-icon>
             <span>Configuración de roles</span>
           </button>
-          <button mat-menu-item (click)="openCompanySettings()" *appHasPermission="'company:read'">
-            <mat-icon>account_balance</mat-icon>
+          <button mat-menu-item 
+                  (click)="openCompanySettings()" 
+                  *appHasPermission="'company:read'"
+                  aria-label="Administración de empresas">
+            <mat-icon [attr.aria-hidden]="true">account_balance</mat-icon>
             <span>Administración de Empresas</span>
           </button>
 
           <mat-divider></mat-divider>
-          <button mat-menu-item (click)="logout()">
-            <mat-icon>logout</mat-icon>
+          <button mat-menu-item (click)="logout()" aria-label="Cerrar sesión">
+            <mat-icon [attr.aria-hidden]="true">logout</mat-icon>
             <span>Salir</span>
           </button>
         </mat-menu>
@@ -79,9 +104,7 @@
       </mat-toolbar>
 
       <div class="content">
-
-
-        <router-outlet />
+        <router-outlet></router-outlet>
       </div>
     </mat-sidenav-content>
   </mat-sidenav-container>
