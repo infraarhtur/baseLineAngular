@@ -16,7 +16,7 @@
         </mat-icon>
       </div>
 
-      <mat-nav-list>
+      <mat-nav-list class="sidenav-menu-list">
         @for (item of menuItems; track trackByRoute($index, item)) {
         <a mat-list-item routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: false }"
           [routerLink]="item.route" (click)="onSidenavClose()" [attr.aria-label]="item.label">
@@ -27,10 +27,12 @@
       </mat-nav-list>
 
       <div class="sidenav-footer">
-        <a mat-list-item (click)="logout()">
-          <mat-icon [attr.aria-hidden]="true">logout</mat-icon>
-          <span>Salir</span>
-        </a>
+        <mat-nav-list>
+          <a mat-list-item (click)="logout()" [attr.aria-label]="'Cerrar sesión'">
+            <mat-icon class="item-icon" [attr.aria-hidden]="true">logout</mat-icon>
+            <span class="item-label" *ngIf="isExpanded || isHandset">Salir</span>
+          </a>
+        </mat-nav-list>
       </div>
 
     </mat-sidenav>
