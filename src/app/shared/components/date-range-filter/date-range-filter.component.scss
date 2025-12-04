@@ -1,0 +1,23 @@
+.date-range-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.presets-group {
+  flex-wrap: wrap;
+}
+
+::ng-deep .presets-group .mat-button-toggle {
+  margin-right: 4px;
+  margin-bottom: 4px;
+}
+
+.custom-range {
+  display: flex;
+  flex-direction: row;
+}
+
+.custom-range-field {
+  width: 100%;
+}

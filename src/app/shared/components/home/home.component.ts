@@ -174,17 +174,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
   private loadMenuItemsByPermissions(): void {
     // Obtener todos los permisos del usuario desde el token
     const allPermissions = this.authService.getAllPermissions();
-    
+
     // Filtrar solo los permisos de lectura (que terminan en :read)
     const readPermissions = allPermissions.filter(permission => permission.includes(':read'));
-    
+
     // Actualizar el signal del menú con los permisos del usuario
     this.menuSignalService.updatePermissions(readPermissions);
-    
+
     // Log para verificación (puedes remover esto en producción)
     console.log('Permisos del usuario:', readPermissions);
     console.log('Items del menú filtrados:', this.menuSignalService.menuItems());
-    
+
     // Verificar específicamente si tiene el permiso 'product:read'
     const hasProductReadPermission = readPermissions.includes('product:read');
     console.log('Tiene permiso product:read:', hasProductReadPermission);
@@ -240,6 +240,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.reportService.report_sale_summary_payment(start_date, end_date, status).subscribe({
       next: (data) => {
         this.logicCardPending(data);
+        console.log('report_sale_summary_payment',status,data);
         this.snackbar.success('Ventas pendientes cargados');
       },
       error: (err) => {
@@ -382,8 +383,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     if (!lastItem) {
       return;
     }
-
-    let total_sales_pending = (lastItem.total_sales || 0) + 1;
+debugger;
+    let total_sales_pending = (lastItem.total_sales || 0) ;
     let total_amount_pending = lastItem.total_amount || 0;
     let total_discount_pending = lastItem.total_discount || 0;
 

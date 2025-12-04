@@ -64,3 +64,6 @@ ng g c features/clients/components/select-clients
 ng g module features/clients --routing  
 ng generate service features/providers/services/providers
 ng g c features/administration/components/create-companies
+ng g c shared/components/date-range-filter
+
+src/app/shared

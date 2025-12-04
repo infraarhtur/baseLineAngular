@@ -1,0 +1,46 @@
+<div class="date-range-filter">
+
+  <!-- Presets de fecha -->
+  <mat-button-toggle-group
+    class="presets-group"
+    name="datePresets"
+    [value]="selectedPreset"
+    (change)="onPresetChange($event.value)"
+    appearance="standard">
+
+    <mat-button-toggle
+      *ngFor="let p of presets"
+      [value]="p.key">
+      {{ p.label }}
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+
+  <!-- Rango personalizado: solo si se eligió 'custom' -->
+  <div class="custom-range" *ngIf="selectedPreset === 'custom'">
+    <mat-form-field appearance="outline" class="custom-range-field">
+      <mat-label>Rango personalizado</mat-label>
+
+      <mat-date-range-input
+        [rangePicker]="picker"
+        (dateChange)="onCustomDateChange()">
+
+        <input
+          matStartDate
+          placeholder="Desde"
+          [(ngModel)]="customStart" />
+
+        <input
+          matEndDate
+          placeholder="Hasta"
+          [(ngModel)]="customEnd" />
+      </mat-date-range-input>
+
+      <mat-datepicker-toggle
+        matIconSuffix
+        [for]="picker">
+      </mat-datepicker-toggle>
+
+      <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field>
+  </div>
+</div>
