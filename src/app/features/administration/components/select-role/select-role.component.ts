@@ -205,8 +205,6 @@ openDialog(event: MouseEvent,role: any): void {
 }
 
 addRole() {
-
-
   const dialogRef = this.dialog.open(CreateRoleComponent, {
     width: '450px',
     data: {isEdit: false,
